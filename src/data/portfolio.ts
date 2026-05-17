@@ -216,7 +216,14 @@ export const NAV_LINKS = [
 ] as const
 
 export const STATS = [
-  { value: '4+', label: 'Live projects' },
+  { value: '10+', label: 'Builds shipped' },
   { value: '3+', label: 'Years building' },
   { value: '24h', label: 'Avg reply' },
+] as const
+
+export const HERO_ACCENTS = [
+  'intelligent',
+  'production',
+  'AI-native',
+  'reliable',
 ] as const

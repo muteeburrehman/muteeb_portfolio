@@ -1,6 +1,7 @@
 import type { ComponentType, ReactNode } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { STATS } from '../data/portfolio'
+import { HERO_ACCENTS, STATS } from '../data/portfolio'
 import {
   ArrowIcon,
   BrainIcon,
@@ -10,7 +11,25 @@ import {
   ZapIcon,
 } from './icons'
 
+function useRotatingWord(words: readonly string[], intervalMs = 2600) {
+  const [index, setIndex] = useState(0)
+  useEffect(() => {
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    if (prefersReduced || words.length <= 1) return
+    const id = window.setInterval(
+      () => setIndex((i) => (i + 1) % words.length),
+      intervalMs,
+    )
+    return () => window.clearInterval(id)
+  }, [words, intervalMs])
+  return index
+}
+
 export function Hero() {
+  const accentIndex = useRotatingWord(HERO_ACCENTS)
+
   return (
     <section
       id="home"
@@ -53,22 +72,42 @@ export function Hero() {
 
             <h1 className="font-display leading-[0.94] tracking-tight">
               <span className="block text-[clamp(2.75rem,9.5vw,6.5rem)] text-white opacity-0 animate-fade-up stagger-2">
-                Building
+                Engineering
               </span>
-              <span className="block text-[clamp(2.75rem,9.5vw,6.5rem)] opacity-0 animate-fade-up stagger-3">
-                <span className="text-gradient-shine drop-shadow-[0_0_28px_rgba(56,189,248,0.18)]">
-                  intelligent
+              <span
+                className="block text-[clamp(2.75rem,9.5vw,6.5rem)] opacity-0 animate-fade-up stagger-3"
+                aria-label={HERO_ACCENTS[accentIndex]}
+              >
+                <span className="relative inline-grid grid-cols-1 grid-rows-1 align-bottom">
+                  {HERO_ACCENTS.map((word, i) => (
+                    <span
+                      key={word}
+                      aria-hidden={i !== accentIndex}
+                      className={`col-start-1 row-start-1 whitespace-nowrap pr-[0.08em] text-gradient-shine drop-shadow-[0_0_28px_rgba(56,189,248,0.18)] transition-all duration-700 ease-out ${
+                        i === accentIndex
+                          ? 'translate-y-0 opacity-100'
+                          : i === (accentIndex - 1 + HERO_ACCENTS.length) % HERO_ACCENTS.length
+                            ? '-translate-y-3 opacity-0'
+                            : 'translate-y-3 opacity-0'
+                      }`}
+                    >
+                      {word}
+                    </span>
+                  ))}
                 </span>
               </span>
               <span className="block text-[clamp(2.75rem,9.5vw,6.5rem)] text-white opacity-0 animate-fade-up stagger-4">
-                products.
+                products, end to end.
               </span>
             </h1>
 
             <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/60 sm:text-xl opacity-0 animate-fade-up stagger-5">
-              I&apos;m <span className="font-medium text-white/85">Muteeb</span> — engineering
-              production AI agents, voice interfaces, RAG systems and full stack products with
-              Python, React and AWS.
+              Hi, I&apos;m <span className="font-medium text-white/90">Muteeb</span> — a full
+              stack developer and AI engineer. I help teams ship LLM agents, voice interfaces,
+              RAG pipelines and complete web products. Built on{' '}
+              <span className="text-white/80">Python</span>,{' '}
+              <span className="text-white/80">React</span> and{' '}
+              <span className="text-white/80">AWS</span>.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center gap-3 opacity-0 animate-fade-up stagger-5">
