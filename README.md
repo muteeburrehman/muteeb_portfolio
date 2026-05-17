@@ -1,33 +1,33 @@
 # Muteeb Ur Rehman — Portfolio
 
-React, TypeScript, Vite, Tailwind CSS, React Router. Contact form sends **branded HTML email** via FastAPI + SMTP.
+Personal portfolio (not tied to any company site). React, Vite, Tailwind, contact form → branded HTML email via FastAPI + Gmail SMTP.
 
 ## Local
 
 ```bash
-npm install && npm run dev          # :5173 — proxies /api/contact → :8000
+npm install && npm run dev
 cd backend && pip install -r requirements.txt
-cp ../.env.example ../.env          # set EMAIL_PASS
+cp ../.env.example ../.env   # EMAIL_PASS = Gmail app password
 uvicorn main:app --reload --port 8000
 ```
 
 ## Deploy (Docker)
 
-Uses your existing **qubix-nginx** (no extra host ports). Internal containers: `muteeb-web:80`, `muteeb-api:8000`.
-
 ```bash
-cp .env.example .env   # secrets + SMTP
+cp .env.example .env
 docker compose up -d --build
 ```
 
-1. DNS: `dev.muteeblabs.uk` → VPS  
-2. **Edge nginx (required):** `docker compose up` only starts `muteeb-web` / `muteeb-api`. Traffic still goes through **qubix-nginx**. Without a vhost, another site (e.g. inventory) wins as default.  
-   ```bash
-   docker exec qubix-nginx grep -r "dev.muteeblabs.uk" /etc/nginx/   # find wrong config
-   cp edge-nginx-dev.muteeblabs.uk.conf /opt/qubix/nginx/conf.d/dev.muteeblabs.uk.conf
-   docker exec qubix-nginx nginx -t && docker exec qubix-nginx nginx -s reload
-   ```  
-3. SSL (Qubix stack dir): `docker compose run --rm certbot certonly --webroot -w /var/www/certbot -d dev.muteeblabs.uk --agree-tos --email YOUR@EMAIL`  
-4. Test: `curl -sS https://dev.muteeblabs.uk/healthz` → `ok` (not inventory login HTML)
+This starts **your** containers only: `muteeb-web` (static site + `/api/contact`) and `muteeb-api` (email).
 
-Update: `docker compose up -d --build`
+### Why host nginx is involved
+
+On your VPS, **one** nginx container already uses ports **80/443** for several apps. This project does not replace that — it adds `muteeb-web` on an internal Docker network. You must add **one** `server_name dev.muteeblabs.uk` block on the **host** nginx so that hostname reaches `muteeb-web`, not inventory or anything else.
+
+1. DNS: `dev.muteeblabs.uk` → VPS IP  
+2. Find conflicts: `docker exec <host-nginx> grep -r "dev.muteeblabs.uk" /etc/nginx/`  
+3. Install vhost: copy `edge-nginx-dev.muteeblabs.uk.conf` into that nginx’s `conf.d/`, reload  
+4. Test: `curl https://dev.muteeblabs.uk/healthz` → `ok`  
+5. SSL: certbot webroot on the same host nginx / certbot setup you already use for that server  
+
+Set `EDGE_PROXY_NETWORK` in `.env` to the Docker network your host nginx shares with app containers (`docker network ls`).
