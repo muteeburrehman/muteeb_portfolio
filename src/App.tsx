@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
+import { BackToTop } from './components/BackToTop'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 import { Marquee } from './components/Marquee'
@@ -27,6 +28,7 @@ function App() {
         <Route path="/contact" element={<ContactPage />} />
       </Routes>
       <Footer />
+      <BackToTop hideOnContact={pathname === '/contact'} />
       <Marquee hideOnContact={pathname === '/contact'} />
     </>
   )

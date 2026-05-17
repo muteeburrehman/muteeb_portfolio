@@ -97,24 +97,28 @@ export function ContactForm() {
   }
 
   const inputClass =
-    'w-full rounded-xl border border-white/10 bg-bg/80 px-4 py-3.5 text-sm text-white placeholder:text-white/25 transition-colors focus:border-sky-400/50 focus:ring-2 focus:ring-sky-400/20'
+    'w-full rounded-xl border border-white/10 bg-bg/70 px-4 py-3.5 text-sm text-white placeholder:text-white/30 transition-all focus:border-sky-400/60 focus:bg-bg/90 focus:ring-2 focus:ring-sky-400/15'
 
   if (status === 'success') {
     return (
-      <div className="border-gradient flex flex-col items-center justify-center rounded-3xl bg-surface-elevated p-12 text-center">
-        <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10 text-green-400">
+      <div className="border-gradient relative flex flex-col items-center justify-center overflow-hidden rounded-3xl bg-surface-elevated p-12 text-center">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-linear-to-br from-emerald-500/[0.06] via-transparent to-sky-500/[0.06]"
+        />
+        <div className="relative mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/12 text-emerald-300 ring-1 ring-emerald-500/30">
           <CheckIcon />
         </div>
-        <h3 className="text-xl font-semibold text-white">Message sent successfully</h3>
-        <p className="mt-3 max-w-sm text-sm text-white/50">
+        <h3 className="relative text-xl font-semibold text-white">Message sent successfully</h3>
+        <p className="relative mt-3 max-w-sm text-sm text-white/55">
           Thanks for reaching out — I&apos;ll get back to you soon. You can also email{' '}
-          <a href={`mailto:${EMAIL}`} className="text-sky-400 hover:underline">
+          <a href={`mailto:${EMAIL}`} className="text-sky-300 hover:underline">
             {EMAIL}
           </a>
         </p>
         <Button
           variant="outline"
-          className="mt-8"
+          className="relative mt-8"
           onClick={() => {
             setStatus('idle')
             setForm(initial)
@@ -126,15 +130,20 @@ export function ContactForm() {
     )
   }
 
+  const submitting = status === 'submitting'
+
   return (
     <form
       onSubmit={handleSubmit}
-      className="border-gradient space-y-5 rounded-3xl bg-surface-elevated p-6 sm:p-8"
+      className="border-gradient relative space-y-5 rounded-3xl bg-surface-elevated p-6 sm:p-8"
       noValidate
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="name" className="mb-2 block text-xs font-medium tracking-wide text-white/50 uppercase">
+          <label
+            htmlFor="name"
+            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/55 uppercase"
+          >
             Your name
           </label>
           <input
@@ -144,12 +153,16 @@ export function ContactForm() {
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             placeholder="John Doe"
             className={inputClass}
-            disabled={status === 'submitting'}
+            disabled={submitting}
+            autoComplete="name"
           />
           {errors.name && <p className="mt-1.5 text-xs text-red-400">{errors.name}</p>}
         </div>
         <div>
-          <label htmlFor="email" className="mb-2 block text-xs font-medium tracking-wide text-white/50 uppercase">
+          <label
+            htmlFor="email"
+            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/55 uppercase"
+          >
             Email
           </label>
           <input
@@ -159,33 +172,56 @@ export function ContactForm() {
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             placeholder="you@company.com"
             className={inputClass}
-            disabled={status === 'submitting'}
+            disabled={submitting}
+            autoComplete="email"
           />
           {errors.email && <p className="mt-1.5 text-xs text-red-400">{errors.email}</p>}
         </div>
       </div>
 
       <div>
-        <label htmlFor="topic" className="mb-2 block text-xs font-medium tracking-wide text-white/50 uppercase">
+        <label
+          htmlFor="topic"
+          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/55 uppercase"
+        >
           Project type
         </label>
-        <select
-          id="topic"
-          value={form.topic}
-          onChange={(e) => setForm({ ...form, topic: e.target.value })}
-          className={`${inputClass} cursor-pointer appearance-none`}
-          disabled={status === 'submitting'}
-        >
-          {CONTACT_TOPICS.map((t) => (
-            <option key={t} value={t} className="bg-bg">
-              {t}
-            </option>
-          ))}
-        </select>
+        <div className="relative">
+          <select
+            id="topic"
+            value={form.topic}
+            onChange={(e) => setForm({ ...form, topic: e.target.value })}
+            className={`${inputClass} cursor-pointer appearance-none pr-10`}
+            disabled={submitting}
+          >
+            {CONTACT_TOPICS.map((t) => (
+              <option key={t} value={t} className="bg-bg">
+                {t}
+              </option>
+            ))}
+          </select>
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-white/40"
+          >
+            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none">
+              <path
+                d="M6 9l6 6 6-6"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+        </div>
       </div>
 
       <div>
-        <label htmlFor="message" className="mb-2 block text-xs font-medium tracking-wide text-white/50 uppercase">
+        <label
+          htmlFor="message"
+          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/55 uppercase"
+        >
           Message
         </label>
         <textarea
@@ -193,23 +229,59 @@ export function ContactForm() {
           rows={5}
           value={form.message}
           onChange={(e) => setForm({ ...form, message: e.target.value })}
-          placeholder="Tell me about your project, timeline, and goals..."
+          placeholder="Tell me about your project, timeline, and goals…"
           className={`${inputClass} resize-none`}
-          disabled={status === 'submitting'}
+          disabled={submitting}
         />
-        {errors.message && <p className="mt-1.5 text-xs text-red-400">{errors.message}</p>}
+        <div className="mt-1.5 flex items-center justify-between text-[11px] text-white/35">
+          {errors.message ? (
+            <span className="text-red-400">{errors.message}</span>
+          ) : (
+            <span>Minimum 20 characters</span>
+          )}
+          <span className={form.message.length > 0 ? 'text-white/55' : ''}>
+            {form.message.length}/5000
+          </span>
+        </div>
       </div>
 
       {error ? (
-        <p className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+        <p className="rounded-xl border border-red-500/25 bg-red-500/5 px-4 py-3 text-sm text-red-300">
           {error}
         </p>
       ) : null}
 
-      <Button type="submit" className="w-full sm:w-auto" disabled={status === 'submitting'}>
-        {status === 'submitting' ? 'Sending…' : 'Send Message'}
-        {status !== 'submitting' && <ArrowIcon />}
-      </Button>
+      <div className="flex flex-col items-start gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-[11px] text-white/35">
+          Replies within <span className="text-white/55">24 hours</span> · No spam, ever.
+        </p>
+        <Button type="submit" className="w-full sm:w-auto" disabled={submitting}>
+          {submitting ? (
+            <>
+              <svg
+                aria-hidden="true"
+                className="h-4 w-4 animate-spin"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" opacity="0.25" />
+                <path
+                  d="M21 12a9 9 0 00-9-9"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+              Sending…
+            </>
+          ) : (
+            <>
+              Send message
+              <ArrowIcon className="h-4 w-4" />
+            </>
+          )}
+        </Button>
+      </div>
     </form>
   )
 }

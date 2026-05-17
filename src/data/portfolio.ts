@@ -48,7 +48,70 @@ export const MARQUEE_ITEMS = [
   'ELASTICSEARCH',
 ] as const
 
-export const WORK_ITEMS = [
+export const PROJECTS = [
+  {
+    slug: 'pitprize',
+    name: 'PitPrize',
+    category: 'Full Stack · Live',
+    tagline: 'Skill-based motorsport prediction platform',
+    description:
+      'A live competition platform where users build teams, predict race outcomes and compete for real cash prizes. Built end-to-end — scoring engine, prize pools, contest entries, leaderboards and admin tooling.',
+    image: '/projects/pitprize.png',
+    imageAlt: 'PitPrize racing prediction platform homepage',
+    tags: ['React', 'Python', 'PostgreSQL', 'Stripe', 'Real-time'],
+    url: 'https://pitprize.com',
+    role: 'Full Stack Engineer',
+    status: 'Live · 2026 season',
+    accent: 'amber' as const,
+  },
+  {
+    slug: 'marblesemen',
+    name: 'Marble Semen',
+    category: 'E-commerce · Live',
+    tagline: 'Wagyu genetics storefront & catalog',
+    description:
+      'A specialised e-commerce platform for genetically tested Wagyu cattle semen — product catalog, embryos, custom "Bull Battery" tool, shopping cart and content-rich storefront for a niche US client.',
+    image: '/projects/marblesemen.png',
+    imageAlt: 'Marble Semen Wagyu e-commerce homepage',
+    tags: ['Full Stack', 'Catalog', 'Cart', 'Payments', 'CMS'],
+    url: 'https://marblesemen.com',
+    role: 'Full Stack Engineer',
+    status: 'Live · in production',
+    accent: 'sky' as const,
+  },
+  {
+    slug: 'ai-email-router',
+    name: 'AI Email Automation Suite',
+    category: 'AI Automation · Production',
+    tagline: 'Intelligent inbox routing & auto-reply',
+    description:
+      'A custom n8n + OpenAI pipeline that listens to Gmail, extracts intent with an LLM, classifies messages (services / consultations / payments / other) and drafts contextual replies — turning a busy inbox into a self-managing assistant.',
+    image: '/projects/n8n-workflow.png',
+    imageAlt: 'n8n workflow connecting Gmail with OpenAI classification and auto-reply branches',
+    tags: ['n8n', 'OpenAI', 'Gmail API', 'LLM Classifier', 'Auto-reply'],
+    url: '',
+    role: 'AI Engineer',
+    status: 'Production',
+    accent: 'purple' as const,
+  },
+  {
+    slug: 'custom-chatbots',
+    name: 'Custom AI Chatbots',
+    category: 'AI Engineering · Multiple clients',
+    tagline: 'Domain-trained conversational agents',
+    description:
+      'Bespoke chatbots for client websites and internal tools — RAG knowledge bases, tool use, voice interfaces and tight integrations with each client\'s data and stack. From support bots to lead-qualification agents.',
+    image: '',
+    imageAlt: '',
+    tags: ['LangChain', 'RAG', 'OpenAI', 'Claude', 'Voice'],
+    url: '',
+    role: 'AI Engineer',
+    status: 'Multiple deployments',
+    accent: 'emerald' as const,
+  },
+] as const
+
+export const CAPABILITIES = [
   {
     num: '01',
     title: 'AI Agents & LLM Pipelines',
@@ -93,6 +156,33 @@ export const WORK_ITEMS = [
   },
 ] as const
 
+export const PROCESS = [
+  {
+    step: '01',
+    title: 'Discover',
+    description:
+      'Understand the problem, the users and the constraints. Audit any existing systems and agree on what "done" looks like.',
+  },
+  {
+    step: '02',
+    title: 'Architect',
+    description:
+      'Design clean data flow, pick the right stack and lay out the AI/automation pieces — so the build stays simple and the system stays maintainable.',
+  },
+  {
+    step: '03',
+    title: 'Build & ship',
+    description:
+      'Ship in tight loops with frequent demos. Production-grade code, real test data and observability from day one.',
+  },
+  {
+    step: '04',
+    title: 'Iterate',
+    description:
+      'Support, monitor, optimise. Tighten prompts, prune costs, add features. Stay involved past launch.',
+  },
+] as const
+
 export const SERVICES = [
   {
     title: 'AI & LLM Development',
@@ -120,12 +210,13 @@ export const CONTACT_TOPICS = [
 export const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/#work', label: 'Work' },
+  { to: '/#process', label: 'Process' },
   { to: '/#about', label: 'About' },
   { to: '/contact', label: 'Contact' },
 ] as const
 
 export const STATS = [
+  { value: '4+', label: 'Live projects' },
   { value: '3+', label: 'Years building' },
-  { value: 'AI', label: 'First mindset' },
-  { value: '24h', label: 'Typical reply' },
+  { value: '24h', label: 'Avg reply' },
 ] as const

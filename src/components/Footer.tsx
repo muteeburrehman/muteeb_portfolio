@@ -16,12 +16,12 @@ const socialIcons = {
 
 function FooterNavLink({ to, label }: { to: string; label: string }) {
   const base =
-    'text-sm transition-colors hover:text-white'
-  const active = 'text-white font-medium'
+    'group inline-flex items-center gap-2 text-sm transition-colors hover:text-white'
 
   if (to.includes('#')) {
     return (
       <a href={to} className={`${base} text-white/45`}>
+        <span className="h-px w-3 bg-white/15 transition-all group-hover:w-5 group-hover:bg-sky-400/60" />
         {label}
       </a>
     )
@@ -30,9 +30,20 @@ function FooterNavLink({ to, label }: { to: string; label: string }) {
   return (
     <NavLink
       to={to}
-      className={({ isActive }) => `${base} ${isActive ? active : 'text-white/45'}`}
+      className={({ isActive }) =>
+        `${base} ${isActive ? 'font-medium text-white' : 'text-white/45'}`
+      }
     >
-      {label}
+      {({ isActive }) => (
+        <>
+          <span
+            className={`h-px transition-all ${
+              isActive ? 'w-5 bg-sky-400/70' : 'w-3 bg-white/15 group-hover:w-5 group-hover:bg-sky-400/60'
+            }`}
+          />
+          {label}
+        </>
+      )}
     </NavLink>
   )
 }
@@ -43,28 +54,43 @@ export function Footer() {
   const activeSocials = SOCIAL_LINKS.filter((s) => s.url.trim().length > 0)
 
   return (
-    <footer className="relative mt-auto border-t border-white/8 bg-surface/80 backdrop-blur-xl">
+    <footer className="relative mt-auto overflow-hidden border-t border-white/8 bg-surface/80 backdrop-blur-xl">
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-sky-400/30 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-sky-400/40 to-transparent"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute -top-32 left-1/2 h-64 w-[40rem] -translate-x-1/2 rounded-full bg-sky-500/[0.04] blur-3xl"
         aria-hidden="true"
       />
 
-      <div className="mx-auto max-w-7xl px-6 py-14 pb-28 lg:px-10 lg:py-16 lg:pb-28">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
-          {/* Brand */}
-          <div className="lg:col-span-4">
-            <Link
-              to="/"
-              className="inline-block font-display text-2xl tracking-tight text-white transition-opacity hover:opacity-80"
-            >
-              MUR.
-            </Link>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/45">{ROLE}</p>
-            <div className="mt-5 flex flex-wrap gap-2">
+      <div className="relative mx-auto max-w-7xl px-6 py-14 pb-28 lg:px-10 lg:py-20 lg:pb-32">
+        <div className="mb-12 flex flex-wrap items-end justify-between gap-6 border-b border-white/5 pb-10">
+          <Link
+            to="/"
+            className="group inline-flex items-end gap-2 font-display tracking-tight text-white transition-opacity hover:opacity-90"
+          >
+            <span className="text-5xl leading-none sm:text-6xl lg:text-7xl">
+              MUR<span className="text-gradient">.</span>
+            </span>
+          </Link>
+          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-medium text-emerald-300 backdrop-blur-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+            </span>
+            Available · UTC+5
+          </span>
+        </div>
+
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
+          <div className="lg:col-span-5">
+            <p className="max-w-sm text-base leading-relaxed text-white/55">{ROLE}</p>
+            <div className="mt-5 flex flex-wrap gap-1.5">
               {FOOTER_FOCUS.map((item) => (
                 <span
                   key={item}
-                  className="rounded-full border border-white/8 bg-white/5 px-2.5 py-1 text-[11px] text-white/40"
+                  className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-[11px] text-white/50"
                 >
                   {item}
                 </span>
@@ -72,9 +98,8 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Navigation */}
-          <div className="lg:col-span-2">
-            <p className="mb-4 font-mono text-[10px] tracking-[0.2em] text-white/30 uppercase">
+          <div className="lg:col-span-3">
+            <p className="mb-4 font-mono text-[10px] tracking-[0.22em] text-white/30 uppercase">
               Navigate
             </p>
             <nav className="flex flex-col gap-3" aria-label="Footer navigation">
@@ -84,33 +109,29 @@ export function Footer() {
             </nav>
           </div>
 
-          {/* Connect */}
-          <div className="lg:col-span-6">
-            <p className="mb-4 font-mono text-[10px] tracking-[0.2em] text-white/30 uppercase">
+          <div className="lg:col-span-4">
+            <p className="mb-4 font-mono text-[10px] tracking-[0.22em] text-white/30 uppercase">
               Connect
             </p>
-            <p className="mb-5 max-w-md text-sm text-white/45">
-              Open to freelance, contract, and full-time work. Drop a line about your AI or full
-              stack project.
-            </p>
-
             <a
               href={`mailto:${EMAIL}`}
-              className="group inline-flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-5 py-4 transition-all hover:border-sky-400/30 hover:bg-sky-500/5"
+              className="group flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition-all hover:border-sky-400/35 hover:bg-sky-500/[0.04]"
             >
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-500/10 text-sky-400 transition-colors group-hover:bg-sky-500/20">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-500/12 text-sky-300 transition-colors group-hover:bg-sky-500/20">
                 <MailIcon />
               </span>
-              <span className="min-w-0">
-                <span className="block text-xs text-white/40">Email me at</span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-[11px] tracking-wider text-white/40 uppercase">
+                  Email me
+                </span>
                 <span className="block truncate text-sm font-medium text-white group-hover:text-sky-200">
                   {EMAIL}
                 </span>
               </span>
-              <ArrowIcon className="ml-auto h-4 w-4 shrink-0 text-white/30 transition-transform group-hover:translate-x-0.5 group-hover:text-white/60" />
+              <ArrowIcon className="ml-auto h-4 w-4 shrink-0 text-white/30 transition-transform group-hover:translate-x-0.5 group-hover:text-white/70" />
             </a>
 
-            <div className="mt-6 flex flex-wrap items-center gap-3">
+            <div className="mt-5 flex flex-wrap items-center gap-3">
               {activeSocials.map(({ label, url, icon }) => {
                 const Icon = socialIcons[icon]
                 return (
@@ -120,7 +141,7 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white/50 transition-all hover:border-white/20 hover:bg-white/10 hover:text-white"
+                    className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/55 transition-all hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
                   >
                     <Icon />
                   </a>
@@ -130,21 +151,21 @@ export function Footer() {
               {pathname !== '/contact' && (
                 <Link
                   to="/contact"
-                  className={`inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-white/80 transition-all hover:border-white/30 hover:bg-white/5 hover:text-white ${activeSocials.length === 0 ? '' : 'sm:ml-1'}`}
+                  className="group inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-white/85 transition-all hover:border-sky-400/40 hover:bg-white/[0.04] hover:text-white"
                 >
                   Contact form
-                  <ArrowIcon className="h-3.5 w-3.5" />
+                  <ArrowIcon className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               )}
             </div>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 sm:flex-row">
-          <p className="text-center text-xs text-white/30 sm:text-left">
+        <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-white/5 pt-8 sm:flex-row">
+          <p className="text-center text-xs text-white/35 sm:text-left">
             © {year} {NAME}. Crafted with React &amp; Tailwind.
           </p>
-          <p className="text-center text-xs text-white/20 sm:text-right">
+          <p className="text-center text-xs text-white/25 sm:text-right">
             Python · AI · Full Stack · Cloud
           </p>
         </div>
