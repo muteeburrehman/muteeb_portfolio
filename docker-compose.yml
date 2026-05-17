@@ -1,0 +1,70 @@
+# Production: no host ports — traffic via qubix-nginx on qubix_proxy network.
+# Copy .env.example → .env, then: docker compose up -d --build
+#
+# Edge nginx (once): add server block for dev.muteeblabs.uk → proxy_pass http://muteeb-web:80;
+# SSL (once, from Qubix stack dir): docker compose run --rm certbot certonly --webroot
+#   -w /var/www/certbot --email YOU@EMAIL -d dev.muteeblabs.uk --agree-tos
+
+name: muteeb-portfolio
+
+services:
+  web:
+    build:
+      context: .
+      target: web
+      args:
+        VITE_SITE_URL: ${PUBLIC_SITE_URL:-https://dev.muteeblabs.uk}
+        VITE_CONTACT_API_URL: ${VITE_CONTACT_API_URL:-/api/contact}
+    image: muteeb-portfolio/web:latest
+    container_name: muteeb-web
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - internal
+      - qubix_proxy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  api:
+    build:
+      context: .
+      target: api
+    image: muteeb-portfolio/api:latest
+    container_name: muteeb-api
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      PUBLIC_SITE_URL: ${PUBLIC_SITE_URL:-https://dev.muteeblabs.uk}
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://dev.muteeblabs.uk,http://localhost:5173}
+      MAIL_BRAND_NAME: ${MAIL_BRAND_NAME:-Muteeb Labs}
+      EMAIL_HOST: ${EMAIL_HOST:-}
+      EMAIL_PORT: ${EMAIL_PORT:-587}
+      EMAIL_USE_TLS: ${EMAIL_USE_TLS:-True}
+      EMAIL_USER: ${EMAIL_USER:-}
+      EMAIL_PASS: ${EMAIL_PASS:-}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    expose:
+      - "8000"
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8000/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 12s
+
+networks:
+  internal:
+    driver: bridge
+  qubix_proxy:
+    external: true
+    name: ${QUBIX_DOCKER_NETWORK:-qubix-solutions_qubix-net}

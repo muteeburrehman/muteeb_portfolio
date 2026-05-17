@@ -1,28 +1,28 @@
 # Muteeb Ur Rehman — Portfolio
 
-Personal portfolio built with **React**, **TypeScript**, **Vite**, **Tailwind CSS**, and **React Router**.
+React, TypeScript, Vite, Tailwind CSS, React Router. Contact form sends **branded HTML email** via FastAPI + SMTP.
 
-## Pages
-
-- **/** — Home (hero, work, about, contact CTA)
-- **/contact** — Full contact page with form
-
-## Run locally
+## Local
 
 ```bash
-npm install
-npm run dev
+npm install && npm run dev          # :5173 — proxies /api/contact → :8000
+cd backend && pip install -r requirements.txt
+cp ../.env.example ../.env          # set EMAIL_PASS
+uvicorn main:app --reload --port 8000
 ```
 
-Open [http://localhost:5173](http://localhost:5173).
+## Deploy (Docker)
 
-## Build
+Uses your existing **qubix-nginx** (no extra host ports). Internal containers: `muteeb-web:80`, `muteeb-api:8000`.
 
 ```bash
-npm run build
-npm run preview
+cp .env.example .env   # secrets + SMTP
+docker compose up -d --build
 ```
 
-## Contact form
+1. DNS: `dev.muteeblabs.uk` → VPS  
+2. Add to **qubix** `nginx/conf.d/` a server for `dev.muteeblabs.uk` with `proxy_pass http://muteeb-web:80;` (include `/api/contact` and SPA `location /`). Reload `qubix-nginx`.  
+3. SSL from Qubix stack dir: `docker compose run --rm certbot certonly --webroot -w /var/www/certbot -d dev.muteeblabs.uk --agree-tos --email YOUR@EMAIL`  
+4. Test: `curl https://dev.muteeblabs.uk/healthz`
 
-The form opens your email client with a pre-filled message to `muteebworkinfo@gmail.com`. For server-side delivery, connect a service like Formspree or a custom API later.
+Update: `docker compose up -d --build`

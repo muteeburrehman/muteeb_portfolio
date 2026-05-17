@@ -3,12 +3,17 @@ import { CONTACT_TOPICS, EMAIL } from '../data/portfolio'
 import { ArrowIcon, CheckIcon } from './icons'
 import { Button } from './ui/Button'
 
+const CONTACT_ENDPOINT =
+  (import.meta.env.VITE_CONTACT_API_URL as string | undefined)?.trim() || '/api/contact'
+
 type FormState = {
   name: string
   email: string
   topic: string
   message: string
 }
+
+type Status = 'idle' | 'submitting' | 'success' | 'error'
 
 const initial: FormState = {
   name: '',
@@ -17,10 +22,23 @@ const initial: FormState = {
   message: '',
 }
 
+function extractApiError(payload: unknown): string | undefined {
+  if (!payload || typeof payload !== 'object') return undefined
+  const body = payload as Record<string, unknown>
+  const detail = body.detail
+  if (typeof detail === 'string') return detail
+  if (Array.isArray(detail) && detail.length > 0) {
+    const row = detail[0] as Record<string, unknown>
+    if (typeof row.msg === 'string') return row.msg
+  }
+  return undefined
+}
+
 export function ContactForm() {
   const [form, setForm] = useState<FormState>(initial)
-  const [submitted, setSubmitted] = useState(false)
+  const [status, setStatus] = useState<Status>('idle')
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
+  const [error, setError] = useState<string | null>(null)
 
   function validate() {
     const next: Partial<Record<keyof FormState, string>> = {}
@@ -33,30 +51,63 @@ export function ContactForm() {
     return Object.keys(next).length === 0
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     if (!validate()) return
 
-    const subject = encodeURIComponent(`[Portfolio] ${form.topic} — ${form.name}`)
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nEmail: ${form.email}\nTopic: ${form.topic}\n\n${form.message}`,
-    )
-    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`
-    setSubmitted(true)
+    setStatus('submitting')
+    setError(null)
+
+    try {
+      const res = await fetch(CONTACT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          topic: form.topic,
+          message: form.message.trim(),
+        }),
+      })
+
+      const body = await res.json().catch(() => ({}))
+
+      if (!res.ok) {
+        const msg =
+          extractApiError(body) ||
+          (res.status === 422
+            ? 'Please check required fields — name, email and message.'
+            : 'Something went wrong. Please try again or email directly.')
+        throw new Error(msg)
+      }
+
+      setForm(initial)
+      setStatus('success')
+    } catch (err) {
+      setStatus('error')
+      const raw = err instanceof Error ? err.message : ''
+      setError(
+        raw === 'Failed to fetch'
+          ? 'Could not reach the server. If you self-host, ensure the contact API is running.'
+          : err instanceof Error
+            ? err.message
+            : 'Something went wrong',
+      )
+    }
   }
 
   const inputClass =
     'w-full rounded-xl border border-white/10 bg-bg/80 px-4 py-3.5 text-sm text-white placeholder:text-white/25 transition-colors focus:border-sky-400/50 focus:ring-2 focus:ring-sky-400/20'
 
-  if (submitted) {
+  if (status === 'success') {
     return (
       <div className="border-gradient flex flex-col items-center justify-center rounded-3xl bg-surface-elevated p-12 text-center">
         <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10 text-green-400">
           <CheckIcon />
         </div>
-        <h3 className="text-xl font-semibold text-white">Opening your email client…</h3>
+        <h3 className="text-xl font-semibold text-white">Message sent successfully</h3>
         <p className="mt-3 max-w-sm text-sm text-white/50">
-          If it didn&apos;t open, email me directly at{' '}
+          Thanks for reaching out — I&apos;ll get back to you soon. You can also email{' '}
           <a href={`mailto:${EMAIL}`} className="text-sky-400 hover:underline">
             {EMAIL}
           </a>
@@ -65,7 +116,7 @@ export function ContactForm() {
           variant="outline"
           className="mt-8"
           onClick={() => {
-            setSubmitted(false)
+            setStatus('idle')
             setForm(initial)
           }}
         >
@@ -79,6 +130,7 @@ export function ContactForm() {
     <form
       onSubmit={handleSubmit}
       className="border-gradient space-y-5 rounded-3xl bg-surface-elevated p-6 sm:p-8"
+      noValidate
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
@@ -92,6 +144,7 @@ export function ContactForm() {
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             placeholder="John Doe"
             className={inputClass}
+            disabled={status === 'submitting'}
           />
           {errors.name && <p className="mt-1.5 text-xs text-red-400">{errors.name}</p>}
         </div>
@@ -106,6 +159,7 @@ export function ContactForm() {
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             placeholder="you@company.com"
             className={inputClass}
+            disabled={status === 'submitting'}
           />
           {errors.email && <p className="mt-1.5 text-xs text-red-400">{errors.email}</p>}
         </div>
@@ -120,6 +174,7 @@ export function ContactForm() {
           value={form.topic}
           onChange={(e) => setForm({ ...form, topic: e.target.value })}
           className={`${inputClass} cursor-pointer appearance-none`}
+          disabled={status === 'submitting'}
         >
           {CONTACT_TOPICS.map((t) => (
             <option key={t} value={t} className="bg-bg">
@@ -140,13 +195,20 @@ export function ContactForm() {
           onChange={(e) => setForm({ ...form, message: e.target.value })}
           placeholder="Tell me about your project, timeline, and goals..."
           className={`${inputClass} resize-none`}
+          disabled={status === 'submitting'}
         />
         {errors.message && <p className="mt-1.5 text-xs text-red-400">{errors.message}</p>}
       </div>
 
-      <Button type="submit" className="w-full sm:w-auto">
-        Send Message
-        <ArrowIcon />
+      {error ? (
+        <p className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+          {error}
+        </p>
+      ) : null}
+
+      <Button type="submit" className="w-full sm:w-auto" disabled={status === 'submitting'}>
+        {status === 'submitting' ? 'Sending…' : 'Send Message'}
+        {status !== 'submitting' && <ArrowIcon />}
       </Button>
     </form>
   )
