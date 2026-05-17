@@ -26,8 +26,10 @@ On your VPS, **one** nginx container already uses ports **80/443** for several a
 
 1. DNS: `dev.muteeblabs.uk` → VPS IP  
 2. Find conflicts: `docker exec <host-nginx> grep -r "dev.muteeblabs.uk" /etc/nginx/`  
-3. Install vhost: copy `edge-nginx-dev.muteeblabs.uk.conf` into that nginx’s `conf.d/`, reload  
-4. Test: `curl https://dev.muteeblabs.uk/healthz` → `ok`  
-5. SSL: certbot webroot on the same host nginx / certbot setup you already use for that server  
+3. Install vhost (HTTP first — no cert yet): `cp edge-nginx-dev.muteeblabs.uk.conf` → host nginx `conf.d/`, reload  
+4. Test: `curl http://dev.muteeblabs.uk/healthz` → `ok`  
+5. Cert: `certbot certonly --webroot … -d dev.muteeblabs.uk`  
+6. HTTPS: `cp edge-nginx-dev.muteeblabs.uk.ssl.conf` over `dev.muteeblabs.uk.conf`, reload  
+7. Test: `curl https://dev.muteeblabs.uk/healthz` → `ok`  
 
 Set `EDGE_PROXY_NETWORK` in `.env` to the Docker network your host nginx shares with app containers (`docker network ls`).
