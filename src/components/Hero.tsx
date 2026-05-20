@@ -54,10 +54,6 @@ export function Hero() {
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs text-white/65 backdrop-blur-sm">
             Remote · Worldwide
           </span>
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs text-white/65 backdrop-blur-sm">
-            <SparklesIcon className="h-3 w-3 text-sky-300" />
-            v2026
-          </span>
         </div>
 
         <div className="grid items-start gap-12 lg:grid-cols-12 lg:gap-10">

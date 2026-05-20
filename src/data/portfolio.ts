@@ -1,4 +1,4 @@
-export const EMAIL = 'muteebworkinfo@gmail.com'
+export const EMAIL = 'business@muteeblabs.uk'
 export const NAME = 'Muteeb Ur Rehman'
 export const ROLE = 'Full Stack Developer & AI Engineer'
 export const TECH_STACK =
@@ -215,10 +215,13 @@ export const NAV_LINKS = [
   { to: '/contact', label: 'Contact' },
 ] as const
 
+/** Shown on site + kept in sync with MAIL_REPLY_WINDOW in .env */
+export const REPLY_TIME = 'usually within one day'
+
 export const STATS = [
   { value: '10+', label: 'Builds shipped' },
   { value: '3+', label: 'Years building' },
-  { value: '24h', label: 'Avg reply' },
+  { value: '1 day', label: 'Typical reply' },
 ] as const
 
 export const HERO_ACCENTS = [

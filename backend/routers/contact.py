@@ -8,7 +8,7 @@ import logging
 from fastapi import APIRouter, HTTPException
 
 from schemas.contact import ContactSubmission
-from services.email_service import send_contact_notification
+from services.email_service import process_contact_submission
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ router = APIRouter(tags=["contact"])
 @router.post("/contact", summary="Receive contact form and send email.")
 async def submit_contact(payload: ContactSubmission) -> dict[str, bool | str]:
     try:
-        await asyncio.to_thread(send_contact_notification, payload)
+        await asyncio.to_thread(process_contact_submission, payload)
     except Exception:
         logger.exception("Contact SMTP delivery failed")
         raise HTTPException(

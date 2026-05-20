@@ -1,0 +1,289 @@
+<!--
+================================================================
+  Muteeb Labs — branded Gmail reply template
+================================================================
+
+  How to use this for one-off manual replies in Gmail:
+
+  1.  Open this file in a browser:
+      file://<path>/email-templates/reply-template.html
+      (or run: xdg-open email-templates/reply-template.html)
+  2.  Click anywhere in the rendered email, press Ctrl/Cmd-A
+      → Ctrl/Cmd-C to copy the styled content.
+  3.  Hit Reply in Gmail. Delete Gmail's default quoted thread
+      (optional) and Ctrl/Cmd-V the template into the compose body.
+  4.  Edit the greeting, paragraphs, and CTA text inline.
+
+  How to save it as a reusable Gmail Template (recommended):
+
+  1.  Gmail → Settings ⚙ → See all settings → Advanced tab
+      → enable "Templates" → Save changes.
+  2.  Compose a new email and paste the template above into the body.
+  3.  Compose window → three-dot menu → Templates
+      → Save draft as template → Save as new template
+      → name it e.g. "Muteeb Labs reply".
+  4.  For future replies: Reply → three-dot menu → Templates
+      → Insert template → select "Muteeb Labs reply".
+
+  Notes:
+  - Gmail strips some advanced CSS (linear-gradient sometimes degrades).
+    Inline styles + tables maximise survival across Gmail compose.
+  - Replace the [bracketed placeholders] before sending.
+  - Subject line is set when you compose — Gmail does not pull it
+    from this file.
+================================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Muteeb Labs — Reply</title>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 32px 16px 48px;
+      background: #0a0a0a;
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    "
+  >
+    <table
+      role="presentation"
+      width="100%"
+      cellspacing="0"
+      cellpadding="0"
+      style="background: #0a0a0a"
+    >
+      <tr>
+        <td align="center">
+          <table
+            role="presentation"
+            width="100%"
+            cellspacing="0"
+            cellpadding="0"
+            style="max-width: 580px"
+          >
+            <!-- Header gradient -->
+            <tr>
+              <td style="border-radius: 16px 16px 0 0; overflow: hidden">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td
+                      style="
+                        background: #38bdf8;
+                        background: linear-gradient(125deg, #38bdf8 0%, #a855f7 100%);
+                        padding: 26px 28px 28px;
+                      "
+                    >
+                      <p
+                        style="
+                          margin: 0 0 6px;
+                          color: rgba(255, 255, 255, 0.85);
+                          font-size: 10px;
+                          font-weight: 700;
+                          letter-spacing: 0.28em;
+                          text-transform: uppercase;
+                        "
+                      >
+                        MUTEEB LABS
+                      </p>
+                      <p
+                        style="
+                          margin: 0;
+                          color: #ffffff;
+                          font-size: 22px;
+                          font-weight: 800;
+                          line-height: 1.2;
+                          font-family: Georgia, 'Times New Roman', serif;
+                        "
+                      >
+                        [Reply headline — e.g. "Great to hear from you, Alex"]
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Body card -->
+            <tr>
+              <td
+                style="
+                  background: #161616;
+                  padding: 0 26px 26px;
+                  border: 1px solid #2a2a2a;
+                  border-top: none;
+                  border-radius: 0 0 16px 16px;
+                "
+              >
+                <p
+                  style="
+                    margin: 0;
+                    padding: 22px 0 4px;
+                    color: #f5f5f5;
+                    font-size: 15px;
+                    line-height: 1.65;
+                  "
+                >
+                  Hi [Name],
+                </p>
+
+                <p
+                  style="
+                    margin: 14px 0 0;
+                    color: #d4d4d4;
+                    font-size: 15px;
+                    line-height: 1.65;
+                  "
+                >
+                  Thanks for your message about <strong style="color: #f5f5f5">[topic]</strong>.
+                  [One or two sentences responding to their inquiry — clarifying scope,
+                  asking follow-up questions, or sharing relevant work.]
+                </p>
+
+                <p
+                  style="
+                    margin: 14px 0 0;
+                    color: #d4d4d4;
+                    font-size: 15px;
+                    line-height: 1.65;
+                  "
+                >
+                  [Optional second paragraph — next steps, timeline, or a quick proposal.]
+                </p>
+
+                <!-- Optional list block -->
+                <table
+                  role="presentation"
+                  width="100%"
+                  cellspacing="0"
+                  cellpadding="0"
+                  style="margin: 18px 0 4px"
+                >
+                  <tr>
+                    <td
+                      style="
+                        padding: 14px 16px;
+                        background: #0f0f0f;
+                        border: 1px solid #2a2a2a;
+                        border-left: 4px solid #38bdf8;
+                        border-radius: 0 12px 12px 0;
+                      "
+                    >
+                      <p
+                        style="
+                          margin: 0 0 8px;
+                          color: #737373;
+                          font-size: 10px;
+                          font-weight: 700;
+                          letter-spacing: 0.14em;
+                          text-transform: uppercase;
+                        "
+                      >
+                        Proposed next step
+                      </p>
+                      <p
+                        style="margin: 0; color: #f5f5f5; font-size: 14px; line-height: 1.6"
+                      >
+                        [e.g. 30-min discovery call this week — I have Tue 4 PM and Thu 10 AM PKT open.]
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- CTA -->
+                <table
+                  role="presentation"
+                  width="100%"
+                  cellspacing="0"
+                  cellpadding="0"
+                  style="margin-top: 22px"
+                >
+                  <tr>
+                    <td align="left">
+                      <a
+                        href="https://dev.muteeblabs.uk"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style="
+                          display: inline-block;
+                          padding: 12px 22px;
+                          font-size: 13px;
+                          font-weight: 600;
+                          color: #ffffff;
+                          text-decoration: none;
+                          border-radius: 10px;
+                          background: linear-gradient(135deg, #38bdf8, #a855f7);
+                        "
+                        >Visit portfolio →</a
+                      >
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Signature -->
+                <table
+                  role="presentation"
+                  width="100%"
+                  cellspacing="0"
+                  cellpadding="0"
+                  style="margin-top: 30px"
+                >
+                  <tr>
+                    <td style="padding-top: 18px; border-top: 1px solid #2a2a2a">
+                      <p
+                        style="
+                          margin: 0;
+                          color: #f5f5f5;
+                          font-size: 14px;
+                          line-height: 1.5;
+                          font-weight: 600;
+                        "
+                      >
+                        Muteeb Ur Rehman
+                      </p>
+                      <p
+                        style="
+                          margin: 2px 0 0;
+                          color: #737373;
+                          font-size: 12px;
+                          line-height: 1.5;
+                        "
+                      >
+                        Full Stack Developer &amp; AI Engineer
+                      </p>
+                      <p
+                        style="
+                          margin: 6px 0 0;
+                          color: #737373;
+                          font-size: 12px;
+                          line-height: 1.5;
+                        "
+                      >
+                        <a
+                          href="mailto:business@muteeblabs.uk"
+                          style="color: #38bdf8; text-decoration: none"
+                          >business@muteeblabs.uk</a
+                        >
+                        &nbsp;·&nbsp;
+                        <a
+                          href="https://dev.muteeblabs.uk"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style="color: #38bdf8; text-decoration: none"
+                          >muteeblabs.uk</a
+                        >
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

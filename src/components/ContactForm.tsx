@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { CONTACT_TOPICS, EMAIL } from '../data/portfolio'
+import { CONTACT_TOPICS, EMAIL, REPLY_TIME } from '../data/portfolio'
 import { ArrowIcon, CheckIcon } from './icons'
 import { Button } from './ui/Button'
 
@@ -34,26 +34,64 @@ function extractApiError(payload: unknown): string | undefined {
   return undefined
 }
 
+function fieldError(field: keyof FormState, state: FormState): string | undefined {
+  switch (field) {
+    case 'name':
+      if (!state.name.trim()) return 'Name is required'
+      return undefined
+    case 'email':
+      if (!state.email.trim()) return 'Email is required'
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email)) return 'Enter a valid email'
+      return undefined
+    case 'message': {
+      const text = state.message.trim()
+      if (!text) return 'Message is required'
+      if (text.length < 20) return 'Please write at least 20 characters'
+      return undefined
+    }
+    default:
+      return undefined
+  }
+}
+
 export function ContactForm() {
   const [form, setForm] = useState<FormState>(initial)
   const [status, setStatus] = useState<Status>('idle')
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
   const [error, setError] = useState<string | null>(null)
+  const [submitAttempted, setSubmitAttempted] = useState(false)
 
-  function validate() {
+  function validateAll(state: FormState = form) {
     const next: Partial<Record<keyof FormState, string>> = {}
-    if (!form.name.trim()) next.name = 'Name is required'
-    if (!form.email.trim()) next.email = 'Email is required'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = 'Enter a valid email'
-    if (!form.message.trim()) next.message = 'Message is required'
-    else if (form.message.trim().length < 20) next.message = 'Please write at least 20 characters'
+    for (const field of ['name', 'email', 'message'] as const) {
+      const err = fieldError(field, state)
+      if (err) next[field] = err
+    }
     setErrors(next)
     return Object.keys(next).length === 0
   }
 
+  function updateField<K extends keyof FormState>(field: K, value: FormState[K]) {
+    const nextForm = { ...form, [field]: value }
+    setForm(nextForm)
+
+    setErrors((prev) => {
+      const shouldRevalidate = submitAttempted || field in prev
+      if (!shouldRevalidate) return prev
+
+      const err = fieldError(field, nextForm)
+      if (!err) {
+        const { [field]: _, ...rest } = prev
+        return rest
+      }
+      return { ...prev, [field]: err }
+    })
+  }
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    if (!validate()) return
+    setSubmitAttempted(true)
+    if (!validateAll()) return
 
     setStatus('submitting')
     setError(null)
@@ -82,6 +120,8 @@ export function ContactForm() {
       }
 
       setForm(initial)
+      setErrors({})
+      setSubmitAttempted(false)
       setStatus('success')
     } catch (err) {
       setStatus('error')
@@ -122,6 +162,8 @@ export function ContactForm() {
           onClick={() => {
             setStatus('idle')
             setForm(initial)
+            setErrors({})
+            setSubmitAttempted(false)
           }}
         >
           Send another message
@@ -150,7 +192,7 @@ export function ContactForm() {
             id="name"
             type="text"
             value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            onChange={(e) => updateField('name', e.target.value)}
             placeholder="John Doe"
             className={inputClass}
             disabled={submitting}
@@ -169,7 +211,7 @@ export function ContactForm() {
             id="email"
             type="email"
             value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            onChange={(e) => updateField('email', e.target.value)}
             placeholder="you@company.com"
             className={inputClass}
             disabled={submitting}
@@ -228,7 +270,7 @@ export function ContactForm() {
           id="message"
           rows={5}
           value={form.message}
-          onChange={(e) => setForm({ ...form, message: e.target.value })}
+            onChange={(e) => updateField('message', e.target.value)}
           placeholder="Tell me about your project, timeline, and goals…"
           className={`${inputClass} resize-none`}
           disabled={submitting}
@@ -236,10 +278,28 @@ export function ContactForm() {
         <div className="mt-1.5 flex items-center justify-between text-[11px] text-white/35">
           {errors.message ? (
             <span className="text-red-400">{errors.message}</span>
+          ) : form.message.trim().length >= 20 ? (
+            <span className="text-emerald-400/80">Looks good</span>
           ) : (
-            <span>Minimum 20 characters</span>
+            <span>
+              Minimum 20 characters
+              {form.message.trim().length > 0 ? (
+                <span className="text-white/45">
+                  {' '}
+                  ({20 - form.message.trim().length} more needed)
+                </span>
+              ) : null}
+            </span>
           )}
-          <span className={form.message.length > 0 ? 'text-white/55' : ''}>
+          <span
+            className={
+              form.message.trim().length >= 20
+                ? 'text-emerald-400/70'
+                : form.message.length > 0
+                  ? 'text-white/55'
+                  : ''
+            }
+          >
             {form.message.length}/5000
           </span>
         </div>
@@ -253,7 +313,7 @@ export function ContactForm() {
 
       <div className="flex flex-col items-start gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-[11px] text-white/35">
-          Replies within <span className="text-white/55">24 hours</span> · No spam, ever.
+          Personal reply <span className="text-white/55">{REPLY_TIME}</span> · No spam, ever.
         </p>
         <Button type="submit" className="w-full sm:w-auto" disabled={submitting}>
           {submitting ? (

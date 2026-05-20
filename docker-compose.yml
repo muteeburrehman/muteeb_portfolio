@@ -48,6 +48,12 @@ services:
       EMAIL_USE_TLS: ${EMAIL_USE_TLS:-True}
       EMAIL_USER: ${EMAIL_USER:-}
       EMAIL_PASS: ${EMAIL_PASS:-}
+      EMAIL_FROM: ${EMAIL_FROM:-}
+      EMAIL_TO: ${EMAIL_TO:-}
+      SEND_CLIENT_ACK: ${SEND_CLIENT_ACK:-True}
+      MAIL_SIGN_NAME: ${MAIL_SIGN_NAME:-Muteeb Ur Rehman}
+      MAIL_SIGN_TITLE: ${MAIL_SIGN_TITLE:-Full Stack Developer & AI Engineer}
+      MAIL_REPLY_WINDOW: ${MAIL_REPLY_WINDOW:-usually within one day}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
     expose:
       - "8000"

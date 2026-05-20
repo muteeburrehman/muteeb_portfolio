@@ -3,7 +3,7 @@ import { ClockIcon, MailIcon, SparklesIcon } from '../components/icons'
 import { GradientGlow } from '../components/ui/GradientGlow'
 import { Reveal } from '../components/ui/Reveal'
 import { SectionLabel } from '../components/ui/SectionLabel'
-import { EMAIL, NAME, ROLE, SERVICES } from '../data/portfolio'
+import { EMAIL, NAME, REPLY_TIME, ROLE, SERVICES } from '../data/portfolio'
 
 export function ContactPage() {
   return (
@@ -19,8 +19,8 @@ export function ContactPage() {
             <span className="text-gradient">something smart</span> together.
           </h1>
           <p className="mt-6 max-w-xl text-lg text-white/55">
-            Have an AI project, full stack app, or cloud deployment in mind? Send a message — I
-            typically reply within 24 hours.
+            Have an AI project, full stack app, or cloud deployment in mind? Send a message — you
+            get an instant confirmation, and I reply personally {REPLY_TIME}.
           </p>
         </Reveal>
 
@@ -59,7 +59,7 @@ export function ContactPage() {
                     <span className="block text-[11px] tracking-wider text-white/40 uppercase">
                       Response time
                     </span>
-                    <span className="block text-sm text-white">Within 24 hours</span>
+                    <span className="block text-sm text-white">{REPLY_TIME}</span>
                   </span>
                 </li>
               </ul>
