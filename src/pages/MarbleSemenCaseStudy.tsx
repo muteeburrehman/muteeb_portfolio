@@ -130,7 +130,7 @@ export function MarbleSemenCaseStudy() {
               {cs.delivered.map((item) => (
                 <li
                   key={item}
-                  className="rounded-lg border border-border bg-white px-4 py-3.5 text-sm leading-relaxed text-text-primary"
+                  className="panel-surface px-4 py-3.5 text-sm leading-relaxed text-white/85"
                 >
                   {item}
                 </li>
@@ -144,7 +144,7 @@ export function MarbleSemenCaseStudy() {
               {cs.results.map((item) => (
                 <li
                   key={item}
-                  className="rounded-lg border border-accent/20 bg-accent/5 px-4 py-4 text-sm leading-relaxed text-text-primary"
+                  className="rounded-lg border border-accent/25 bg-accent/10 px-4 py-4 text-sm leading-relaxed text-white/85"
                 >
                   {item}
                 </li>
@@ -157,7 +157,7 @@ export function MarbleSemenCaseStudy() {
       <section className="section-white case-study-section pb-20">
         <div className="container case-study-content">
           <Reveal>
-            <div className="rounded-xl border border-border bg-bg-off p-8 sm:p-10">
+            <div className="panel-surface p-8 sm:p-10">
               <h2 className="heading-section text-[1.5rem]">See it live</h2>
               <p className="mt-3 max-w-lg text-muted">
                 The platform is in production for a real US Wagyu genetics business — not a concept
@@ -177,7 +177,7 @@ export function MarbleSemenCaseStudy() {
                   href={BOOK_CALL_PATH}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-[44px] items-center rounded-lg border border-border bg-white px-5 text-sm font-medium text-text-primary transition-colors hover:border-accent"
+                  className="btn-ghost-dark"
                 >
                   Book a discovery call
                 </a>
