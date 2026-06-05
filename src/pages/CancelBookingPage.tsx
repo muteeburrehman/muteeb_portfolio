@@ -68,12 +68,12 @@ export function CancelBookingPage() {
           </p>
         </Reveal>
 
-        <Reveal delay={80} className="mt-10 rounded-xl border border-border bg-white p-6 sm:p-8">
+        <Reveal delay={80} className="panel-surface mt-10 p-6 sm:p-8">
           {loading && <p className="text-sm text-muted">Loading booking…</p>}
 
           {error && (
             <div
-              className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+              className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400"
               role="alert"
             >
               {error}
@@ -85,7 +85,7 @@ export function CancelBookingPage() {
               <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 ring-1 ring-emerald-500/30">
                 <CheckIcon />
               </div>
-              <h2 className="text-lg font-semibold text-text-primary">Booking cancelled</h2>
+              <h2 className="text-lg font-semibold text-white">Booking cancelled</h2>
               <p className="mt-2 text-sm text-muted">
                 That slot is open again. Someone else can book it, or you can pick a new time.
               </p>
@@ -98,13 +98,13 @@ export function CancelBookingPage() {
           {!loading && !done && preview && preview.status === 'confirmed' && (
             <div>
               <p className="text-sm text-muted">Scheduled for</p>
-              <p className="mt-1 text-lg font-medium text-text-primary">{when}</p>
+              <p className="mt-1 text-lg font-medium text-white">{when}</p>
               <p className="mt-4 text-sm text-muted">
                 {preview.name} · {preview.email}
               </p>
               <Button
                 variant="outline"
-                className="mt-8 w-full border-red-200 text-red-700 hover:border-red-300 hover:bg-red-50"
+                className="mt-8 w-full border-red-500/40 text-red-400 hover:border-red-500/60 hover:bg-red-500/10"
                 disabled={cancelling}
                 onClick={handleCancel}
               >

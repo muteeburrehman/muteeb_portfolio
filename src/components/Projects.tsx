@@ -15,18 +15,18 @@ function browserHost(url: string | undefined, fallback: string) {
 
 function ChatPreview() {
   return (
-    <div className="flex h-full min-h-[200px] flex-col gap-3 bg-bg-off p-6">
-      <div className="self-start max-w-[78%] rounded-2xl rounded-bl-md border border-border bg-white px-4 py-2.5 text-[12px] text-text-primary">
+    <div className="flex h-full min-h-[200px] flex-col gap-3 p-6" style={{ background: 'var(--bg-dark-3)' }}>
+      <div className="self-start max-w-[78%] rounded-2xl rounded-bl-md border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-[12px] text-white/70">
         How do I reset my account password?
       </div>
-      <div className="self-end max-w-[82%] rounded-2xl rounded-br-md bg-accent/10 px-4 py-2.5 text-[12px] text-text-primary">
+      <div className="self-end max-w-[82%] rounded-2xl rounded-br-md bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.15)] px-4 py-2.5 text-[12px] text-white/70">
         I&apos;ve emailed you a secure reset link valid for 15 minutes. Want me to also enable
         2FA?
       </div>
-      <div className="self-start max-w-[60%] rounded-2xl rounded-bl-md border border-border bg-white px-4 py-2.5 text-[12px] text-text-primary">
+      <div className="self-start max-w-[60%] rounded-2xl rounded-bl-md border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-[12px] text-white/70">
         Yes — go ahead.
       </div>
-      <div className="self-end max-w-[78%] rounded-2xl rounded-br-md bg-accent/10 px-4 py-2.5 text-[12px] text-text-primary">
+      <div className="self-end max-w-[78%] rounded-2xl rounded-br-md bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.15)] px-4 py-2.5 text-[12px] text-white/70">
         Done ✓ 2FA active. Anything else I can help with today?
       </div>
     </div>
@@ -35,7 +35,7 @@ function ChatPreview() {
 
 export function Projects() {
   return (
-    <section id="work" className="section-off section-block">
+    <section id="work" className="section-block" style={{ background: 'var(--bg-dark-3)' }}>
       <div className="container">
         <Reveal>
           <SectionLabel>Selected work</SectionLabel>
@@ -57,18 +57,20 @@ export function Projects() {
 
             return (
               <Reveal key={project.slug} delay={i * 90} as="article">
-                <article className="flex h-full flex-col overflow-hidden rounded-xl border border-border bg-bg-white transition-shadow hover:shadow-[0_8px_30px_-12px_rgba(15,23,42,0.12)]">
-                  <div className="relative aspect-[16/9] overflow-hidden border-b border-border bg-bg-off">
+                <article className="glass-card flex h-full flex-col overflow-hidden !p-0">
+                  <div className="relative aspect-[16/9] overflow-hidden border-b border-white/[0.06]" style={{ background: 'var(--bg-dark)' }}>
                     {project.image ? (
                       <img
                         src={project.image}
                         alt={project.imageAlt}
                         loading="lazy"
-                        className={`h-full w-full ${objectFit} transition-transform duration-500 hover:scale-[1.02]`}
+                        className={`h-full w-full ${objectFit} transition-transform duration-700 hover:scale-[1.04]`}
                       />
                     ) : (
                       <ChatPreview />
                     )}
+                    {/* Gradient overlay on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(6,8,15,0.5)] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                   </div>
 
                   <div className="flex flex-1 flex-col p-6">
@@ -89,10 +91,10 @@ export function Projects() {
                       )}
                     </div>
 
-                    <h3 className="font-display text-xl font-bold text-text-primary">
+                    <h3 className="font-display text-xl font-bold text-white">
                       {project.name}
                     </h3>
-                    <p className="mt-1 text-sm font-medium text-accent">{project.tagline}</p>
+                    <p className="mt-1 text-sm font-medium text-accent-hover">{project.tagline}</p>
 
                     <p className="mt-3 text-sm leading-relaxed text-muted">
                       {project.description}
@@ -106,10 +108,10 @@ export function Projects() {
                       ))}
                     </ul>
 
-                    <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4 text-[11px] text-muted">
+                    <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.06] pt-4 text-[11px] text-muted">
                       <span>
                         <span className="font-mono uppercase">Role</span>{' '}
-                        <span className="text-text-primary">{project.role}</span>
+                        <span className="text-white/70">{project.role}</span>
                       </span>
                       <div className="flex items-center gap-4">
                         {'caseStudyTo' in project && project.caseStudyTo ? (

@@ -5,10 +5,18 @@ import { SectionLabel } from './ui/SectionLabel'
 
 export function ContactCTA() {
   return (
-    <section id="contact" className="section-off section-block">
-      <div className="container">
+    <section id="contact" className="section-block relative overflow-hidden" style={{ background: 'var(--bg-dark-3)' }}>
+      {/* Ambient glow */}
+      <div className="ambient-orb ambient-orb--1" style={{ top: '-30%', left: '20%' }} aria-hidden="true" />
+
+      <div className="container relative z-10">
         <Reveal>
-          <div className="rounded-xl border border-border bg-white p-8 sm:p-10 lg:flex lg:items-end lg:justify-between lg:gap-12 lg:p-12">
+          <div className="glass-card-static rounded-2xl p-8 sm:p-10 lg:flex lg:items-end lg:justify-between lg:gap-12 lg:p-12"
+            style={{
+              background: 'linear-gradient(160deg, rgba(12,16,35,0.7) 0%, rgba(6,8,15,0.8) 100%)',
+              border: '1px solid rgba(99,102,241,0.12)',
+            }}
+          >
             <div className="max-w-xl">
               <SectionLabel>Get started</SectionLabel>
               <h2 className="heading-section">
@@ -21,7 +29,7 @@ export function ContactCTA() {
               </p>
               <a
                 href={`mailto:${EMAIL}`}
-                className="mt-5 inline-flex min-h-[44px] items-center gap-2 text-sm text-accent transition-colors hover:text-accent-hover"
+                className="mt-5 inline-flex min-h-[44px] items-center gap-2 text-sm text-accent-hover transition-colors hover:text-white"
               >
                 <MailIcon className="h-4 w-4" />
                 {EMAIL}
@@ -40,7 +48,7 @@ export function ContactCTA() {
               </a>
               <a
                 href={`mailto:${EMAIL}`}
-                className="inline-flex min-h-[44px] items-center gap-2 rounded-lg border border-border bg-bg-off px-5 text-sm font-medium text-text-primary transition-colors hover:border-accent"
+                className="btn-ghost-dark"
               >
                 Email directly
               </a>

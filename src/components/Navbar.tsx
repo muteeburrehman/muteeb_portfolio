@@ -64,7 +64,7 @@ export function Navbar() {
       const nav = navRef.current
       if (!nav) return
       nav.style.background =
-        window.scrollY > 50 ? 'rgba(10,12,16,0.95)' : 'rgba(10,12,16,0.75)'
+        window.scrollY > 50 ? 'rgba(6, 8, 15, 0.95)' : 'rgba(6, 8, 15, 0.75)'
     }
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })

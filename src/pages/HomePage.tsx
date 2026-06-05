@@ -4,6 +4,7 @@ import { Capabilities } from '../components/Capabilities'
 import { ContactCTA } from '../components/ContactCTA'
 import { FeaturedCaseStudy } from '../components/FeaturedCaseStudy'
 import { Hero } from '../components/Hero'
+import { HomeValueBar } from '../components/HomeValueBar'
 import { Process } from '../components/Process'
 import { Projects } from '../components/Projects'
 import { Services } from '../components/Services'
@@ -11,7 +12,7 @@ import { TechTicker } from '../components/TechTicker'
 
 const HOME_TITLE = 'MuteebLabs | Custom Software for Cattle, QA & AI Businesses'
 const HOME_DESCRIPTION =
-  'We build custom software for livestock operations, SaaS QA testing, and AI automation. Based in Pakistan, serving clients globally. Book a free discovery call.'
+  'Custom software for livestock operations, SaaS QA, and AI automation. Book a free discovery call with MuteebLabs.'
 
 export function HomePage() {
   useEffect(() => {
@@ -34,6 +35,7 @@ export function HomePage() {
       <Hero />
       <TechTicker />
       <Services />
+      <HomeValueBar />
       <FeaturedCaseStudy />
       <Projects />
       <Capabilities />

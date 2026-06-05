@@ -36,8 +36,7 @@ function nextDays(max: number): string[] {
   return out
 }
 
-const inputClass =
-  'w-full rounded-lg border border-border bg-white px-4 py-3.5 text-sm text-text-primary placeholder:text-muted transition-all focus:border-accent focus:ring-2 focus:ring-accent/15'
+const inputClass = 'form-input'
 
 export function BookingScheduler() {
   const [config, setConfig] = useState<BookingConfig | null>(null)
@@ -196,14 +195,14 @@ export function BookingScheduler() {
       minute: '2-digit',
     })
     return (
-      <div className="flex flex-col items-center rounded-xl border border-border bg-white p-10 text-center sm:p-12">
+      <div className="panel-surface flex flex-col items-center p-10 text-center sm:p-12">
         <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 ring-1 ring-emerald-500/30">
           <CheckIcon />
         </div>
-        <h3 className="text-xl font-semibold text-text-primary">You&apos;re booked</h3>
+        <h3 className="text-xl font-semibold text-white">You&apos;re booked</h3>
         <p className="mt-2 text-accent font-medium">{when}</p>
         <p className="mt-4 max-w-sm text-sm text-muted">
-          Confirmation sent to <strong className="text-text-primary">{email}</strong>. Use this link
+          Confirmation sent to <strong className="text-white">{email}</strong>. Use this link
           at the scheduled time:
         </p>
         <a
@@ -231,7 +230,7 @@ export function BookingScheduler() {
   }
 
   return (
-    <div className="rounded-xl border border-border bg-white p-6 sm:p-8">
+    <div className="panel-surface p-6 sm:p-8">
       <div className="mb-6 flex flex-wrap gap-2" aria-label="Booking progress">
         {(['date', 'time', 'details'] as const).map((s, i) => (
           <span
@@ -240,7 +239,7 @@ export function BookingScheduler() {
               step === s
                 ? 'border-accent bg-accent/10 text-accent'
                 : stepIndex > i
-                  ? 'border-border bg-bg-off text-muted'
+                  ? 'border-border bg-white/5 text-muted'
                   : 'border-border text-muted'
             }`}
           >
@@ -290,10 +289,10 @@ export function BookingScheduler() {
                   title={fullyBooked ? 'No open slots this day' : undefined}
                   className={`min-h-[44px] rounded-lg border px-3 py-2.5 text-sm transition-all ${
                     fullyBooked
-                      ? 'cursor-not-allowed border-border bg-bg-off/50 text-muted opacity-60'
+                      ? 'cursor-not-allowed border-border bg-white/[0.02] text-muted opacity-60'
                       : selectedDate === d
                         ? 'border-accent bg-accent/10 font-medium text-accent'
-                        : 'border-border bg-bg-off text-text-primary hover:border-accent/50'
+                        : 'border-border bg-white/5 text-white/80 hover:border-accent/50'
                   }`}
                   onClick={() => {
                     if (fullyBooked) return
@@ -341,7 +340,7 @@ export function BookingScheduler() {
                   className={`min-h-[44px] rounded-lg border px-3 py-2.5 text-sm transition-all ${
                     selectedSlot?.start === slot.start
                       ? 'border-accent bg-accent/10 font-medium text-accent'
-                      : 'border-border bg-bg-off hover:border-accent/50'
+                      : 'border-border bg-white/5 text-white/80 hover:border-accent/50'
                   }`}
                   onClick={() => {
                     setSelectedSlot(slot)
@@ -369,13 +368,13 @@ export function BookingScheduler() {
           >
             ← Change time
           </button>
-          <p className="text-sm font-medium text-text-primary">
+          <p className="text-sm font-medium text-white/90">
             {formatDisplayDate(selectedDate)} at {selectedSlot.label}
           </p>
 
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
-              <label htmlFor="booking-name" className="block text-sm font-medium text-text-primary">
+              <label htmlFor="booking-name" className="block text-sm font-medium text-white/90">
                 Name
               </label>
               <input
@@ -388,11 +387,11 @@ export function BookingScheduler() {
                 aria-invalid={fieldErrors.name ? true : undefined}
               />
               {fieldErrors.name && (
-                <p className="mt-1.5 text-xs text-red-600">{fieldErrors.name}</p>
+                <p className="mt-1.5 text-xs text-red-400">{fieldErrors.name}</p>
               )}
             </div>
             <div>
-              <label htmlFor="booking-email" className="block text-sm font-medium text-text-primary">
+              <label htmlFor="booking-email" className="block text-sm font-medium text-white/90">
                 Email
               </label>
               <input
@@ -406,12 +405,12 @@ export function BookingScheduler() {
                 aria-invalid={fieldErrors.email ? true : undefined}
               />
               {fieldErrors.email && (
-                <p className="mt-1.5 text-xs text-red-600">{fieldErrors.email}</p>
+                <p className="mt-1.5 text-xs text-red-400">{fieldErrors.email}</p>
               )}
             </div>
           </div>
           <div>
-            <label htmlFor="booking-company" className="block text-sm font-medium text-text-primary">
+            <label htmlFor="booking-company" className="block text-sm font-medium text-white/90">
               Company <span className="font-normal text-muted">(optional)</span>
             </label>
             <input
@@ -423,11 +422,11 @@ export function BookingScheduler() {
               maxLength={200}
             />
             {fieldErrors.company && (
-              <p className="mt-1.5 text-xs text-red-600">{fieldErrors.company}</p>
+              <p className="mt-1.5 text-xs text-red-400">{fieldErrors.company}</p>
             )}
           </div>
           <div>
-            <label htmlFor="booking-phone" className="block text-sm font-medium text-text-primary">
+            <label htmlFor="booking-phone" className="block text-sm font-medium text-white/90">
               Phone <span className="font-normal text-muted">(optional)</span>
             </label>
             <PhoneField
@@ -441,7 +440,7 @@ export function BookingScheduler() {
             />
           </div>
           <div>
-            <label htmlFor="booking-notes" className="block text-sm font-medium text-text-primary">
+            <label htmlFor="booking-notes" className="block text-sm font-medium text-white/90">
               What should we discuss?{' '}
               <span className="font-normal text-muted">(optional)</span>
             </label>
@@ -456,7 +455,7 @@ export function BookingScheduler() {
             />
             <div className="mt-1.5 flex justify-between text-xs text-muted">
               {fieldErrors.notes ? (
-                <span className="text-red-600">{fieldErrors.notes}</span>
+                <span className="text-red-400">{fieldErrors.notes}</span>
               ) : (
                 <span>Optional</span>
               )}

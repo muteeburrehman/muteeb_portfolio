@@ -29,11 +29,11 @@ export function BookCallPage() {
         <ul className="mt-10 grid gap-4 sm:grid-cols-3">
           {FUNNEL_STEPS.map((item, i) => (
             <Reveal key={item.step} delay={60 + i * 40} as="li">
-              <div className="h-full rounded-xl border border-border bg-white p-5">
+              <div className="panel-surface h-full p-5">
                 <span className="font-mono text-[11px] tracking-wider text-accent uppercase">
                   {item.step}
                 </span>
-                <p className="mt-2 font-semibold text-text-primary">{item.title}</p>
+                <p className="mt-2 font-semibold text-white">{item.title}</p>
                 <p className="mt-1 text-sm leading-relaxed text-muted">{item.text}</p>
               </div>
             </Reveal>

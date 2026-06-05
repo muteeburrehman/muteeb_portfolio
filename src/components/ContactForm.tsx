@@ -136,16 +136,15 @@ export function ContactForm() {
     }
   }
 
-  const inputClass =
-    'w-full rounded-lg border border-border bg-white px-4 py-3.5 text-sm text-text-primary placeholder:text-muted transition-all focus:border-accent focus:ring-2 focus:ring-accent/15'
+  const inputClass = 'form-input'
 
   if (status === 'success') {
     return (
-      <div className="relative flex flex-col items-center justify-center rounded-xl border border-border bg-white p-12 text-center">
+      <div className="panel-surface relative flex flex-col items-center justify-center p-12 text-center">
         <div className="relative mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 ring-1 ring-emerald-500/30">
           <CheckIcon />
         </div>
-        <h3 className="relative text-xl font-semibold text-text-primary">Message sent successfully</h3>
+        <h3 className="relative text-xl font-semibold text-white">Message sent successfully</h3>
         <p className="relative mt-3 max-w-sm text-sm text-muted">
           Thanks for reaching out — I&apos;ll get back to you soon. You can also email{' '}
           <a href={`mailto:${EMAIL}`} className="text-accent hover:underline">
@@ -173,14 +172,14 @@ export function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="relative space-y-5 rounded-xl border border-border bg-white p-6 sm:p-8"
+      className="panel-surface relative space-y-5 p-6 sm:p-8"
       noValidate
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label
             htmlFor="name"
-            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
+            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/50 uppercase"
           >
             Your name
           </label>
@@ -199,7 +198,7 @@ export function ContactForm() {
         <div>
           <label
             htmlFor="email"
-            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
+            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/50 uppercase"
           >
             Email
           </label>
@@ -220,7 +219,7 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="topic"
-          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
+          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/50 uppercase"
         >
           Project type
         </label>
@@ -258,7 +257,7 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="message"
-          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
+          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/50 uppercase"
         >
           Message
         </label>
@@ -292,7 +291,7 @@ export function ContactForm() {
               form.message.trim().length >= 20
                 ? 'text-emerald-400/70'
                 : form.message.length > 0
-                  ? 'text-text-primary'
+                  ? 'text-white/80'
                   : ''
             }
           >
@@ -302,14 +301,14 @@ export function ContactForm() {
       </div>
 
       {error ? (
-        <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+        <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
           {error}
         </p>
       ) : null}
 
       <div className="flex flex-col items-start gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-[11px] text-muted">
-          Personal reply <span className="text-text-primary">{REPLY_TIME}</span> · No spam, ever.
+          Personal reply <span className="text-white/80">{REPLY_TIME}</span> · No spam, ever.
         </p>
         <Button type="submit" className="w-full sm:w-auto" disabled={submitting}>
           {submitting ? (

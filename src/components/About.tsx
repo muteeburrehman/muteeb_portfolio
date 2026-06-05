@@ -4,8 +4,12 @@ import { SectionLabel } from './ui/SectionLabel'
 
 export function About() {
   return (
-    <section id="about" className="section-dark section-block">
-      <div className="container">
+    <section id="about" className="section-block relative overflow-hidden" style={{ background: 'var(--bg-dark-2)' }}>
+      {/* Ambient orbs */}
+      <div className="ambient-orb ambient-orb--2" style={{ top: '-15%', right: '-10%' }} aria-hidden="true" />
+      <div className="ambient-orb ambient-orb--3" style={{ bottom: '-10%', left: '-5%' }} aria-hidden="true" />
+
+      <div className="container relative z-10">
         <Reveal className="text-center">
           <SectionLabel>About</SectionLabel>
           <h2 className="heading-display mx-auto max-w-2xl text-[clamp(1.75rem,4vw,2.5rem)] text-white">
@@ -19,10 +23,10 @@ export function About() {
           <dl className="mx-auto mt-12 grid max-w-3xl grid-cols-3 gap-6 sm:gap-10">
             {STATS.map((s) => (
               <div key={s.label} className="text-center">
-                <dt className="font-display text-3xl font-bold text-white sm:text-4xl">
+                <dt className="font-display text-3xl font-bold sm:text-4xl text-gradient">
                   {s.value}
                 </dt>
-                <dd className="mt-2 text-xs tracking-wide text-on-dark-muted uppercase">
+                <dd className="mt-2 text-xs tracking-wide text-muted uppercase">
                   {s.label}
                 </dd>
               </div>
@@ -30,7 +34,7 @@ export function About() {
           </dl>
         </Reveal>
 
-        <Reveal delay={120} className="mx-auto mt-12 max-w-2xl space-y-5 text-center text-base leading-relaxed text-on-dark-muted sm:text-lg">
+        <Reveal delay={120} className="mx-auto mt-12 max-w-2xl space-y-5 text-center text-base leading-relaxed text-muted sm:text-lg">
           <p>
             I&apos;m <strong className="font-medium text-white">Muteeb Ur Rehman</strong> —
             a full stack developer and AI engineer. I build intelligent products end to end:
@@ -43,7 +47,7 @@ export function About() {
               href="https://pitprize.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-white underline decoration-accent/50 underline-offset-4 transition-colors hover:decoration-accent"
+              className="font-medium text-accent-hover underline decoration-accent/40 underline-offset-4 transition-colors hover:decoration-accent"
             >
               PitPrize
             </a>{' '}
@@ -52,7 +56,7 @@ export function About() {
               href="https://marblesemen.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-white underline decoration-accent/50 underline-offset-4 transition-colors hover:decoration-accent"
+              className="font-medium text-accent-hover underline decoration-accent/40 underline-offset-4 transition-colors hover:decoration-accent"
             >
               Marble Semen
             </a>{' '}
@@ -71,7 +75,7 @@ export function About() {
             {SKILLS.map((skill) => (
               <span
                 key={skill}
-                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-on-dark-muted"
+                className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3.5 py-1.5 text-xs text-muted backdrop-blur-sm transition-all hover:border-accent/30 hover:text-accent-hover"
               >
                 {skill}
               </span>

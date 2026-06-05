@@ -1,22 +1,27 @@
 import { Link } from 'react-router-dom'
+import { FEATURED_CASE_STUDY } from '../../data/portfolio'
 import { ArrowIcon } from '../icons'
 import { SectionLabel } from '../ui/SectionLabel'
 
 export function LivestockCaseStudyBlock() {
+  const { name, description, tags, to } = FEATURED_CASE_STUDY
+
   return (
     <section className="section-off section-block">
       <div className="container">
         <SectionLabel>Featured case study</SectionLabel>
-        <div className="featured-project-card rounded-xl border border-border bg-white">
+        <div
+          className="glass-card-static featured-project-card rounded-xl"
+          style={{
+            borderLeft: '3px solid',
+            borderImage: 'linear-gradient(to bottom, #6366f1, #a855f7) 1',
+          }}
+        >
           <div className="min-w-0">
-            <h2 className="heading-section">MarbleSemen.com</h2>
-            <p className="mt-4 text-base leading-relaxed text-muted">
-              Full-stack cattle genetics and sale management platform. We replaced a manual
-              spreadsheet workflow with a custom buyer portal, EPD tracking dashboard, and semen
-              inventory system for a real Wagyu operation.
-            </p>
+            <h2 className="heading-section">{name}</h2>
+            <p className="mt-4 text-base leading-relaxed text-muted">{description}</p>
             <ul className="mt-5 flex flex-wrap gap-2">
-              {['React', 'Django', 'PostgreSQL', 'AWS', 'Authorize.net'].map((tag) => (
+              {tags.map((tag) => (
                 <li key={tag} className="pill-tech">
                   {tag}
                 </li>
@@ -24,7 +29,7 @@ export function LivestockCaseStudyBlock() {
             </ul>
           </div>
           <Link
-            to="/#work"
+            to={to}
             className="btn-primary-light shrink-0 justify-self-start lg:justify-self-center"
           >
             Read the Case Study

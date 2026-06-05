@@ -8,11 +8,16 @@ export function FeaturedCaseStudy() {
   const { name, description, tags, to } = FEATURED_CASE_STUDY
 
   return (
-    <section className="section-off section-block">
+    <section className="section-block" style={{ background: 'var(--bg-dark-3)' }}>
       <div className="container">
         <Reveal>
           <SectionLabel>Featured project</SectionLabel>
-          <div className="featured-project-card rounded-xl border border-border bg-white">
+          <div className="glass-card-static featured-project-card rounded-xl"
+            style={{
+              borderLeft: '3px solid',
+              borderImage: 'linear-gradient(to bottom, #6366f1, #a855f7) 1',
+            }}
+          >
             <div className="min-w-0">
               <h2 className="heading-section">{name}</h2>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">

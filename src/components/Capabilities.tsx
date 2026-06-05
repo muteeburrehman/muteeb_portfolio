@@ -25,7 +25,7 @@ const CAPABILITY_ICONS: IconComponent[] = [
 
 export function Capabilities() {
   return (
-    <section id="capabilities" className="section-white section-block">
+    <section id="capabilities" className="section-block" style={{ background: 'var(--bg-dark-2)' }}>
       <div className="container">
         <Reveal>
           <SectionLabel>What I build</SectionLabel>
@@ -44,15 +44,15 @@ export function Capabilities() {
             const Icon = CAPABILITY_ICONS[i] ?? CodeIcon
             return (
               <Reveal key={item.num} delay={i * 70} as="article">
-                <article className="card-light group flex h-full flex-col">
+                <article className="glass-card group flex h-full flex-col p-7">
                   <div className="mb-5 flex items-start justify-between">
-                    <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-white text-accent">
+                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-b from-accent/20 to-accent/5 text-accent-hover">
                       <Icon className="h-5 w-5" />
                     </span>
-                    <span className="font-mono text-xs text-muted">{item.num}</span>
+                    <span className="font-mono text-xs text-white/20">{item.num}</span>
                   </div>
 
-                  <h3 className="text-lg font-semibold text-text-primary">{item.title}</h3>
+                  <h3 className="text-lg font-semibold text-white">{item.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{item.description}</p>
 
                   <ul className="mt-4 flex flex-wrap gap-2">
@@ -63,9 +63,9 @@ export function Capabilities() {
                     ))}
                   </ul>
 
-                  <div className="mt-auto flex min-h-[44px] items-center gap-1.5 pt-5 text-xs text-muted group-hover:text-accent">
+                  <div className="mt-auto flex min-h-[44px] items-center gap-1.5 pt-5 text-xs text-muted transition-colors group-hover:text-accent-hover">
                     Explore
-                    <ArrowIcon className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+                    <ArrowIcon className="h-3 w-3 transition-transform group-hover:translate-x-1" />
                   </div>
                 </article>
               </Reveal>

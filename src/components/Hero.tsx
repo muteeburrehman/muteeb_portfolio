@@ -1,23 +1,30 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { BOOK_CALL_PATH } from '../data/portfolio'
+import { Link } from 'react-router-dom'
+import { BOOK_CALL_PATH, HERO_TRUST_ITEMS, HOME_METRICS } from '../data/portfolio'
 import { ArrowIcon } from './icons'
 
 const TESTIMONIALS = [
   {
     text: 'MuteebLabs replaced our entire cattle records system with a platform our team actually uses. The buyer portal alone paid for the project.',
-    author: '— Wagyu breeder, Mt. Pleasant',
+    name: 'Wagyu breeder',
+    role: 'Mt. Pleasant, US',
+    tags: ['Livestock Software', 'Buyer portal'],
   },
   {
     text: 'They caught 40+ bugs before our launch that our internal team missed. Felt like having a full QA department without the cost.',
-    author: '— Sara M., SaaS founder, UK',
+    name: 'Sara M.',
+    role: 'SaaS founder, UK',
+    tags: ['QA Testing', 'SaaS'],
   },
   {
     text: 'The n8n automation they built saves us 12 hours a week on manual data entry. ROI was visible within the first month.',
-    author: '— Ahmed K., Operations lead, UAE',
+    name: 'Ahmed K.',
+    role: 'Operations lead, UAE',
+    tags: ['AI Automation', 'n8n'],
   },
 ] as const
 
-const ROTATE_MS = 4000
+const ROTATE_MS = 5000
 const FADE_MS = 400
 
 function HeroTestimonial() {
@@ -57,7 +64,7 @@ function HeroTestimonial() {
     <div className="testimonial-card">
       <div className="testimonial-stars">
         <span aria-hidden="true">★★★★★</span>
-        <span>Trusted by founders worldwide</span>
+        <span>Client feedback</span>
       </div>
 
       <div className="testimonial-quote-mark" aria-hidden="true">
@@ -66,7 +73,18 @@ function HeroTestimonial() {
 
       <div className="testimonial-body" style={{ opacity: visible ? 1 : 0 }}>
         <p className="testimonial-text">{current.text}</p>
-        <p className="testimonial-author">{current.author}</p>
+        <p className="testimonial-author">
+          <strong className="text-white/80">{current.name}</strong>
+          <span className="text-white/30"> · </span>
+          {current.role}
+        </p>
+        <div className="testimonial-tags">
+          {current.tags.map((tag) => (
+            <span key={tag} className="testimonial-tag">
+              {tag}
+            </span>
+          ))}
+        </div>
       </div>
 
       <div className="testimonial-dots" role="tablist" aria-label="Testimonials">
@@ -82,14 +100,6 @@ function HeroTestimonial() {
           />
         ))}
       </div>
-
-      <hr className="testimonial-divider" />
-
-      <div className="testimonial-pills">
-        <span className="testimonial-pill">✓ 5+ Years Building</span>
-        <span className="testimonial-pill">✓ Remote · Worldwide</span>
-        <span className="testimonial-pill">✓ Accepting New Clients</span>
-      </div>
     </div>
   )
 }
@@ -97,6 +107,11 @@ function HeroTestimonial() {
 export function Hero() {
   return (
     <section id="home" className="hero">
+      {/* Ambient floating orbs */}
+      <div className="hero-glow" aria-hidden="true" />
+      <div className="hero-orb-1" aria-hidden="true" />
+      <div className="hero-orb-2" aria-hidden="true" />
+
       <div className="hero-container">
         <div className="hero-left">
           <div className="hero-badges">
@@ -110,55 +125,49 @@ export function Hero() {
             <span className="hero-badge hero-badge--remote">Remote · Worldwide</span>
           </div>
 
-          <p className="hero-label">MuteebLabs · Software agency</p>
-
           <h1 className="hero-title">
-            Custom Software for Cattle Operations, SaaS Teams &amp; AI-Powered Businesses
+            Software for{' '}
+            <span className="hero-title-accent">Cattle Operations</span>,{' '}
+            <span className="hero-title-accent">SaaS Teams</span> &amp;{' '}
+            <span className="hero-title-accent">AI-Powered Businesses</span>
           </h1>
 
           <p className="hero-desc">
-            We build livestock management platforms, QA testing frameworks, and AI automation
-            tools — for businesses that need software built right.
+            We build livestock platforms, QA frameworks, and AI automation — so you ship faster,
+            catch issues before launch, and replace spreadsheet chaos with software that scales.
           </p>
 
           <div className="hero-ctas">
-            <a
-              href={BOOK_CALL_PATH}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary"
-            >
+            <Link to={BOOK_CALL_PATH} className="btn-primary btn-primary--glow">
               Book a Free Discovery Call
               <ArrowIcon className="h-4 w-4" />
-            </a>
+            </Link>
             <a href="#work" className="btn-ghost-dark">
               See Our Work
             </a>
           </div>
 
-          <p className="hero-ships">
-            <span className="hero-ships-dot" aria-hidden="true">
-              <span className="hero-ships-dot-ping" />
-              <span className="hero-ships-dot-core" />
-            </span>
-            <strong>Our team ships</strong>
-            <span aria-hidden="true">·</span>
-            <span>Livestock · QA · AI automation</span>
-          </p>
+          <ul className="hero-trust-row">
+            {HERO_TRUST_ITEMS.map((item) => (
+              <li key={item.label} className="hero-trust-item">
+                <span className="hero-trust-check" aria-hidden="true">
+                  ✓
+                </span>
+                <span>
+                  <strong>{item.label}</strong>
+                  <span className="hero-trust-detail">{item.detail}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
 
           <div className="hero-stats">
-            <div className="hero-stat">
-              <span className="hero-stat-number">5+</span>
-              <span className="hero-stat-label">Years Building</span>
-            </div>
-            <div className="hero-stat">
-              <span className="hero-stat-number">3</span>
-              <span className="hero-stat-label">Industry Niches</span>
-            </div>
-            <div className="hero-stat">
-              <span className="hero-stat-number">10+</span>
-              <span className="hero-stat-label">Builds Shipped</span>
-            </div>
+            {HOME_METRICS.map((stat) => (
+              <div key={stat.label} className="hero-stat">
+                <span className="hero-stat-number">{stat.value}</span>
+                <span className="hero-stat-label">{stat.label}</span>
+              </div>
+            ))}
           </div>
         </div>
 

@@ -231,27 +231,58 @@ export const TRUST_BAR_ITEMS = [
   'AI & Automation Specialists',
 ] as const
 
+export const HOME_METRICS = [
+  { value: '5+', label: 'Years in business' },
+  { value: '3', label: 'Industry verticals' },
+  { value: '10+', label: 'Production builds' },
+  { value: '1 day', label: 'Typical reply' },
+] as const
+
+export const HERO_TRUST_ITEMS = [
+  { label: 'Domain expertise', detail: 'Livestock, SaaS & AI' },
+  { label: 'End-to-end delivery', detail: 'Discovery to production' },
+  { label: 'Quality & reliability', detail: 'Tested, maintainable code' },
+] as const
+
+export const HOME_VALUE_PROPS = [
+  { title: 'Agile approach', description: 'Frequent demos, tight feedback loops' },
+  { title: 'Secure & scalable', description: 'Production-minded AWS architecture' },
+  { title: 'Transparent comms', description: 'Clear scope, timeline, and updates' },
+  { title: 'Dedicated support', description: 'We stay involved after launch' },
+] as const
+
 export const AGENCY_SERVICES = [
   {
-    title: 'Livestock & Cattle Software',
+    title: 'Livestock Software',
     description:
-      'Custom herd management platforms, genetics tracking dashboards, and buyer-facing portals — built for Wagyu breeders, stud farms, and cattle operations.',
+      'Herd management, genetics dashboards, and buyer portals — so cattle operations run on software, not spreadsheets.',
     to: '/livestock-software',
     icon: 'database' as const,
+    accent: 'sky' as const,
   },
   {
-    title: 'QA Testing Services',
+    title: 'QA Testing',
     description:
-      "Manual testing, regression suites, bug reporting, and release validation — for SaaS teams that don't have a full QA department yet.",
+      'Regression suites and release validation — catch bugs before your users do, without hiring a full QA department.',
     to: '/qa-testing',
     icon: 'check' as const,
+    accent: 'purple' as const,
   },
   {
     title: 'AI & Automation',
     description:
-      'AI chatbots, workflow automation, document processing pipelines, and custom business software — built with LangChain, n8n, OpenAI API, and FastAPI.',
+      'Chatbots, n8n workflows, and LLM pipelines — automate repetitive work and ship AI features that actually work.',
     to: '/ai-automation',
     icon: 'zap' as const,
+    accent: 'emerald' as const,
+  },
+  {
+    title: 'SaaS Development',
+    description:
+      'React + Python full-stack products with clean APIs and PostgreSQL — from MVP to production for growing teams.',
+    to: '/#work',
+    icon: 'code' as const,
+    accent: 'amber' as const,
   },
 ] as const
 
