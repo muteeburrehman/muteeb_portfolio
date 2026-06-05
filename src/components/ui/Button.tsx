@@ -13,12 +13,9 @@ type ButtonProps = {
 }
 
 const variants = {
-  primary:
-    'bg-white text-black hover:opacity-90 hover:shadow-[0_0_30px_rgba(255,255,255,0.15)]',
-  ghost:
-    'border border-white/25 text-white hover:border-white/50 hover:bg-white/5',
-  outline:
-    'border border-white/15 text-white/80 hover:border-sky-400/40 hover:text-white',
+  primary: 'bg-accent text-white hover:bg-accent-hover',
+  ghost: 'border border-border text-text-primary hover:border-accent hover:bg-bg-off',
+  outline: 'border border-border text-muted hover:border-accent hover:text-text-primary',
 }
 
 export function Button({
@@ -32,7 +29,7 @@ export function Button({
   disabled,
 }: ButtonProps) {
   const base =
-    'inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50'
+    'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50'
 
   const classes = `${base} ${variants[variant]} ${className}`
 

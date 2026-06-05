@@ -1,0 +1,475 @@
+import type { CountryCode } from 'libphonenumber-js'
+import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
+import {
+  createBooking,
+  fetchAvailabilitySummary,
+  fetchBookingConfig,
+  fetchSlots,
+  formatDateKey,
+  formatDisplayDate,
+  type BookingConfig,
+  type BookingSlot,
+} from '../lib/bookingApi'
+import {
+  bookingFieldError,
+  formatPhoneE164,
+  validateBookingDetails,
+  type BookingDetailsFields,
+  type BookingField,
+} from '../lib/bookingValidation'
+import { DEFAULT_PHONE_COUNTRY } from '../lib/countryDialCodes'
+import { ArrowIcon, CheckIcon } from './icons'
+import { PhoneField } from './PhoneField'
+import { Button } from './ui/Button'
+
+type Step = 'date' | 'time' | 'details' | 'done'
+
+function nextDays(max: number): string[] {
+  const out: string[] = []
+  const cursor = new Date()
+  cursor.setHours(0, 0, 0, 0)
+  for (let i = 0; i < max; i++) {
+    out.push(formatDateKey(cursor))
+    cursor.setDate(cursor.getDate() + 1)
+  }
+  return out
+}
+
+const inputClass =
+  'w-full rounded-lg border border-border bg-white px-4 py-3.5 text-sm text-text-primary placeholder:text-muted transition-all focus:border-accent focus:ring-2 focus:ring-accent/15'
+
+export function BookingScheduler() {
+  const [config, setConfig] = useState<BookingConfig | null>(null)
+  const [configLoading, setConfigLoading] = useState(true)
+  const [step, setStep] = useState<Step>('date')
+  const [selectedDate, setSelectedDate] = useState<string | null>(null)
+  const [selectedSlot, setSelectedSlot] = useState<BookingSlot | null>(null)
+  const [slots, setSlots] = useState<BookingSlot[]>([])
+  const [loadingSlots, setLoadingSlots] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [result, setResult] = useState<{
+    meeting_link: string
+    start: string
+    cancel_url?: string
+  } | null>(null)
+  const [openSlotsByDay, setOpenSlotsByDay] = useState<Record<string, number>>({})
+
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [company, setCompany] = useState('')
+  const [phoneCountry, setPhoneCountry] = useState<CountryCode>(DEFAULT_PHONE_COUNTRY)
+  const [phoneNational, setPhoneNational] = useState('')
+  const [notes, setNotes] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<BookingField, string>>>({})
+  const [submitAttempted, setSubmitAttempted] = useState(false)
+
+  const detailsState = useMemo<BookingDetailsFields>(
+    () => ({
+      name,
+      email,
+      company,
+      phoneCountry,
+      phoneNational,
+      notes,
+    }),
+    [name, email, company, phoneCountry, phoneNational, notes],
+  )
+
+  function updateDetailField<K extends BookingField>(field: K, value: BookingDetailsFields[K]) {
+    const next: BookingDetailsFields = { ...detailsState, [field]: value }
+    if (field === 'name') setName(value as string)
+    if (field === 'email') setEmail(value as string)
+    if (field === 'company') setCompany(value as string)
+    if (field === 'phoneCountry') setPhoneCountry(value as CountryCode)
+    if (field === 'phoneNational') setPhoneNational(value as string)
+    if (field === 'notes') setNotes(value as string)
+
+    setFieldErrors((prev) => {
+      const shouldRevalidate = submitAttempted || field in prev
+      if (!shouldRevalidate) return prev
+      const err = bookingFieldError(field, next)
+      if (!err) {
+        const { [field]: _, ...rest } = prev
+        return rest
+      }
+      return { ...prev, [field]: err }
+    })
+  }
+
+  useEffect(() => {
+    setConfigLoading(true)
+    fetchBookingConfig()
+      .then(setConfig)
+      .catch(() =>
+        setError(
+          'Scheduling API is not reachable. Start the backend (uvicorn on port 8000) or use the contact form.',
+        ),
+      )
+      .finally(() => setConfigLoading(false))
+  }, [])
+
+  const dayOptions = useMemo(() => {
+    if (!config) return []
+    return nextDays(config.max_days_ahead)
+  }, [config])
+
+  useEffect(() => {
+    if (!config || dayOptions.length === 0) return
+    const from = dayOptions[0]
+    const to = dayOptions[dayOptions.length - 1]
+    fetchAvailabilitySummary(from, to)
+      .then((summary) => {
+        const map: Record<string, number> = {}
+        for (const day of summary.days) {
+          map[day.date] = day.available_count
+        }
+        setOpenSlotsByDay(map)
+      })
+      .catch(() => {
+        /* dates still work; fully-booked days just won't be greyed out */
+      })
+  }, [config, dayOptions])
+
+  useEffect(() => {
+    if (!selectedDate || step !== 'time') return
+    setLoadingSlots(true)
+    setError(null)
+    fetchSlots(selectedDate, selectedDate)
+      .then((res) => setSlots(res.slots))
+      .catch(() => setError('Could not load times for this day.'))
+      .finally(() => setLoadingSlots(false))
+  }, [selectedDate, step])
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!selectedSlot) return
+    setSubmitAttempted(true)
+    const validationErrors = validateBookingDetails(detailsState)
+    setFieldErrors(validationErrors)
+    if (Object.keys(validationErrors).length > 0) {
+      setError('Please fix the highlighted fields.')
+      return
+    }
+
+    const phoneE164 = formatPhoneE164(phoneCountry, phoneNational)
+
+    setSubmitting(true)
+    setError(null)
+    try {
+      const booked = await createBooking({
+        name: name.trim(),
+        email: email.trim(),
+        start: selectedSlot.start,
+        company: company.trim() || undefined,
+        phone: phoneE164,
+        notes: notes.trim() || undefined,
+        source: 'book_page',
+      })
+      setResult({
+        meeting_link: booked.meeting_link,
+        start: booked.start,
+        cancel_url: booked.cancel_url,
+      })
+      setStep('done')
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Booking failed'
+      setError(
+        msg.toLowerCase().includes('no longer available')
+          ? 'That time was just taken by another client. Please pick another slot.'
+          : msg,
+      )
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const stepIndex = ['date', 'time', 'details'].indexOf(step)
+
+  if (step === 'done' && result) {
+    const when = new Date(result.start).toLocaleString(undefined, {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+    })
+    return (
+      <div className="flex flex-col items-center rounded-xl border border-border bg-white p-10 text-center sm:p-12">
+        <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 ring-1 ring-emerald-500/30">
+          <CheckIcon />
+        </div>
+        <h3 className="text-xl font-semibold text-text-primary">You&apos;re booked</h3>
+        <p className="mt-2 text-accent font-medium">{when}</p>
+        <p className="mt-4 max-w-sm text-sm text-muted">
+          Confirmation sent to <strong className="text-text-primary">{email}</strong>. Use this link
+          at the scheduled time:
+        </p>
+        <a
+          href={result.meeting_link}
+          className="mt-6 inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-white hover:bg-accent-hover"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Join meeting
+          <ArrowIcon className="h-4 w-4" />
+        </a>
+        {result.cancel_url && (
+          <a
+            href={result.cancel_url}
+            className="mt-4 text-sm text-muted underline hover:text-accent"
+          >
+            Need to cancel? Free this slot for others
+          </a>
+        )}
+        <Button variant="outline" className="mt-6" onClick={() => window.location.reload()}>
+          Book another slot
+        </Button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="rounded-xl border border-border bg-white p-6 sm:p-8">
+      <div className="mb-6 flex flex-wrap gap-2" aria-label="Booking progress">
+        {(['date', 'time', 'details'] as const).map((s, i) => (
+          <span
+            key={s}
+            className={`rounded-full border px-3 py-1 font-mono text-[10px] tracking-wide uppercase ${
+              step === s
+                ? 'border-accent bg-accent/10 text-accent'
+                : stepIndex > i
+                  ? 'border-border bg-bg-off text-muted'
+                  : 'border-border text-muted'
+            }`}
+          >
+            {i + 1}. {s === 'date' ? 'Date' : s === 'time' ? 'Time' : 'Details'}
+          </span>
+        ))}
+      </div>
+
+      {error && (
+        <div
+          className="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          role="alert"
+        >
+          {error}
+          {error.includes('not reachable') && (
+            <span className="mt-2 block">
+              <Link to="/contact" className="font-medium underline">
+                Go to contact form →
+              </Link>
+            </span>
+          )}
+        </div>
+      )}
+
+      {configLoading && (
+        <p className="text-sm text-muted">Loading available times…</p>
+      )}
+
+      {!configLoading && config && step === 'date' && (
+        <div>
+          <p className="mb-2 text-sm text-muted">
+            Pick a day ({config.slot_duration_minutes}-minute discovery call,{' '}
+            {config.timezone.replace('_', ' ')})
+          </p>
+          <p className="mb-4 text-xs text-muted">
+            One booking per time slot. Booked times are hidden; cancel via email to release a slot.
+          </p>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+            {dayOptions.map((d) => {
+              const openCount = openSlotsByDay[d]
+              const fullyBooked = openCount === 0
+              return (
+                <button
+                  key={d}
+                  type="button"
+                  disabled={fullyBooked}
+                  title={fullyBooked ? 'No open slots this day' : undefined}
+                  className={`min-h-[44px] rounded-lg border px-3 py-2.5 text-sm transition-all ${
+                    fullyBooked
+                      ? 'cursor-not-allowed border-border bg-bg-off/50 text-muted opacity-60'
+                      : selectedDate === d
+                        ? 'border-accent bg-accent/10 font-medium text-accent'
+                        : 'border-border bg-bg-off text-text-primary hover:border-accent/50'
+                  }`}
+                  onClick={() => {
+                    if (fullyBooked) return
+                    setSelectedDate(d)
+                    setSelectedSlot(null)
+                    setStep('time')
+                    setError(null)
+                  }}
+                >
+                  {formatDisplayDate(d)}
+                  {fullyBooked && (
+                    <span className="mt-0.5 block text-[10px] font-normal uppercase tracking-wide">
+                      Full
+                    </span>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {step === 'time' && selectedDate && (
+        <div>
+          <button
+            type="button"
+            className="mb-4 text-sm text-muted hover:text-accent"
+            onClick={() => setStep('date')}
+          >
+            ← Change date
+          </button>
+          <p className="mb-4 text-sm text-muted">
+            {formatDisplayDate(selectedDate)} — available times
+          </p>
+          {loadingSlots ? (
+            <p className="text-sm text-muted">Loading slots…</p>
+          ) : slots.length === 0 ? (
+            <p className="text-sm text-muted">No open slots this day. Try another date.</p>
+          ) : (
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+              {slots.map((slot) => (
+                <button
+                  key={slot.start}
+                  type="button"
+                  className={`min-h-[44px] rounded-lg border px-3 py-2.5 text-sm transition-all ${
+                    selectedSlot?.start === slot.start
+                      ? 'border-accent bg-accent/10 font-medium text-accent'
+                      : 'border-border bg-bg-off hover:border-accent/50'
+                  }`}
+                  onClick={() => {
+                    setSelectedSlot(slot)
+                    setStep('details')
+                    setError(null)
+                  }}
+                >
+                  {slot.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {step === 'details' && selectedSlot && selectedDate && (
+        <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+          <button
+            type="button"
+            className="text-sm text-muted hover:text-accent"
+            onClick={() => {
+              setStep('time')
+              setError(null)
+            }}
+          >
+            ← Change time
+          </button>
+          <p className="text-sm font-medium text-text-primary">
+            {formatDisplayDate(selectedDate)} at {selectedSlot.label}
+          </p>
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label htmlFor="booking-name" className="block text-sm font-medium text-text-primary">
+                Name
+              </label>
+              <input
+                id="booking-name"
+                className={`${inputClass} mt-1.5 ${fieldErrors.name ? 'border-red-300 focus:border-red-400 focus:ring-red-200' : ''}`}
+                value={name}
+                onChange={(e) => updateDetailField('name', e.target.value)}
+                autoComplete="name"
+                maxLength={200}
+                aria-invalid={fieldErrors.name ? true : undefined}
+              />
+              {fieldErrors.name && (
+                <p className="mt-1.5 text-xs text-red-600">{fieldErrors.name}</p>
+              )}
+            </div>
+            <div>
+              <label htmlFor="booking-email" className="block text-sm font-medium text-text-primary">
+                Email
+              </label>
+              <input
+                id="booking-email"
+                className={`${inputClass} mt-1.5 ${fieldErrors.email ? 'border-red-300 focus:border-red-400 focus:ring-red-200' : ''}`}
+                type="email"
+                value={email}
+                onChange={(e) => updateDetailField('email', e.target.value)}
+                autoComplete="email"
+                maxLength={254}
+                aria-invalid={fieldErrors.email ? true : undefined}
+              />
+              {fieldErrors.email && (
+                <p className="mt-1.5 text-xs text-red-600">{fieldErrors.email}</p>
+              )}
+            </div>
+          </div>
+          <div>
+            <label htmlFor="booking-company" className="block text-sm font-medium text-text-primary">
+              Company <span className="font-normal text-muted">(optional)</span>
+            </label>
+            <input
+              id="booking-company"
+              className={`${inputClass} mt-1.5 ${fieldErrors.company ? 'border-red-300 focus:border-red-400 focus:ring-red-200' : ''}`}
+              value={company}
+              onChange={(e) => updateDetailField('company', e.target.value)}
+              autoComplete="organization"
+              maxLength={200}
+            />
+            {fieldErrors.company && (
+              <p className="mt-1.5 text-xs text-red-600">{fieldErrors.company}</p>
+            )}
+          </div>
+          <div>
+            <label htmlFor="booking-phone" className="block text-sm font-medium text-text-primary">
+              Phone <span className="font-normal text-muted">(optional)</span>
+            </label>
+            <PhoneField
+              country={phoneCountry}
+              national={phoneNational}
+              onCountryChange={(code) => updateDetailField('phoneCountry', code)}
+              onNationalChange={(value) => updateDetailField('phoneNational', value)}
+              error={fieldErrors.phoneNational}
+              disabled={submitting}
+              inputClass={inputClass}
+            />
+          </div>
+          <div>
+            <label htmlFor="booking-notes" className="block text-sm font-medium text-text-primary">
+              What should we discuss?{' '}
+              <span className="font-normal text-muted">(optional)</span>
+            </label>
+            <textarea
+              id="booking-notes"
+              className={`${inputClass} mt-1.5 resize-none ${fieldErrors.notes ? 'border-red-300 focus:border-red-400 focus:ring-red-200' : ''}`}
+              rows={4}
+              value={notes}
+              onChange={(e) => updateDetailField('notes', e.target.value)}
+              placeholder="Brief project context, timeline, goals…"
+              maxLength={2000}
+            />
+            <div className="mt-1.5 flex justify-between text-xs text-muted">
+              {fieldErrors.notes ? (
+                <span className="text-red-600">{fieldErrors.notes}</span>
+              ) : (
+                <span>Optional</span>
+              )}
+              <span>{notes.length}/2000</span>
+            </div>
+          </div>
+
+          <Button type="submit" disabled={submitting}>
+            {submitting ? 'Booking…' : 'Confirm discovery call'}
+            {!submitting && <ArrowIcon />}
+          </Button>
+        </form>
+      )}
+    </div>
+  )
+}

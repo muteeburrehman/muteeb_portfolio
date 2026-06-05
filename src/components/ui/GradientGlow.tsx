@@ -10,7 +10,7 @@ export function GradientGlow({ className = '' }: GradientGlowProps) {
         aria-hidden="true"
       />
       <div
-        className={`glow-orb top-1/3 right-0 h-96 w-96 bg-purple-600/15 ${className}`}
+        className={`glow-orb top-1/3 right-0 h-96 w-96 bg-accent/12 ${className}`}
         aria-hidden="true"
       />
       <div

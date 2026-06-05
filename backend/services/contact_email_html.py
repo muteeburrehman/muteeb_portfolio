@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import html
 
+import os
+
 from schemas.contact import ContactSubmission
 from services.contact_urls import public_contact_form_url
 
@@ -22,7 +24,7 @@ _TEXT_DIM = "#737373"
 _SKY = "#38bdf8"
 _PURPLE = "#a855f7"
 _ACCENT_BAR = f"linear-gradient(90deg,{_SKY},{_PURPLE})"
-_BRAND = "Muteeb Labs"
+_BRAND = os.getenv("MAIL_BRAND_NAME", "Muteeb Labs")
 
 
 def _topic_label(data: ContactSubmission) -> str | None:

@@ -178,6 +178,39 @@ def send_contact_acknowledgment(data: ContactSubmission) -> None:
             pass
 
 
+def send_raw_email(
+    *,
+    to_addrs: list[str],
+    subject: str,
+    plain_body: str,
+    html_body: str | None = None,
+    reply_to: str | None = None,
+) -> None:
+    """Plain-text email with optional branded HTML (booking confirmations, alerts)."""
+    recipients = [a.strip() for a in to_addrs if a and a.strip()]
+    if not recipients:
+        raise RuntimeError("No recipients for send_raw_email")
+
+    smtp, email_user, _ = _open_smtp()
+    try:
+        from_addr = _from_addr(email_user)
+        mime = MIMEMultipart("alternative")
+        mime["Subject"] = subject
+        mime["From"] = formataddr((BRAND, from_addr))
+        mime["To"] = ", ".join(recipients)
+        if reply_to:
+            mime["Reply-To"] = reply_to
+        mime.attach(MIMEText(plain_body, "plain", "utf-8"))
+        if html_body:
+            mime.attach(MIMEText(html_body, "html", "utf-8"))
+        _send_mime(smtp, email_user, recipients, mime)
+    finally:
+        try:
+            smtp.quit()
+        except smtplib.SMTPException:
+            pass
+
+
 def process_contact_submission(data: ContactSubmission) -> None:
     """
     Full contact pipeline:

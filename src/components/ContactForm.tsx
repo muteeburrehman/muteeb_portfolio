@@ -137,22 +137,18 @@ export function ContactForm() {
   }
 
   const inputClass =
-    'w-full rounded-xl border border-white/10 bg-bg/70 px-4 py-3.5 text-sm text-white placeholder:text-white/30 transition-all focus:border-sky-400/60 focus:bg-bg/90 focus:ring-2 focus:ring-sky-400/15'
+    'w-full rounded-lg border border-border bg-white px-4 py-3.5 text-sm text-text-primary placeholder:text-muted transition-all focus:border-accent focus:ring-2 focus:ring-accent/15'
 
   if (status === 'success') {
     return (
-      <div className="border-gradient relative flex flex-col items-center justify-center overflow-hidden rounded-3xl bg-surface-elevated p-12 text-center">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-linear-to-br from-emerald-500/[0.06] via-transparent to-sky-500/[0.06]"
-        />
-        <div className="relative mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/12 text-emerald-300 ring-1 ring-emerald-500/30">
+      <div className="relative flex flex-col items-center justify-center rounded-xl border border-border bg-white p-12 text-center">
+        <div className="relative mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 ring-1 ring-emerald-500/30">
           <CheckIcon />
         </div>
-        <h3 className="relative text-xl font-semibold text-white">Message sent successfully</h3>
-        <p className="relative mt-3 max-w-sm text-sm text-white/55">
+        <h3 className="relative text-xl font-semibold text-text-primary">Message sent successfully</h3>
+        <p className="relative mt-3 max-w-sm text-sm text-muted">
           Thanks for reaching out — I&apos;ll get back to you soon. You can also email{' '}
-          <a href={`mailto:${EMAIL}`} className="text-sky-300 hover:underline">
+          <a href={`mailto:${EMAIL}`} className="text-accent hover:underline">
             {EMAIL}
           </a>
         </p>
@@ -177,14 +173,14 @@ export function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="border-gradient relative space-y-5 rounded-3xl bg-surface-elevated p-6 sm:p-8"
+      className="relative space-y-5 rounded-xl border border-border bg-white p-6 sm:p-8"
       noValidate
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label
             htmlFor="name"
-            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/55 uppercase"
+            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
           >
             Your name
           </label>
@@ -203,7 +199,7 @@ export function ContactForm() {
         <div>
           <label
             htmlFor="email"
-            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/55 uppercase"
+            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
           >
             Email
           </label>
@@ -224,7 +220,7 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="topic"
-          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/55 uppercase"
+          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
         >
           Project type
         </label>
@@ -237,14 +233,14 @@ export function ContactForm() {
             disabled={submitting}
           >
             {CONTACT_TOPICS.map((t) => (
-              <option key={t} value={t} className="bg-bg">
+              <option key={t} value={t}>
                 {t}
               </option>
             ))}
           </select>
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-white/40"
+            className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-muted"
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none">
               <path
@@ -262,7 +258,7 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="message"
-          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/55 uppercase"
+          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
         >
           Message
         </label>
@@ -275,7 +271,7 @@ export function ContactForm() {
           className={`${inputClass} resize-none`}
           disabled={submitting}
         />
-        <div className="mt-1.5 flex items-center justify-between text-[11px] text-white/35">
+        <div className="mt-1.5 flex items-center justify-between text-[11px] text-muted">
           {errors.message ? (
             <span className="text-red-400">{errors.message}</span>
           ) : form.message.trim().length >= 20 ? (
@@ -284,7 +280,7 @@ export function ContactForm() {
             <span>
               Minimum 20 characters
               {form.message.trim().length > 0 ? (
-                <span className="text-white/45">
+                <span className="text-muted">
                   {' '}
                   ({20 - form.message.trim().length} more needed)
                 </span>
@@ -296,7 +292,7 @@ export function ContactForm() {
               form.message.trim().length >= 20
                 ? 'text-emerald-400/70'
                 : form.message.length > 0
-                  ? 'text-white/55'
+                  ? 'text-text-primary'
                   : ''
             }
           >
@@ -306,14 +302,14 @@ export function ContactForm() {
       </div>
 
       {error ? (
-        <p className="rounded-xl border border-red-500/25 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+        <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
           {error}
         </p>
       ) : null}
 
       <div className="flex flex-col items-start gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-[11px] text-white/35">
-          Personal reply <span className="text-white/55">{REPLY_TIME}</span> · No spam, ever.
+        <p className="text-[11px] text-muted">
+          Personal reply <span className="text-text-primary">{REPLY_TIME}</span> · No spam, ever.
         </p>
         <Button type="submit" className="w-full sm:w-auto" disabled={submitting}>
           {submitting ? (

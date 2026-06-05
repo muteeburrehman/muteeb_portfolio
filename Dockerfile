@@ -36,6 +36,7 @@ ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/main.py .
+COPY backend/data ./data
 COPY backend/routers ./routers
 COPY backend/schemas ./schemas
 COPY backend/services ./services

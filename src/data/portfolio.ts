@@ -1,6 +1,11 @@
 export const EMAIL = 'business@muteeblabs.uk'
+/** Built-in scheduling funnel (custom slots + CRM). */
+export const BOOK_CALL_PATH = '/book'
+/** @deprecated Use BOOK_CALL_PATH — kept for gradual migration */
+export const CALENDLY_URL = BOOK_CALL_PATH
+export const SITE_BRAND = 'MuteebLabs'
 export const NAME = 'Muteeb Ur Rehman'
-export const ROLE = 'Full Stack Developer & AI Engineer'
+export const ROLE = 'Custom Software Development Agency'
 export const TECH_STACK =
   'Python • React • PostgreSQL • LangChain • LLMs • OpenAI • Gemini • Claude • Vector DBs • Qdrant • n8n • Voice Agents • AWS'
 
@@ -10,7 +15,7 @@ export const SOCIAL_LINKS = [
   { label: 'LinkedIn', url: '', icon: 'linkedin' as const },
 ] as const
 
-export const FOOTER_FOCUS = ['Python', 'AI / LLMs', 'React', 'AWS', 'LangChain'] as const
+export const FOOTER_FOCUS = ['Livestock', 'QA Testing', 'AI Automation', 'React', 'AWS'] as const
 
 export const SKILLS = [
   'Python',
@@ -73,8 +78,9 @@ export const PROJECTS = [
       'A specialised e-commerce platform for genetically tested Wagyu cattle semen — product catalog, embryos, custom "Bull Battery" tool, shopping cart and content-rich storefront for a niche US client.',
     image: '/projects/marblesemen.png',
     imageAlt: 'Marble Semen Wagyu e-commerce homepage',
-    tags: ['Full Stack', 'Catalog', 'Cart', 'Payments', 'CMS'],
+    tags: ['React', 'Django', 'PostgreSQL', 'AWS', 'Authorize.net'],
     url: 'https://marblesemen.com',
+    caseStudyTo: '/case-study/marblesemen',
     role: 'Full Stack Engineer',
     status: 'Live · in production',
     accent: 'sky' as const,
@@ -209,11 +215,96 @@ export const CONTACT_TOPICS = [
 
 export const NAV_LINKS = [
   { to: '/', label: 'Home' },
+  { to: '/livestock-software', label: 'Livestock Software' },
+  { to: '/qa-testing', label: 'QA Testing' },
+  { to: '/ai-automation', label: 'AI & Automation' },
   { to: '/#work', label: 'Work' },
   { to: '/#process', label: 'Process' },
   { to: '/#about', label: 'About' },
   { to: '/contact', label: 'Contact' },
 ] as const
+
+export const TRUST_BAR_ITEMS = [
+  '5+ Years Building Software',
+  '3 Industry Niches',
+  'React · Django · FastAPI · AWS',
+  'AI & Automation Specialists',
+] as const
+
+export const AGENCY_SERVICES = [
+  {
+    title: 'Livestock & Cattle Software',
+    description:
+      'Custom herd management platforms, genetics tracking dashboards, and buyer-facing portals — built for Wagyu breeders, stud farms, and cattle operations.',
+    to: '/livestock-software',
+    icon: 'database' as const,
+  },
+  {
+    title: 'QA Testing Services',
+    description:
+      "Manual testing, regression suites, bug reporting, and release validation — for SaaS teams that don't have a full QA department yet.",
+    to: '/qa-testing',
+    icon: 'check' as const,
+  },
+  {
+    title: 'AI & Automation',
+    description:
+      'AI chatbots, workflow automation, document processing pipelines, and custom business software — built with LangChain, n8n, OpenAI API, and FastAPI.',
+    to: '/ai-automation',
+    icon: 'zap' as const,
+  },
+] as const
+
+export const FEATURED_CASE_STUDY = {
+  slug: 'marblesemen',
+  name: 'MarbleSemen.com',
+  description:
+    'Full-stack cattle genetics and sale management platform — replacing spreadsheets with a custom buyer portal and EPD tracking dashboard for a real Wagyu operation.',
+  tags: ['React', 'Django', 'PostgreSQL', 'AWS', 'Authorize.net'],
+  to: '/case-study/marblesemen',
+} as const
+
+export const MARBLESEMEN_CASE_STUDY = {
+  slug: 'marblesemen',
+  title: 'MarbleSemen.com',
+  subtitle: 'Fullblood Wagyu genetics platform for a US cattle operation',
+  client: 'Marble Semen',
+  industry: 'Livestock · Cattle genetics · E-commerce',
+  location: 'United States',
+  liveUrl: 'https://marblesemen.com',
+  image: '/projects/marblesemen.png',
+  imageAlt: 'Marble Semen website homepage — Wagyu genetics e-commerce',
+  stack: ['React', 'Django', 'PostgreSQL', 'AWS', 'Authorize.net'],
+  role: 'Full-stack development partner',
+  timeline: 'Multi-phase delivery · Production',
+  overview:
+    'Marble Semen sells genetically tested Fullblood Wagyu semen and embryos to breeders across the United States. They needed more than a brochure site — a reliable system to present inventory, educate buyers, and support orders without running the business on spreadsheets and phone tag.',
+  challenge: [
+    'Inventory and genetics data lived in spreadsheets — hard to keep accurate and impossible to scale.',
+    'Buyers needed a professional, trustworthy storefront that reflects premium Wagyu genetics.',
+    'The team wanted custom tools (including a “Bull Battery” experience) without off-the-shelf e-commerce limits.',
+    'Content, catalog, and checkout flows had to work for a niche B2B audience, not generic retail shoppers.',
+  ],
+  approach: [
+    'Discovery sessions with the client to map semen SKUs, embryos, genetics terminology, and sales workflow.',
+    'Designed a clear information architecture: catalog, process pages, specials, and buyer-focused CTAs.',
+    'Built a maintainable full-stack architecture with a React front end and Django API on PostgreSQL.',
+    'Deployed on AWS with a production-minded setup so the site stays fast and available for US traffic.',
+  ],
+  delivered: [
+    'Public storefront with genetics-focused branding and mobile-responsive layout.',
+    'Product catalog for semen and embryos with structured categories and merchandising.',
+    'Custom “Bull Battery” tool and supporting content pages for the sales process.',
+    'Shopping cart and Authorize.net checkout flows aligned with how the client sells today.',
+    'Admin-friendly structure so the team can evolve catalog and content over time.',
+  ],
+  results: [
+    'Live production site serving real US customers at marblesemen.com.',
+    'Replaced ad-hoc spreadsheet workflows with a single source of truth online.',
+    'Professional digital presence that matches the premium positioning of Fullblood Wagyu genetics.',
+    'Authorize.net payments live in production; foundation in place for CRM hooks and deeper herd-management features.',
+  ],
+} as const
 
 /** Shown on site + kept in sync with MAIL_REPLY_WINDOW in .env */
 export const REPLY_TIME = 'usually within one day'

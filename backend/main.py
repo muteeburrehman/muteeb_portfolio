@@ -13,7 +13,9 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from routers.booking import router as booking_router
 from routers.contact import router as contact_router
+from services.booking_store import init_db
 
 
 def _bootstrap_config() -> None:
@@ -48,6 +50,7 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
         logger.warning("SMTP incomplete (missing %s) — mail will fail until .env is set.", missing)
     else:
         logger.info("SMTP configured for %s", host)
+    init_db()
     yield
 
 
@@ -69,6 +72,7 @@ app.add_middleware(
 )
 
 app.include_router(contact_router)
+app.include_router(booking_router)
 
 
 @app.get("/healthz")

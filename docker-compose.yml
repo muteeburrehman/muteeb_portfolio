@@ -55,6 +55,17 @@ services:
       MAIL_SIGN_TITLE: ${MAIL_SIGN_TITLE:-Full Stack Developer & AI Engineer}
       MAIL_REPLY_WINDOW: ${MAIL_REPLY_WINDOW:-usually within one day}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      BOOKING_DB_PATH: /data/bookings.sqlite
+      BOOKING_TIMEZONE: ${BOOKING_TIMEZONE:-Asia/Karachi}
+      MEETING_LINK: ${MEETING_LINK:-}
+      HUBSPOT_ENABLED: ${HUBSPOT_ENABLED:-false}
+      HUBSPOT_ACCESS_TOKEN: ${HUBSPOT_ACCESS_TOKEN:-}
+      HUBSPOT_PIPELINE_ID: ${HUBSPOT_PIPELINE_ID:-default}
+      HUBSPOT_DEAL_STAGE: ${HUBSPOT_DEAL_STAGE:-appointmentscheduled}
+      N8N_BOOKING_WEBHOOK_URL: ${N8N_BOOKING_WEBHOOK_URL:-}
+      BOOKING_ADMIN_KEY: ${BOOKING_ADMIN_KEY:-}
+    volumes:
+      - booking_data:/data
     expose:
       - "8000"
     networks:
@@ -65,6 +76,9 @@ services:
       timeout: 5s
       retries: 3
       start_period: 12s
+
+volumes:
+  booking_data:
 
 networks:
   internal:

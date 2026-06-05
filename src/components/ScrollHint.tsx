@@ -8,7 +8,7 @@ export function ScrollHint() {
         SCROLL
       </span>
       <span className="relative h-28 w-px overflow-hidden bg-white/10">
-        <span className="absolute top-0 left-0 h-1/2 w-full animate-float bg-linear-to-b from-sky-400/85 via-purple-400/40 to-transparent" />
+        <span className="absolute top-0 left-0 h-1/2 w-full animate-float bg-linear-to-b from-sky-400/85 via-accent-light/40 to-transparent" />
       </span>
     </aside>
   )

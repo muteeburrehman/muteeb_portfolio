@@ -2,6 +2,8 @@
 
 Personal portfolio (not tied to any company site). React, Vite, Tailwind, contact form → branded HTML email via FastAPI + Gmail SMTP.
 
+**Sales funnel:** built-in discovery-call booking at `/book`. **Start here:** [docs/FUNNEL_SETUP_GUIDE.md](docs/FUNNEL_SETUP_GUIDE.md) (credentials, HubSpot CRM, n8n flows, booking admin key). Also: [docs/SETUP_CREDENTIALS.md](docs/SETUP_CREDENTIALS.md) · [docs/SALES_FUNNEL.md](docs/SALES_FUNNEL.md).
+
 ## Local
 
 ```bash

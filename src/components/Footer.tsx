@@ -5,9 +5,10 @@ import {
   NAME,
   NAV_LINKS,
   ROLE,
+  SITE_BRAND,
   SOCIAL_LINKS,
 } from '../data/portfolio'
-import { ArrowIcon, GitHubIcon, LinkedInIcon, MailIcon } from './icons'
+import { GitHubIcon, LinkedInIcon, MailIcon } from './icons'
 
 const socialIcons = {
   github: GitHubIcon,
@@ -15,13 +16,11 @@ const socialIcons = {
 } as const
 
 function FooterNavLink({ to, label }: { to: string; label: string }) {
-  const base =
-    'group inline-flex items-center gap-2 text-sm transition-colors hover:text-white'
+  const base = 'text-sm transition-colors hover:text-white'
 
   if (to.includes('#')) {
     return (
-      <a href={to} className={`${base} text-white/45`}>
-        <span className="h-px w-3 bg-white/15 transition-all group-hover:w-5 group-hover:bg-sky-400/60" />
+      <a href={to} className={`${base} text-on-dark-muted`}>
         {label}
       </a>
     )
@@ -31,19 +30,10 @@ function FooterNavLink({ to, label }: { to: string; label: string }) {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `${base} ${isActive ? 'font-medium text-white' : 'text-white/45'}`
+        `${base} ${isActive ? 'font-medium text-white' : 'text-on-dark-muted'}`
       }
     >
-      {({ isActive }) => (
-        <>
-          <span
-            className={`h-px transition-all ${
-              isActive ? 'w-5 bg-sky-400/70' : 'w-3 bg-white/15 group-hover:w-5 group-hover:bg-sky-400/60'
-            }`}
-          />
-          {label}
-        </>
-      )}
+      {label}
     </NavLink>
   )
 }
@@ -54,43 +44,19 @@ export function Footer() {
   const activeSocials = SOCIAL_LINKS.filter((s) => s.url.trim().length > 0)
 
   return (
-    <footer className="relative mt-auto overflow-hidden border-t border-white/8 bg-surface/80 backdrop-blur-xl">
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-sky-400/40 to-transparent"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute -top-32 left-1/2 h-64 w-[40rem] -translate-x-1/2 rounded-full bg-sky-500/[0.04] blur-3xl"
-        aria-hidden="true"
-      />
-
-      <div className="relative mx-auto max-w-7xl px-6 py-14 pb-28 lg:px-10 lg:py-20 lg:pb-32">
-        <div className="mb-12 flex flex-wrap items-end justify-between gap-6 border-b border-white/5 pb-10">
-          <Link
-            to="/"
-            className="group inline-flex items-end gap-2 font-display tracking-tight text-white transition-opacity hover:opacity-90"
-          >
-            <span className="text-5xl leading-none sm:text-6xl lg:text-7xl">
-              MUR<span className="text-gradient">.</span>
-            </span>
-          </Link>
-          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-medium text-emerald-300 backdrop-blur-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-            </span>
-            Available · UTC+5
-          </span>
-        </div>
-
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-5">
-            <p className="max-w-sm text-base leading-relaxed text-white/55">{ROLE}</p>
-            <div className="mt-5 flex flex-wrap gap-1.5">
+    <footer className="section-dark border-t border-white/[0.08]">
+      <div className="container section-block">
+        <div className="grid gap-12 md:grid-cols-3 md:gap-10">
+          <div>
+            <Link to="/" className="font-display text-xl font-bold text-white">
+              {SITE_BRAND}
+            </Link>
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-on-dark-muted">{ROLE}</p>
+            <div className="mt-4 flex flex-wrap gap-2">
               {FOOTER_FOCUS.map((item) => (
                 <span
                   key={item}
-                  className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-[11px] text-white/50"
+                  className="rounded-md border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-on-dark-muted"
                 >
                   {item}
                 </span>
@@ -98,10 +64,8 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="lg:col-span-3">
-            <p className="mb-4 font-mono text-[10px] tracking-[0.22em] text-white/30 uppercase">
-              Navigate
-            </p>
+          <div>
+            <p className="label-tag mb-4 text-on-dark-muted">Navigate</p>
             <nav className="flex flex-col gap-3" aria-label="Footer navigation">
               {NAV_LINKS.map(({ to, label }) => (
                 <FooterNavLink key={to} to={to} label={label} />
@@ -109,29 +73,17 @@ export function Footer() {
             </nav>
           </div>
 
-          <div className="lg:col-span-4">
-            <p className="mb-4 font-mono text-[10px] tracking-[0.22em] text-white/30 uppercase">
-              Connect
-            </p>
+          <div>
+            <p className="label-tag mb-4 text-on-dark-muted">Connect</p>
             <a
               href={`mailto:${EMAIL}`}
-              className="group flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition-all hover:border-sky-400/35 hover:bg-sky-500/[0.04]"
+              className="inline-flex min-h-[44px] items-center gap-2 text-sm text-white transition-colors hover:text-accent"
             >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-500/12 text-sky-300 transition-colors group-hover:bg-sky-500/20">
-                <MailIcon />
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-[11px] tracking-wider text-white/40 uppercase">
-                  Email me
-                </span>
-                <span className="block truncate text-sm font-medium text-white group-hover:text-sky-200">
-                  {EMAIL}
-                </span>
-              </span>
-              <ArrowIcon className="ml-auto h-4 w-4 shrink-0 text-white/30 transition-transform group-hover:translate-x-0.5 group-hover:text-white/70" />
+              <MailIcon className="h-4 w-4 shrink-0" />
+              {EMAIL}
             </a>
 
-            <div className="mt-5 flex flex-wrap items-center gap-3">
+            <div className="mt-4 flex flex-wrap items-center gap-3">
               {activeSocials.map(({ label, url, icon }) => {
                 const Icon = socialIcons[icon]
                 return (
@@ -141,7 +93,7 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/55 transition-all hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+                    className="flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 text-on-dark-muted transition-colors hover:border-white/20 hover:text-white"
                   >
                     <Icon />
                   </a>
@@ -151,21 +103,20 @@ export function Footer() {
               {pathname !== '/contact' && (
                 <Link
                   to="/contact"
-                  className="group inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-white/85 transition-all hover:border-sky-400/40 hover:bg-white/[0.04] hover:text-white"
+                  className="inline-flex min-h-[44px] items-center rounded-lg border border-white/15 px-4 text-sm text-white/90 transition-colors hover:border-accent hover:text-white"
                 >
                   Contact form
-                  <ArrowIcon className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               )}
             </div>
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-white/5 pt-8 sm:flex-row">
-          <p className="text-center text-xs text-white/35 sm:text-left">
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/[0.08] pt-8 sm:flex-row">
+          <p className="text-xs text-on-dark-muted">
             © {year} {NAME}. Crafted with React &amp; Tailwind.
           </p>
-          <p className="text-center text-xs text-white/25 sm:text-right">
+          <p className="text-xs text-on-dark-muted/80">
             Python · AI · Full Stack · Cloud
           </p>
         </div>
