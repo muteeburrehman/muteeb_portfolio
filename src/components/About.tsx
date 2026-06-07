@@ -1,4 +1,5 @@
 import { SKILLS, STATS } from '../data/portfolio'
+import { LinkedInBadge } from './LinkedInBadge'
 import { Reveal } from './ui/Reveal'
 import { SectionLabel } from './ui/SectionLabel'
 
@@ -81,6 +82,11 @@ export function About() {
               </span>
             ))}
           </div>
+        </Reveal>
+
+        <Reveal delay={200} className="mx-auto mt-14 flex max-w-xl flex-col items-center text-center">
+          <p className="label-tag mb-4 text-muted">Connect on LinkedIn</p>
+          <LinkedInBadge layout="horizontal" size="small" />
         </Reveal>
       </div>
     </section>

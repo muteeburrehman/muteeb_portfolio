@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import {
   EMAIL,
   FOOTER_FOCUS,
@@ -40,7 +40,6 @@ function FooterNavLink({ to, label }: { to: string; label: string }) {
 
 export function Footer() {
   const year = new Date().getFullYear()
-  const { pathname } = useLocation()
   const activeSocials = SOCIAL_LINKS.filter((s) => s.url.trim().length > 0)
 
   return (
@@ -75,15 +74,15 @@ export function Footer() {
 
           <div>
             <p className="label-tag mb-4 text-muted">Connect</p>
-            <a
-              href={`mailto:${EMAIL}`}
-              className="inline-flex min-h-[44px] items-center gap-2 text-sm text-white transition-colors hover:text-accent-hover"
-            >
-              <MailIcon className="h-4 w-4 shrink-0" />
-              {EMAIL}
-            </a>
+            <div className="flex flex-col gap-3">
+              <a
+                href={`mailto:${EMAIL}`}
+                className="inline-flex min-h-[44px] items-center gap-2.5 text-sm text-white transition-colors hover:text-accent-hover"
+              >
+                <MailIcon className="h-4 w-4 shrink-0" />
+                {EMAIL}
+              </a>
 
-            <div className="mt-4 flex flex-wrap items-center gap-3">
               {activeSocials.map(({ label, url, icon }) => {
                 const Icon = socialIcons[icon]
                 return (
@@ -92,22 +91,13 @@ export function Footer() {
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={label}
-                    className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] text-muted backdrop-blur-sm transition-all hover:border-accent/30 hover:text-white"
+                    className="inline-flex min-h-[44px] items-center gap-2.5 text-sm text-muted transition-colors hover:text-white"
                   >
-                    <Icon />
+                    <Icon className="h-4 w-4 shrink-0" />
+                    {label}
                   </a>
                 )
               })}
-
-              {pathname !== '/contact' && (
-                <Link
-                  to="/contact"
-                  className="inline-flex min-h-[44px] items-center rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 text-sm text-white/80 backdrop-blur-sm transition-all hover:border-accent/30 hover:text-white"
-                >
-                  Contact form
-                </Link>
-              )}
             </div>
           </div>
         </div>

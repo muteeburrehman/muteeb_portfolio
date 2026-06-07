@@ -6,13 +6,15 @@ export const CALENDLY_URL = BOOK_CALL_PATH
 export const SITE_BRAND = 'MuteebLabs'
 export const NAME = 'Muteeb Ur Rehman'
 export const ROLE = 'Custom Software Development Agency'
+export const LINKEDIN_URL = 'https://pk.linkedin.com/in/muteeb-ur-rehman-091a2628a'
+export const LINKEDIN_VANITY = 'muteeb-ur-rehman-091a2628a'
 export const TECH_STACK =
   'Python • React • PostgreSQL • LangChain • LLMs • OpenAI • Gemini • Claude • Vector DBs • Qdrant • n8n • Voice Agents • AWS'
 
 /** Add your profile URLs here — links only appear when url is set */
 export const SOCIAL_LINKS = [
   { label: 'GitHub', url: '', icon: 'github' as const },
-  { label: 'LinkedIn', url: '', icon: 'linkedin' as const },
+  { label: 'LinkedIn', url: LINKEDIN_URL, icon: 'linkedin' as const },
 ] as const
 
 export const FOOTER_FOCUS = ['Livestock', 'QA Testing', 'AI Automation', 'React', 'AWS'] as const
