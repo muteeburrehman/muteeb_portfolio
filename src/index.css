@@ -140,22 +140,6 @@
     color: #e8eaf0;
   }
 
-  .linkedin-badge {
-    width: 100%;
-  }
-
-  .linkedin-badge--horizontal {
-    max-width: 360px;
-  }
-
-  .linkedin-badge--vertical {
-    max-width: 280px;
-  }
-
-  .linkedin-badge iframe {
-    max-width: 100%;
-  }
-
   .glass-card:hover {
     background: var(--glass-bg-hover);
     border-color: rgba(255, 255, 255, 0.14);

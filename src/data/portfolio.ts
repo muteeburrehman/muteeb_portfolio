@@ -7,7 +7,6 @@ export const SITE_BRAND = 'MuteebLabs'
 export const NAME = 'Muteeb Ur Rehman'
 export const ROLE = 'Custom Software Development Agency'
 export const LINKEDIN_URL = 'https://pk.linkedin.com/in/muteeb-ur-rehman-091a2628a'
-export const LINKEDIN_VANITY = 'muteeb-ur-rehman-091a2628a'
 export const TECH_STACK =
   'Python • React • PostgreSQL • LangChain • LLMs • OpenAI • Gemini • Claude • Vector DBs • Qdrant • n8n • Voice Agents • AWS'
 
