@@ -226,14 +226,14 @@ export const NAV_LINKS = [
 ] as const
 
 export const TRUST_BAR_ITEMS = [
-  '5+ Years Building Software',
+  '3 Years Building Software',
   '3 Industry Niches',
   'React · Django · FastAPI · AWS',
   'AI & Automation Specialists',
 ] as const
 
 export const HOME_METRICS = [
-  { value: '5+', label: 'Years in business' },
+  { value: '3', label: 'Years experience' },
   { value: '3', label: 'Industry verticals' },
   { value: '10+', label: 'Production builds' },
   { value: '1 day', label: 'Typical reply' },
@@ -343,7 +343,7 @@ export const REPLY_TIME = 'usually within one day'
 
 export const STATS = [
   { value: '10+', label: 'Builds shipped' },
-  { value: '3+', label: 'Years building' },
+  { value: '3', label: 'Years experience' },
   { value: '1 day', label: 'Typical reply' },
 ] as const
 
