@@ -199,10 +199,10 @@ export function BookingScheduler() {
         <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 ring-1 ring-emerald-500/30">
           <CheckIcon />
         </div>
-        <h3 className="text-xl font-semibold text-white">You&apos;re booked</h3>
+        <h3 className="text-xl font-semibold text-text-primary">You&apos;re booked</h3>
         <p className="mt-2 text-accent font-medium">{when}</p>
         <p className="mt-4 max-w-sm text-sm text-muted">
-          Confirmation sent to <strong className="text-white">{email}</strong>. Use this link
+          Confirmation sent to <strong className="text-text-primary">{email}</strong>. Use this link
           at the scheduled time:
         </p>
         <a
@@ -239,7 +239,7 @@ export function BookingScheduler() {
               step === s
                 ? 'border-accent bg-accent/10 text-accent'
                 : stepIndex > i
-                  ? 'border-border bg-white/5 text-muted'
+                  ? 'border-border bg-bg-off text-muted'
                   : 'border-border text-muted'
             }`}
           >
@@ -292,7 +292,7 @@ export function BookingScheduler() {
                       ? 'cursor-not-allowed border-border bg-white/[0.02] text-muted opacity-60'
                       : selectedDate === d
                         ? 'border-accent bg-accent/10 font-medium text-accent'
-                        : 'border-border bg-white/5 text-white/80 hover:border-accent/50'
+                        : 'border-border bg-bg-off text-text-primary hover:border-accent/40'
                   }`}
                   onClick={() => {
                     if (fullyBooked) return
@@ -368,13 +368,13 @@ export function BookingScheduler() {
           >
             ← Change time
           </button>
-          <p className="text-sm font-medium text-white/90">
+          <p className="text-sm font-medium text-text-primary">
             {formatDisplayDate(selectedDate)} at {selectedSlot.label}
           </p>
 
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
-              <label htmlFor="booking-name" className="block text-sm font-medium text-white/90">
+              <label htmlFor="booking-name" className="block text-sm font-medium text-text-primary">
                 Name
               </label>
               <input
@@ -391,7 +391,7 @@ export function BookingScheduler() {
               )}
             </div>
             <div>
-              <label htmlFor="booking-email" className="block text-sm font-medium text-white/90">
+              <label htmlFor="booking-email" className="block text-sm font-medium text-text-primary">
                 Email
               </label>
               <input
@@ -410,7 +410,7 @@ export function BookingScheduler() {
             </div>
           </div>
           <div>
-            <label htmlFor="booking-company" className="block text-sm font-medium text-white/90">
+            <label htmlFor="booking-company" className="block text-sm font-medium text-text-primary">
               Company <span className="font-normal text-muted">(optional)</span>
             </label>
             <input
@@ -426,7 +426,7 @@ export function BookingScheduler() {
             )}
           </div>
           <div>
-            <label htmlFor="booking-phone" className="block text-sm font-medium text-white/90">
+            <label htmlFor="booking-phone" className="block text-sm font-medium text-text-primary">
               Phone <span className="font-normal text-muted">(optional)</span>
             </label>
             <PhoneField
@@ -440,7 +440,7 @@ export function BookingScheduler() {
             />
           </div>
           <div>
-            <label htmlFor="booking-notes" className="block text-sm font-medium text-white/90">
+            <label htmlFor="booking-notes" className="block text-sm font-medium text-text-primary">
               What should we discuss?{' '}
               <span className="font-normal text-muted">(optional)</span>
             </label>

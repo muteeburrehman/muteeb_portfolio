@@ -11,12 +11,7 @@ export function ContactCTA() {
 
       <div className="container relative z-10">
         <Reveal>
-          <div className="glass-card-static rounded-2xl p-8 sm:p-10 lg:flex lg:items-end lg:justify-between lg:gap-12 lg:p-12"
-            style={{
-              background: 'linear-gradient(160deg, rgba(12,16,35,0.7) 0%, rgba(6,8,15,0.8) 100%)',
-              border: '1px solid rgba(99,102,241,0.12)',
-            }}
-          >
+          <div className="glass-card-static rounded-2xl border border-[rgba(0,120,215,0.14)] bg-white p-8 sm:p-10 lg:flex lg:items-end lg:justify-between lg:gap-12 lg:p-12">
             <div className="max-w-xl">
               <SectionLabel>Get started</SectionLabel>
               <h2 className="heading-section">
@@ -29,7 +24,7 @@ export function ContactCTA() {
               </p>
               <a
                 href={`mailto:${EMAIL}`}
-                className="mt-5 inline-flex min-h-[44px] items-center gap-2 text-sm text-accent-hover transition-colors hover:text-white"
+                className="mt-5 inline-flex min-h-[44px] items-center gap-2 text-sm text-accent-hover transition-colors hover:text-accent"
               >
                 <MailIcon className="h-4 w-4" />
                 {EMAIL}

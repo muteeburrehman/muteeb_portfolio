@@ -144,7 +144,7 @@ export function ContactForm() {
         <div className="relative mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 ring-1 ring-emerald-500/30">
           <CheckIcon />
         </div>
-        <h3 className="relative text-xl font-semibold text-white">Message sent successfully</h3>
+        <h3 className="relative text-xl font-semibold text-text-primary">Message sent successfully</h3>
         <p className="relative mt-3 max-w-sm text-sm text-muted">
           Thanks for reaching out — I&apos;ll get back to you soon. You can also email{' '}
           <a href={`mailto:${EMAIL}`} className="text-accent hover:underline">
@@ -179,7 +179,7 @@ export function ContactForm() {
         <div>
           <label
             htmlFor="name"
-            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/50 uppercase"
+            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
           >
             Your name
           </label>
@@ -198,7 +198,7 @@ export function ContactForm() {
         <div>
           <label
             htmlFor="email"
-            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/50 uppercase"
+            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
           >
             Email
           </label>
@@ -219,7 +219,7 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="topic"
-          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/50 uppercase"
+          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
         >
           Project type
         </label>
@@ -257,7 +257,7 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="message"
-          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-white/50 uppercase"
+          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
         >
           Message
         </label>
@@ -291,7 +291,7 @@ export function ContactForm() {
               form.message.trim().length >= 20
                 ? 'text-emerald-400/70'
                 : form.message.length > 0
-                  ? 'text-white/80'
+                  ? 'text-text-primary'
                   : ''
             }
           >
@@ -301,14 +301,14 @@ export function ContactForm() {
       </div>
 
       {error ? (
-        <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+        <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-[var(--brand-error)]">
           {error}
         </p>
       ) : null}
 
       <div className="flex flex-col items-start gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-[11px] text-muted">
-          Personal reply <span className="text-white/80">{REPLY_TIME}</span> · No spam, ever.
+          Personal reply <span className="text-text-primary">{REPLY_TIME}</span> · No spam, ever.
         </p>
         <Button type="submit" className="w-full sm:w-auto" disabled={submitting}>
           {submitting ? (

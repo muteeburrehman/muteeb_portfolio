@@ -36,10 +36,10 @@ export function TechTicker() {
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24" style={{ background: 'linear-gradient(270deg, var(--bg-dark), transparent)' }} />
 
         <div className="flex w-max animate-ticker">
-          <span className="shrink-0 px-6 font-mono text-[11px] tracking-wider text-white/20">
+          <span className="shrink-0 px-6 font-mono text-[11px] tracking-wider text-muted">
             {TICKER}
           </span>
-          <span className="shrink-0 px-6 font-mono text-[11px] tracking-wider text-white/20">
+          <span className="shrink-0 px-6 font-mono text-[11px] tracking-wider text-muted">
             {TICKER}
           </span>
         </div>

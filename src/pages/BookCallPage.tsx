@@ -33,7 +33,7 @@ export function BookCallPage() {
                 <span className="font-mono text-[11px] tracking-wider text-accent uppercase">
                   {item.step}
                 </span>
-                <p className="mt-2 font-semibold text-white">{item.title}</p>
+                <p className="mt-2 font-semibold text-text-primary">{item.title}</p>
                 <p className="mt-1 text-sm leading-relaxed text-muted">{item.text}</p>
               </div>
             </Reveal>

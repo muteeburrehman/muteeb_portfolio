@@ -13,7 +13,7 @@ export function PageHero({ badge, headline, subtext }: PageHeroProps) {
       <div className="container relative z-10">
         <div className="page-hero-inner">
           <p className="label-tag mb-4">{badge}</p>
-          <h1 className="heading-display text-[clamp(1.75rem,4vw,2.75rem)] text-white">
+          <h1 className="heading-display text-[clamp(1.75rem,4vw,2.75rem)]">
             {headline}
           </h1>
           <p className="mt-5 text-base leading-relaxed text-on-dark-muted sm:text-lg">

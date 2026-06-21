@@ -30,7 +30,7 @@ export function MarbleSemenCaseStudy() {
         <div className="container case-study-content">
           <Link
             to="/#work"
-            className="inline-flex min-h-[44px] items-center gap-2 text-sm text-[#9ca3af] transition-colors hover:text-white"
+            className="inline-flex min-h-[44px] items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
           >
             <ArrowIcon className="h-3.5 w-3.5 rotate-180" />
             Back to work
@@ -130,7 +130,7 @@ export function MarbleSemenCaseStudy() {
               {cs.delivered.map((item) => (
                 <li
                   key={item}
-                  className="panel-surface px-4 py-3.5 text-sm leading-relaxed text-white/85"
+                  className="panel-surface px-4 py-3.5 text-sm leading-relaxed text-text-primary"
                 >
                   {item}
                 </li>
@@ -144,7 +144,7 @@ export function MarbleSemenCaseStudy() {
               {cs.results.map((item) => (
                 <li
                   key={item}
-                  className="rounded-lg border border-accent/25 bg-accent/10 px-4 py-4 text-sm leading-relaxed text-white/85"
+                  className="rounded-lg border border-[rgba(0,120,215,0.18)] bg-[rgba(0,120,215,0.06)] px-4 py-4 text-sm leading-relaxed text-text-primary"
                 >
                   {item}
                 </li>

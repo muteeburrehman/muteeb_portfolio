@@ -36,7 +36,7 @@ export function Process() {
                   <span className="font-display text-5xl font-bold lg:text-6xl text-gradient-subtle" style={{ opacity: 0.4 }}>
                     {step.step}
                   </span>
-                  <h3 className="mt-3 text-lg font-semibold text-white">{step.title}</h3>
+                  <h3 className="mt-3 text-lg font-semibold text-text-primary">{step.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{step.description}</p>
                 </li>
               </Reveal>

@@ -13,7 +13,7 @@ export function PageCta({
   return (
     <section className="section-dark section-block dot-grid-dark">
       <div className="container text-center">
-        <h2 className="heading-display mx-auto max-w-xl text-[clamp(1.5rem,3.5vw,2.25rem)] text-white">
+        <h2 className="heading-display mx-auto max-w-xl text-[clamp(1.5rem,3.5vw,2.25rem)]">
           {headline}
         </h2>
         <a

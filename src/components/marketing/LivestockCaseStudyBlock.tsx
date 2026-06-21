@@ -14,7 +14,7 @@ export function LivestockCaseStudyBlock() {
           className="glass-card-static featured-project-card rounded-xl"
           style={{
             borderLeft: '3px solid',
-            borderImage: 'linear-gradient(to bottom, #6366f1, #a855f7) 1',
+            borderImage: 'linear-gradient(to bottom, #0078D7, #00C853) 1',
           }}
         >
           <div className="min-w-0">

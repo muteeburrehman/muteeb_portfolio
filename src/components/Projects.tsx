@@ -15,18 +15,18 @@ function browserHost(url: string | undefined, fallback: string) {
 
 function ChatPreview() {
   return (
-    <div className="flex h-full min-h-[200px] flex-col gap-3 p-6" style={{ background: 'var(--bg-dark-3)' }}>
-      <div className="self-start max-w-[78%] rounded-2xl rounded-bl-md border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-[12px] text-white/70">
+    <div className="flex h-full min-h-[200px] flex-col gap-3 bg-bg-off p-6">
+      <div className="self-start max-w-[78%] rounded-2xl rounded-bl-md border border-border bg-white px-4 py-2.5 text-[12px] text-text-primary">
         How do I reset my account password?
       </div>
-      <div className="self-end max-w-[82%] rounded-2xl rounded-br-md bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.15)] px-4 py-2.5 text-[12px] text-white/70">
+      <div className="self-end max-w-[82%] rounded-2xl rounded-br-md border border-[rgba(0,120,215,0.18)] bg-[rgba(0,120,215,0.08)] px-4 py-2.5 text-[12px] text-text-primary">
         I&apos;ve emailed you a secure reset link valid for 15 minutes. Want me to also enable
         2FA?
       </div>
-      <div className="self-start max-w-[60%] rounded-2xl rounded-bl-md border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-[12px] text-white/70">
+      <div className="self-start max-w-[60%] rounded-2xl rounded-bl-md border border-border bg-white px-4 py-2.5 text-[12px] text-text-primary">
         Yes — go ahead.
       </div>
-      <div className="self-end max-w-[78%] rounded-2xl rounded-br-md bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.15)] px-4 py-2.5 text-[12px] text-white/70">
+      <div className="self-end max-w-[78%] rounded-2xl rounded-br-md border border-[rgba(0,120,215,0.18)] bg-[rgba(0,120,215,0.08)] px-4 py-2.5 text-[12px] text-text-primary">
         Done ✓ 2FA active. Anything else I can help with today?
       </div>
     </div>
@@ -58,7 +58,7 @@ export function Projects() {
             return (
               <Reveal key={project.slug} delay={i * 90} as="article">
                 <article className="glass-card flex h-full flex-col overflow-hidden !p-0">
-                  <div className="relative aspect-[16/9] overflow-hidden border-b border-white/[0.06]" style={{ background: 'var(--bg-dark)' }}>
+                  <div className="relative aspect-[16/9] overflow-hidden border-b border-border bg-bg-off">
                     {project.image ? (
                       <img
                         src={project.image}
@@ -91,7 +91,7 @@ export function Projects() {
                       )}
                     </div>
 
-                    <h3 className="font-display text-xl font-bold text-white">
+                    <h3 className="font-display text-xl font-bold text-text-primary">
                       {project.name}
                     </h3>
                     <p className="mt-1 text-sm font-medium text-accent-hover">{project.tagline}</p>
@@ -108,10 +108,10 @@ export function Projects() {
                       ))}
                     </ul>
 
-                    <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.06] pt-4 text-[11px] text-muted">
+                    <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4 text-[11px] text-muted">
                       <span>
                         <span className="font-mono uppercase">Role</span>{' '}
-                        <span className="text-white/70">{project.role}</span>
+                        <span className="text-text-primary">{project.role}</span>
                       </span>
                       <div className="flex items-center gap-4">
                         {'caseStudyTo' in project && project.caseStudyTo ? (

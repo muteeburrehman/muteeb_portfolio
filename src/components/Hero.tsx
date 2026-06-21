@@ -14,7 +14,7 @@ const TESTIMONIALS = [
     text: 'They caught 40+ bugs before our launch that our internal team missed. Felt like having a full QA department without the cost.',
     name: 'Sara M.',
     role: 'SaaS founder, UK',
-    tags: ['QA Testing', 'SaaS'],
+    tags: ['Software Testing', 'SaaS'],
   },
   {
     text: 'The n8n automation they built saves us 12 hours a week on manual data entry. ROI was visible within the first month.',
@@ -74,8 +74,8 @@ function HeroTestimonial() {
       <div className="testimonial-body" style={{ opacity: visible ? 1 : 0 }}>
         <p className="testimonial-text">{current.text}</p>
         <p className="testimonial-author">
-          <strong className="text-white/80">{current.name}</strong>
-          <span className="text-white/30"> · </span>
+          <strong className="text-text-primary">{current.name}</strong>
+          <span className="text-muted"> · </span>
           {current.role}
         </p>
         <div className="testimonial-tags">
@@ -128,13 +128,14 @@ export function Hero() {
           <h1 className="hero-title">
             Software for{' '}
             <span className="hero-title-accent">Cattle Operations</span>,{' '}
-            <span className="hero-title-accent">SaaS Teams</span> &amp;{' '}
+            <span className="hero-title-accent">Software Testing</span> &amp;{' '}
             <span className="hero-title-accent">AI-Powered Businesses</span>
           </h1>
 
           <p className="hero-desc">
-            We build livestock platforms, QA frameworks, and AI automation — so you ship faster,
-            catch issues before launch, and replace spreadsheet chaos with software that scales.
+            We build livestock platforms, run software testing, and ship AI automation — so you
+            launch faster, catch bugs before users do, and replace spreadsheet chaos with software
+            that scales.
           </p>
 
           <div className="hero-ctas">

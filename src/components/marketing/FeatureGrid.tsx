@@ -24,7 +24,7 @@ export function FeatureGrid({ label, items, columns = 3 }: FeatureGridProps) {
         <div className={`grid gap-6 ${colClass}`}>
           {items.map((item) => (
             <article key={item.title} className="card-light h-full">
-              <h3 className="text-lg font-semibold text-white">{item.title}</h3>
+              <h3 className="text-lg font-semibold text-text-primary">{item.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted">{item.description}</p>
             </article>
           ))}

@@ -39,19 +39,19 @@ const SERVICES = [
 
 export function QATestingPage() {
   useEffect(() => {
-    document.title = 'QA Testing Services | MuteebLabs'
+    document.title = 'Software Testing Services | MuteebLabs'
   }, [])
 
   return (
     <>
       <PageHero
-        badge="QA Testing Services"
-        headline="Your Outsourced QA Team — Without the Overhead"
-        subtext="Manual testing, regression suites, bug reporting, and release validation for SaaS teams that ship fast and can't afford to break things in production."
+        badge="Software Testing Services"
+        headline="Your Outsourced Software Testing Team — Without the Overhead"
+        subtext="Manual testing, regression suites, API validation, and release sign-off for SaaS teams that ship fast and can't afford to break things in production."
       />
       <FeatureGrid label="Services" items={[...SERVICES]} />
       <WhoItsFor text="We work with: Early-stage SaaS startups · Product teams without in-house QA · Agencies launching client projects · Teams preparing for major releases" />
-      <PageCta headline="No QA team? We're yours." />
+      <PageCta headline="Need software testing before your next release?" />
     </>
   )
 }

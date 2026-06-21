@@ -55,8 +55,8 @@ export function Services() {
               Built for <span className="text-gradient">your business</span>
             </h2>
             <p className="max-w-md text-base text-muted lg:justify-self-end lg:text-right">
-              Focused engineering across livestock, QA, AI automation, and SaaS — pick the path that
-              matches your pain point.
+              Focused engineering across livestock, software testing, AI automation, and SaaS —
+              pick the path that matches your pain point.
             </p>
           </div>
         </Reveal>
@@ -79,7 +79,7 @@ export function Services() {
                     <Icon className="h-5 w-5" />
                   </span>
 
-                  <h3 className="text-lg font-semibold text-white">{item.title}</h3>
+                  <h3 className="text-lg font-semibold text-text-primary">{item.title}</h3>
                   <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
                     {item.description}
                   </p>

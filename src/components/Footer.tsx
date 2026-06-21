@@ -1,114 +1,70 @@
-import { Link, NavLink } from 'react-router-dom'
-import {
-  EMAIL,
-  FOOTER_FOCUS,
-  NAME,
-  NAV_LINKS,
-  ROLE,
-  SITE_BRAND,
-  SOCIAL_LINKS,
-} from '../data/portfolio'
-import { GitHubIcon, LinkedInIcon, MailIcon } from './icons'
+import { Link } from 'react-router-dom'
+import { BOOK_CALL_PATH, EMAIL, NAME, ROLE, SOCIAL_LINKS } from '../data/portfolio'
+import { ArrowIcon, LinkedInIcon, MailIcon } from './icons'
+import { SiteLogo } from './SiteLogo'
 
-const socialIcons = {
-  github: GitHubIcon,
-  linkedin: LinkedInIcon,
-} as const
-
-function FooterNavLink({ to, label }: { to: string; label: string }) {
-  const base = 'text-sm transition-colors hover:text-white'
-
-  if (to.includes('#')) {
-    return (
-      <a href={to} className={`${base} text-muted`}>
-        {label}
-      </a>
-    )
-  }
-
-  return (
-    <NavLink
-      to={to}
-      className={({ isActive }) =>
-        `${base} ${isActive ? 'font-medium text-white' : 'text-muted'}`
-      }
-    >
-      {label}
-    </NavLink>
-  )
-}
+const FOOTER_LINKS = [
+  { to: '/livestock-software', label: 'Livestock Software' },
+  { to: '/qa-testing', label: 'Software Testing' },
+  { to: '/ai-automation', label: 'AI & Automation' },
+  { to: '/#work', label: 'Work' },
+  { to: '/contact', label: 'Contact' },
+] as const
 
 export function Footer() {
   const year = new Date().getFullYear()
-  const activeSocials = SOCIAL_LINKS.filter((s) => s.url.trim().length > 0)
+  const linkedIn = SOCIAL_LINKS.find((s) => s.icon === 'linkedin' && s.url)
 
   return (
-    <footer style={{ background: 'var(--bg-dark)', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-      <div className="container section-block">
-        <div className="grid gap-12 md:grid-cols-3 md:gap-10">
-          <div>
-            <Link to="/" className="font-display text-xl font-bold text-white">
-              {SITE_BRAND}
+    <footer className="site-footer">
+      <div className="container py-12 sm:py-14">
+        <div className="footer-main">
+          <div className="footer-brand">
+            <Link to="/" className="footer-logo-link">
+              <SiteLogo variant="footer" />
             </Link>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">{ROLE}</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {FOOTER_FOCUS.map((item) => (
-                <span
-                  key={item}
-                  className="rounded-md border border-white/[0.06] bg-white/[0.03] px-2.5 py-1 text-[11px] text-muted"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
+            <p className="footer-tagline">{ROLE}</p>
           </div>
 
-          <div>
-            <p className="label-tag mb-4 text-muted">Navigate</p>
-            <nav className="flex flex-col gap-3" aria-label="Footer navigation">
-              {NAV_LINKS.map(({ to, label }) => (
-                <FooterNavLink key={to} to={to} label={label} />
-              ))}
-            </nav>
-          </div>
-
-          <div>
-            <p className="label-tag mb-4 text-muted">Connect</p>
-            <div className="flex flex-col gap-3">
+          <div className="footer-actions">
+            <a href={`mailto:${EMAIL}`} className="footer-contact-link">
+              <MailIcon className="h-4 w-4 shrink-0" />
+              {EMAIL}
+            </a>
+            {linkedIn ? (
               <a
-                href={`mailto:${EMAIL}`}
-                className="inline-flex min-h-[44px] items-center gap-2.5 text-sm text-white transition-colors hover:text-accent-hover"
+                href={linkedIn.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-contact-link"
               >
-                <MailIcon className="h-4 w-4 shrink-0" />
-                {EMAIL}
+                <LinkedInIcon className="h-4 w-4 shrink-0" />
+                LinkedIn
               </a>
-
-              {activeSocials.map(({ label, url, icon }) => {
-                const Icon = socialIcons[icon]
-                return (
-                  <a
-                    key={label}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-[44px] items-center gap-2.5 text-sm text-muted transition-colors hover:text-white"
-                  >
-                    <Icon className="h-4 w-4 shrink-0" />
-                    {label}
-                  </a>
-                )
-              })}
-            </div>
+            ) : null}
+            <Link to={BOOK_CALL_PATH} className="btn-primary footer-cta">
+              Book a Call
+              <ArrowIcon className="h-4 w-4" />
+            </Link>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/[0.06] pt-8 sm:flex-row">
-          <p className="text-xs text-muted">
-            © {year} {NAME}. Crafted with React &amp; Tailwind.
-          </p>
-          <p className="text-xs text-white/20">
-            Python · AI · Full Stack · Cloud
-          </p>
+        <nav className="footer-quick-links" aria-label="Footer quick links">
+          {FOOTER_LINKS.map(({ to, label }, i) => (
+            <span key={to} className="footer-quick-link-item">
+              {i > 0 ? <span className="footer-dot" aria-hidden="true">·</span> : null}
+              {to.includes('#') ? (
+                <a href={to}>{label}</a>
+              ) : (
+                <Link to={to}>{label}</Link>
+              )}
+            </span>
+          ))}
+        </nav>
+
+        <div className="footer-bottom">
+          <p>© {year} {NAME}. Crafted with React &amp; Tailwind.</p>
+          <p>Python · AI · Full Stack · Cloud</p>
         </div>
       </div>
     </footer>

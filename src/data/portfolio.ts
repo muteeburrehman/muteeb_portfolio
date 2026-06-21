@@ -4,11 +4,12 @@ export const BOOK_CALL_PATH = '/book'
 /** @deprecated Use BOOK_CALL_PATH — kept for gradual migration */
 export const CALENDLY_URL = BOOK_CALL_PATH
 export const SITE_BRAND = 'MuteebLabs'
+export const SITE_LOGO = '/logo.png'
 export const NAME = 'Muteeb Ur Rehman'
-export const ROLE = 'Custom Software Development Agency'
+export const ROLE = 'Custom Software Development & Testing Agency'
 export const LINKEDIN_URL = 'https://pk.linkedin.com/in/muteeb-ur-rehman-091a2628a'
 export const TECH_STACK =
-  'Python • React • PostgreSQL • LangChain • LLMs • OpenAI • Gemini • Claude • Vector DBs • Qdrant • n8n • Voice Agents • AWS'
+  'Python • React • PostgreSQL • Software Testing • LangChain • LLMs • OpenAI • Gemini • Claude • Vector DBs • Qdrant • n8n • Voice Agents • AWS'
 
 /** Add your profile URLs here — links only appear when url is set */
 export const SOCIAL_LINKS = [
@@ -16,12 +17,15 @@ export const SOCIAL_LINKS = [
   { label: 'LinkedIn', url: LINKEDIN_URL, icon: 'linkedin' as const },
 ] as const
 
-export const FOOTER_FOCUS = ['Livestock', 'QA Testing', 'AI Automation', 'React', 'AWS'] as const
+export const FOOTER_FOCUS = ['Livestock', 'Software Testing', 'AI Automation', 'React', 'AWS'] as const
 
 export const SKILLS = [
   'Python',
   'React',
   'PostgreSQL',
+  'Software Testing',
+  'Manual QA',
+  'API Testing',
   'LangChain',
   'LLMs',
   'OpenAI',
@@ -39,6 +43,8 @@ export const MARQUEE_ITEMS = [
   'PYTHON',
   'REACT',
   'POSTGRESQL',
+  'SOFTWARE TESTING',
+  'MANUAL QA',
   'LANGCHAIN',
   'OPENAI',
   'GEMINI',
@@ -142,20 +148,27 @@ export const CAPABILITIES = [
   },
   {
     num: '04',
+    title: 'Software Testing & QA',
+    description:
+      'Manual exploratory testing, regression suites, API validation, and release sign-off — so you ship with confidence, not surprises.',
+    tags: ['Manual QA', 'Regression', 'API Testing', 'Release validation'],
+  },
+  {
+    num: '05',
     title: 'Full Stack Web Apps',
     description:
       'React frontends backed by Python APIs and PostgreSQL — clean UX, solid data models, and maintainable architecture.',
     tags: ['React', 'PostgreSQL', 'Python'],
   },
   {
-    num: '05',
+    num: '06',
     title: 'Cloud & AWS Infrastructure',
     description:
       'Deploy and scale on AWS — EC2, Lambda, Elasticsearch, and related services for reliable production workloads.',
     tags: ['AWS', 'EC2', 'Lambda', 'Elasticsearch'],
   },
   {
-    num: '06',
+    num: '07',
     title: 'Automation & Integrations',
     description:
       'Workflow automation with n8n — connecting APIs, models, and databases into repeatable pipelines.',
@@ -200,6 +213,10 @@ export const SERVICES = [
     description: 'React + Python backends with PostgreSQL and clean APIs.',
   },
   {
+    title: 'Software Testing',
+    description: 'Manual QA, regression suites, API testing, and pre-release validation.',
+  },
+  {
     title: 'Cloud & DevOps',
     description: 'AWS deployments — EC2, Lambda, Elasticsearch, and scaling.',
   },
@@ -208,6 +225,7 @@ export const SERVICES = [
 export const CONTACT_TOPICS = [
   'AI / LLM Project',
   'Full Stack Development',
+  'Software Testing / QA',
   'Freelance / Contract',
   'Full-time Opportunity',
   'Consultation',
@@ -217,7 +235,7 @@ export const CONTACT_TOPICS = [
 export const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/livestock-software', label: 'Livestock Software' },
-  { to: '/qa-testing', label: 'QA Testing' },
+  { to: '/qa-testing', label: 'Software Testing' },
   { to: '/ai-automation', label: 'AI & Automation' },
   { to: '/#work', label: 'Work' },
   { to: '/#process', label: 'Process' },
@@ -227,9 +245,9 @@ export const NAV_LINKS = [
 
 export const TRUST_BAR_ITEMS = [
   '3 Years Building Software',
-  '3 Industry Niches',
+  'Livestock · Testing · AI',
   'React · Django · FastAPI · AWS',
-  'AI & Automation Specialists',
+  'Software Testing Services',
 ] as const
 
 export const HOME_METRICS = [
@@ -240,9 +258,9 @@ export const HOME_METRICS = [
 ] as const
 
 export const HERO_TRUST_ITEMS = [
-  { label: 'Domain expertise', detail: 'Livestock, SaaS & AI' },
-  { label: 'End-to-end delivery', detail: 'Discovery to production' },
-  { label: 'Quality & reliability', detail: 'Tested, maintainable code' },
+  { label: 'Domain expertise', detail: 'Livestock, testing & AI' },
+  { label: 'End-to-end delivery', detail: 'Build, test, and ship' },
+  { label: 'Quality & reliability', detail: 'Tested before production' },
 ] as const
 
 export const HOME_VALUE_PROPS = [
@@ -262,9 +280,9 @@ export const AGENCY_SERVICES = [
     accent: 'sky' as const,
   },
   {
-    title: 'QA Testing',
+    title: 'Software Testing',
     description:
-      'Regression suites and release validation — catch bugs before your users do, without hiring a full QA department.',
+      'Manual QA, regression suites, and release validation — catch bugs before your users do, without hiring a full in-house team.',
     to: '/qa-testing',
     icon: 'check' as const,
     accent: 'purple' as const,

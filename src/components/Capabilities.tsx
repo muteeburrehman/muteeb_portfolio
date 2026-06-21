@@ -49,10 +49,10 @@ export function Capabilities() {
                     <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-b from-accent/20 to-accent/5 text-accent-hover">
                       <Icon className="h-5 w-5" />
                     </span>
-                    <span className="font-mono text-xs text-white/20">{item.num}</span>
+                    <span className="font-mono text-xs text-muted">{item.num}</span>
                   </div>
 
-                  <h3 className="text-lg font-semibold text-white">{item.title}</h3>
+                  <h3 className="text-lg font-semibold text-text-primary">{item.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{item.description}</p>
 
                   <ul className="mt-4 flex flex-wrap gap-2">

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { NAV_LINKS, SITE_BRAND } from '../data/portfolio'
+import { NAV_LINKS } from '../data/portfolio'
+import { SiteLogo } from './SiteLogo'
 
 function isLinkActive(to: string, pathname: string, hash: string) {
   if (to === '/') return pathname === '/' && !hash
@@ -64,7 +65,9 @@ export function Navbar() {
       const nav = navRef.current
       if (!nav) return
       nav.style.background =
-        window.scrollY > 50 ? 'rgba(6, 8, 15, 0.95)' : 'rgba(6, 8, 15, 0.75)'
+        window.scrollY > 50 ? 'rgba(255, 255, 255, 0.98)' : 'rgba(255, 255, 255, 0.9)'
+      nav.style.boxShadow =
+        window.scrollY > 50 ? '0 4px 24px rgba(0, 120, 215, 0.08)' : '0 1px 0 rgba(0, 120, 215, 0.06)'
     }
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -78,8 +81,7 @@ export function Navbar() {
       <nav ref={navRef}>
         <div className="nav-inner">
           <Link to="/" className="nav-logo" onClick={closeMenu}>
-            <span className="nav-logo-dot" aria-hidden="true" />
-            <span className="nav-logo-text">{SITE_BRAND}</span>
+            <SiteLogo variant="nav" />
           </Link>
 
           <ul className="nav-links">

@@ -10,9 +10,9 @@ import { Projects } from '../components/Projects'
 import { Services } from '../components/Services'
 import { TechTicker } from '../components/TechTicker'
 
-const HOME_TITLE = 'MuteebLabs | Custom Software for Cattle, QA & AI Businesses'
+const HOME_TITLE = 'MuteebLabs | Custom Software, Software Testing & AI'
 const HOME_DESCRIPTION =
-  'Custom software for livestock operations, SaaS QA, and AI automation. Book a free discovery call with MuteebLabs.'
+  'Custom software, software testing, and AI automation for livestock, SaaS, and growing teams. Book a free discovery call with MuteebLabs.'
 
 export function HomePage() {
   useEffect(() => {
@@ -25,7 +25,7 @@ export function HomePage() {
     if (ogDesc) {
       ogDesc.setAttribute(
         'content',
-        'Livestock platforms, QA testing services, and AI automation tools built by MuteebLabs.',
+        'Livestock platforms, software testing services, and AI automation tools built by MuteebLabs.',
       )
     }
   }, [])

@@ -12,7 +12,7 @@ export function About() {
       <div className="container relative z-10">
         <Reveal className="text-center">
           <SectionLabel>About</SectionLabel>
-          <h2 className="heading-display mx-auto max-w-2xl text-[clamp(1.75rem,4vw,2.5rem)] text-white">
+          <h2 className="heading-display mx-auto max-w-2xl text-[clamp(1.75rem,4vw,2.5rem)]">
             Python-first.
             <br />
             <span className="text-gradient">AI-driven.</span>
@@ -36,10 +36,10 @@ export function About() {
 
         <Reveal delay={120} className="mx-auto mt-12 max-w-2xl space-y-5 text-center text-base leading-relaxed text-muted sm:text-lg">
           <p>
-            I&apos;m <strong className="font-medium text-white">Muteeb Ur Rehman</strong> —
-            a full stack developer and AI engineer. I build intelligent products end to end:
-            clean React frontends, Python APIs on PostgreSQL, LLM agents, voice interfaces,
-            automation pipelines and AWS deployments.
+            I&apos;m <strong className="font-medium text-text-primary">Muteeb Ur Rehman</strong> —
+            a full stack developer, AI engineer, and software testing specialist. I build
+            intelligent products end to end: clean React frontends, Python APIs on PostgreSQL,
+            LLM agents, voice interfaces, automation pipelines, and thorough QA before release.
           </p>
           <p>
             Recent shipped work includes{' '}
@@ -65,8 +65,8 @@ export function About() {
           </p>
           <p>
             I work across the modern AI stack — LangChain, OpenAI, Gemini, Claude, Qdrant,
-            n8n — and on infrastructure with EC2, Lambda and Elasticsearch. I care about
-            clean code, reliable systems and outcomes that ship.
+            n8n — plus manual and regression software testing for web and SaaS products. I care
+            about clean code, reliable systems, and outcomes that ship.
           </p>
         </Reveal>
 
@@ -75,7 +75,7 @@ export function About() {
             {SKILLS.map((skill) => (
               <span
                 key={skill}
-                className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3.5 py-1.5 text-xs text-muted backdrop-blur-sm transition-all hover:border-accent/30 hover:text-accent-hover"
+                className="rounded-full border border-border bg-bg-off px-3.5 py-1.5 text-xs text-muted transition-all hover:border-accent/30 hover:text-accent-hover"
               >
                 {skill}
               </span>
