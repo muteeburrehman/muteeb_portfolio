@@ -131,8 +131,12 @@ Test: open `http://localhost:5173/book` — you should see date buttons, not a r
 
 ## Production deploy
 
+Standalone stack — see [deploy/DEPLOY.md](../deploy/DEPLOY.md).
+
 ```bash
+cp .env.example .env   # SITE_DOMAIN, ACME_EMAIL, EMAIL_*, MEETING_LINK
 docker compose up -d --build
+curl -sS https://dev.muteeblabs.uk/healthz
 ```
 
 Ensure `.env` on the server includes at least:

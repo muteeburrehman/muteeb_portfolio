@@ -1,0 +1,40 @@
+# Edge reverse proxy — terminates TLS and forwards to the internal web container.
+# Environment variables (set in .env / docker-compose):
+#   SITE_DOMAIN   e.g. dev.muteeblabs.uk
+#   ACME_EMAIL    e.g. business@muteeblabs.uk (Let's Encrypt notifications)
+
+{
+	email {$ACME_EMAIL:}
+	admin off
+
+	# Trust Cloudflare when the site is proxied (orange cloud).
+	servers {
+		trusted_proxies cloudflare {
+			interval 12h
+			timeout 30s
+		}
+	}
+}
+
+{$SITE_DOMAIN:dev.muteeblabs.uk} {
+	encode gzip zstd
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	reverse_proxy web:80 {
+		health_uri /healthz
+		health_interval 30s
+		health_timeout 5s
+
+		header_up Host {host}
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-For {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+	}
+}

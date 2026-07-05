@@ -1,11 +1,52 @@
-# Personal portfolio — joins your VPS host reverse-proxy network (no host 80/443 here).
-# Copy .env.example → .env, then: docker compose up -d --build
+# Muteeb Portfolio — standalone production stack
 #
-# DNS dev.muteeblabs.uk must point at your host nginx (see edge-nginx-dev.muteeblabs.uk.conf).
+# Architecture:
+#   Internet / Cloudflare → caddy (:80/:443) → web (:80 internal) → api (:8000 internal)
+#
+# Setup:
+#   cp .env.example .env   # set SITE_DOMAIN, ACME_EMAIL, EMAIL_*
+#   docker compose up -d --build
+#
+# Verify:
+#   curl -sS https://dev.muteeblabs.uk/healthz   # → ok
 
 name: muteeb-portfolio
 
 services:
+  caddy:
+    image: caddy:2.9-alpine
+    container_name: muteeb-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:-dev.muteeblabs.uk}
+      ACME_EMAIL: ${ACME_EMAIL:-}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - edge
+    depends_on:
+      web:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-qO-",
+          "--header=Host: ${SITE_DOMAIN:-dev.muteeblabs.uk}",
+          "http://127.0.0.1/healthz",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
   web:
     build:
       context: .
@@ -19,9 +60,11 @@ services:
     depends_on:
       api:
         condition: service_healthy
+    expose:
+      - "80"
     networks:
+      - edge
       - internal
-      - edge_proxy
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
       interval: 30s
@@ -79,11 +122,11 @@ services:
 
 volumes:
   booking_data:
+  caddy_data:
+  caddy_config:
 
 networks:
+  edge:
+    driver: bridge
   internal:
     driver: bridge
-  edge_proxy:
-    external: true
-    # Docker network your host nginx container uses (docker network ls)
-    name: ${EDGE_PROXY_NETWORK:-qubix-solutions_qubix-net}
