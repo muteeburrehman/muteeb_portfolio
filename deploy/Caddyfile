@@ -4,7 +4,6 @@
 #   ACME_EMAIL    e.g. business@muteeblabs.uk (Let's Encrypt notifications)
 
 {
-	email {$ACME_EMAIL:}
 	admin off
 }
 
