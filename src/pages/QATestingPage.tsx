@@ -1,57 +1,32 @@
 import { useEffect } from 'react'
-import { FeatureGrid } from '../components/marketing/FeatureGrid'
-import { PageCta } from '../components/marketing/PageCta'
-import { PageHero } from '../components/marketing/PageHero'
-import { WhoItsFor } from '../components/marketing/WhoItsFor'
+import { SolutionPageLayout } from '../components/marketing/SolutionPageLayout'
+import { SITE_IMAGES } from '../data/portfolio'
 
-const SERVICES = [
-  {
-    title: 'Manual & Exploratory Testing',
-    description:
-      'We act as real users. Every release gets tested across browsers, devices, and edge cases before it ships.',
+const PAGE = {
+  badge: 'Software Testing',
+  headline: 'QA before your users find the bugs',
+  problem: 'Shipping fast without a QA layer means production surprises and lost trust.',
+  solution:
+    'Manual exploratory testing, regression sweeps, and API checks — scoped to your release, not a full-time hire.',
+  heroImage: SITE_IMAGES.qaTestingHero,
+  projectSlugs: ['pitprize', 'marblesemen'] as const,
+  deliverables: [
+    'Exploratory passes on critical user flows before each release',
+    'Regression checklists you can re-run sprint after sprint',
+    'API and auth flow validation with reproducible bug reports',
+    'Sign-off summary your dev team can act on immediately',
+  ],
+  quote: {
+    text: 'They caught over 40 critical bugs before our SaaS release that our internal engineers completely missed.',
+    author: 'Sara M.',
+    role: 'SaaS founder, UK',
   },
-  {
-    title: 'Regression Test Suites',
-    description:
-      'We build and maintain structured regression suites so your team can ship confidently after every sprint.',
-  },
-  {
-    title: 'Bug Reporting & Triage',
-    description:
-      'Detailed, reproducible bug reports with screenshots, steps, and severity ratings — ready for your dev team to action immediately.',
-  },
-  {
-    title: 'Release Validation',
-    description:
-      'Pre-release sign-off process that checks every critical path in your app before you hit deploy.',
-  },
-  {
-    title: 'API Testing',
-    description:
-      'Postman-based API test collections covering your endpoints, auth flows, and data contracts.',
-  },
-  {
-    title: 'QA Documentation',
-    description:
-      'Test plans, test cases, and QA wikis that your team can maintain and build on.',
-  },
-] as const
+} as const
 
 export function QATestingPage() {
   useEffect(() => {
     document.title = 'Software Testing Services | MuteebLabs'
   }, [])
 
-  return (
-    <>
-      <PageHero
-        badge="Software Testing Services"
-        headline="Your Outsourced Software Testing Team — Without the Overhead"
-        subtext="Manual testing, regression suites, API validation, and release sign-off for SaaS teams that ship fast and can't afford to break things in production."
-      />
-      <FeatureGrid label="Services" items={[...SERVICES]} />
-      <WhoItsFor text="We work with: Early-stage SaaS startups · Product teams without in-house QA · Agencies launching client projects · Teams preparing for major releases" />
-      <PageCta headline="Need software testing before your next release?" />
-    </>
-  )
+  return <SolutionPageLayout {...PAGE} />
 }

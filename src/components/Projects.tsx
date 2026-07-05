@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { PROJECTS } from '../data/portfolio'
+import { FEATURED_CASE_STUDY, PROJECTS } from '../data/portfolio'
 import { ArrowIcon, ExternalLinkIcon } from './icons'
 import { Reveal } from './ui/Reveal'
 import { SectionLabel } from './ui/SectionLabel'
@@ -13,134 +13,143 @@ function browserHost(url: string | undefined, fallback: string) {
   }
 }
 
-function ChatPreview() {
+function ProjectPreview({
+  project,
+  className = '',
+}: {
+  project: (typeof PROJECTS)[number]
+  className?: string
+}) {
+  if (project.image) {
+    return (
+      <img
+        src={project.image}
+        alt={project.imageAlt}
+        loading="lazy"
+        className={`project-card-image${className ? ` ${className}` : ''}`}
+      />
+    )
+  }
+
   return (
-    <div className="flex h-full min-h-[200px] flex-col gap-3 bg-bg-off p-6">
-      <div className="self-start max-w-[78%] rounded-2xl rounded-bl-md border border-border bg-white px-4 py-2.5 text-[12px] text-text-primary">
-        How do I reset my account password?
+    <div className="project-chat-preview" aria-hidden="true">
+      <div className="project-chat-preview__bubble project-chat-preview__bubble--user">
+        How do I configure webhook nodes?
       </div>
-      <div className="self-end max-w-[82%] rounded-2xl rounded-br-md border border-[rgba(0,120,215,0.18)] bg-[rgba(0,120,215,0.08)] px-4 py-2.5 text-[12px] text-text-primary">
-        I&apos;ve emailed you a secure reset link valid for 15 minutes. Want me to also enable
-        2FA?
+      <div className="project-chat-preview__bubble project-chat-preview__bubble--bot">
+        Here&apos;s a pipeline example — set POST headers to JSON and map your payload fields.
       </div>
-      <div className="self-start max-w-[60%] rounded-2xl rounded-bl-md border border-border bg-white px-4 py-2.5 text-[12px] text-text-primary">
-        Yes — go ahead.
+      <div className="project-chat-preview__bubble project-chat-preview__bubble--user">
+        Perfect. Can it connect to our docs?
       </div>
-      <div className="self-end max-w-[78%] rounded-2xl rounded-br-md border border-[rgba(0,120,215,0.18)] bg-[rgba(0,120,215,0.08)] px-4 py-2.5 text-[12px] text-text-primary">
-        Done ✓ 2FA active. Anything else I can help with today?
+      <div className="project-chat-preview__bubble project-chat-preview__bubble--bot">
+        Yes — RAG over your knowledge base keeps answers on-brand.
       </div>
     </div>
   )
 }
 
+function ProjectCard({ project }: { project: (typeof PROJECTS)[number] }) {
+  const host = browserHost(project.url, project.slug)
+  const hasCaseStudy = 'caseStudyTo' in project && project.caseStudyTo
+  const browserLabel =
+    project.slug === 'ai-email-router' ? 'inbox.muteeblabs.app' : project.url ? host : `${project.slug}.app`
+  const isFeatured = project.slug === FEATURED_CASE_STUDY.slug
+  const serviceLink = project.slug === 'ai-email-router' ? '/ai-automation' : null
+
+  return (
+    <article className="project-card">
+      <div className="project-card-media">
+        <div className="project-browser">
+          <div className="project-browser__chrome">
+            <span className="project-browser__dot" />
+            <span className="project-browser__dot" />
+            <span className="project-browser__dot" />
+            <span className="project-browser__url">{browserLabel}</span>
+          </div>
+          <div className="project-browser__viewport">
+            <ProjectPreview project={project} />
+          </div>
+        </div>
+      </div>
+
+      <div className="project-card-body">
+        <div className="project-card-labels">
+          {isFeatured ? (
+            <span className="project-card-badge project-card-badge--inline">Featured</span>
+          ) : null}
+          <span className="project-card-category">{project.category}</span>
+        </div>
+        <h3 className="project-card-title">{project.name}</h3>
+        <p className="project-card-tagline">{project.tagline}</p>
+        <p className="project-card-desc">{project.description}</p>
+
+        <ul className="project-card-tags">
+          {project.tags.map((tag) => (
+            <li key={tag} className="pill-tech">
+              {tag}
+            </li>
+          ))}
+        </ul>
+
+        <div className="project-card-footer">
+          <div className="project-card-actions">
+            {hasCaseStudy ? (
+              <Link to={project.caseStudyTo!} className="btn-compact btn-compact--primary">
+                Case study
+                <ArrowIcon className="h-3.5 w-3.5" />
+              </Link>
+            ) : null}
+            {project.url ? (
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-compact btn-compact--ghost"
+              >
+                Live site
+                <ExternalLinkIcon className="h-3.5 w-3.5" />
+              </a>
+            ) : null}
+            {serviceLink && project.slug === 'ai-email-router' ? (
+              <Link to={serviceLink} className="btn-compact btn-compact--primary">
+                AI service
+                <ArrowIcon className="h-3.5 w-3.5" />
+              </Link>
+            ) : null}
+          </div>
+          <span className="project-card-meta">
+            {project.role} · {project.status}
+          </span>
+        </div>
+      </div>
+    </article>
+  )
+}
+
 export function Projects() {
   return (
-    <section id="work" className="section-block" style={{ background: 'var(--bg-dark-3)' }}>
+    <section id="work" className="section-block section-block--compact portfolio-section">
       <div className="container">
         <Reveal>
           <SectionLabel>Selected work</SectionLabel>
-          <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
+          <div className="section-header-row">
             <h2 className="heading-section max-w-2xl">
               Work we&apos;ve <span className="text-gradient">shipped</span>
             </h2>
-            <p className="max-w-md text-base text-muted lg:text-right">
-              Production software for US and global clients — livestock platforms, SaaS products,
-              and AI automation.
+            <p className="section-header-desc">
+              Production platforms across agribusiness, motorsport contests, inventory ops, and
+              automation.
             </p>
           </div>
         </Reveal>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-2">
-          {PROJECTS.map((project, i) => {
-            const objectFit = project.slug === 'ai-email-router' ? 'object-contain' : 'object-cover'
-            const host = browserHost(project.url, `${project.slug}.local`)
-
-            return (
-              <Reveal key={project.slug} delay={i * 90} as="article">
-                <article className="glass-card flex h-full flex-col overflow-hidden !p-0">
-                  <div className="relative aspect-[16/9] overflow-hidden border-b border-border bg-bg-off">
-                    {project.image ? (
-                      <img
-                        src={project.image}
-                        alt={project.imageAlt}
-                        loading="lazy"
-                        className={`h-full w-full ${objectFit} transition-transform duration-700 hover:scale-[1.04]`}
-                      />
-                    ) : (
-                      <ChatPreview />
-                    )}
-                    {/* Gradient overlay on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(6,8,15,0.5)] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  </div>
-
-                  <div className="flex flex-1 flex-col p-6">
-                    <div className="mb-2 flex items-center justify-between gap-3">
-                      <span className="font-mono text-[11px] tracking-wide text-accent uppercase">
-                        {project.category}
-                      </span>
-                      {project.url && (
-                        <a
-                          href={project.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex min-h-[44px] items-center gap-1 text-[11px] text-muted transition-colors hover:text-accent"
-                        >
-                          Visit live
-                          <ExternalLinkIcon className="h-3 w-3" />
-                        </a>
-                      )}
-                    </div>
-
-                    <h3 className="font-display text-xl font-bold text-text-primary">
-                      {project.name}
-                    </h3>
-                    <p className="mt-1 text-sm font-medium text-accent-hover">{project.tagline}</p>
-
-                    <p className="mt-3 text-sm leading-relaxed text-muted">
-                      {project.description}
-                    </p>
-
-                    <ul className="mt-4 flex flex-wrap gap-2">
-                      {project.tags.map((tag) => (
-                        <li key={tag} className="pill-tech">
-                          {tag}
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4 text-[11px] text-muted">
-                      <span>
-                        <span className="font-mono uppercase">Role</span>{' '}
-                        <span className="text-text-primary">{project.role}</span>
-                      </span>
-                      <div className="flex items-center gap-4">
-                        {'caseStudyTo' in project && project.caseStudyTo ? (
-                          <Link
-                            to={project.caseStudyTo}
-                            className="inline-flex min-h-[44px] items-center gap-1 text-accent hover:text-accent-hover"
-                          >
-                            Case study
-                            <ArrowIcon className="h-3 w-3" />
-                          </Link>
-                        ) : null}
-                        {project.url ? (
-                          <a
-                            href={project.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex min-h-[44px] items-center gap-1 hover:text-accent"
-                          >
-                            {host}
-                            <ExternalLinkIcon className="h-3 w-3" />
-                          </a>
-                        ) : null}
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              </Reveal>
-            )
-          })}
+        <div className="project-grid">
+          {PROJECTS.map((project, i) => (
+            <Reveal key={project.slug} delay={60 + i * 60} as="div">
+              <ProjectCard project={project} />
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>

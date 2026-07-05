@@ -4,44 +4,41 @@ import { SectionLabel } from './ui/SectionLabel'
 
 export function Process() {
   return (
-    <section id="process" className="section-block" style={{ background: 'var(--bg-dark)' }}>
-      <div className="container">
+    <section id="process" className="section-block bg-[#02050d] border-t border-slate-900">
+      <div className="glow-radial" style={{ top: '25%', right: '-10%' }} aria-hidden="true" />
+      <div className="grid-overlay" aria-hidden="true" />
+
+      <div className="container relative z-10">
         <Reveal>
-          <SectionLabel>How I work</SectionLabel>
-          <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
-            <h2 className="heading-section max-w-2xl">
-              A simple, <span className="text-gradient">honest</span> process.
+          <SectionLabel>Our Engagement Model</SectionLabel>
+          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] items-end mb-12">
+            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
+              A clear, <span className="text-gradient">outcome-driven process</span>
             </h2>
-            <p className="max-w-md text-base text-muted lg:text-right">
-              No mystery, no over-engineering. Just four predictable steps from kickoff to a
-              shipped, supported product.
+            <p className="text-lg text-slate-400">
+              Four predictable phases from discovery to launch — scoped early, demoed often, supported
+              after release.
             </p>
           </div>
         </Reveal>
 
-        <div className="relative mt-12">
-          {/* Gradient timeline connector */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute top-10 right-0 left-0 hidden h-px md:block"
-            style={{
-              background: 'linear-gradient(90deg, rgba(99,102,241,0.3) 0%, rgba(168,85,247,0.2) 50%, rgba(34,211,238,0.15) 100%)',
-            }}
-          />
+        <div className="timeline-container max-w-4xl mx-auto">
+          {/* Vertical progress line */}
+          <div className="timeline-line" aria-hidden="true" />
 
-          <ol className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-            {PROCESS.map((step, i) => (
-              <Reveal key={step.step} delay={i * 80} as="li">
-                <li className="relative flex flex-col">
-                  <span className="font-display text-5xl font-bold lg:text-6xl text-gradient-subtle" style={{ opacity: 0.4 }}>
-                    {step.step}
-                  </span>
-                  <h3 className="mt-3 text-lg font-semibold text-text-primary">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">{step.description}</p>
-                </li>
-              </Reveal>
-            ))}
-          </ol>
+          {PROCESS.map((step, i) => (
+            <Reveal key={step.step} delay={i * 80}>
+              <div className="timeline-step">
+                <div className="timeline-node" aria-hidden="true">
+                  {step.step}
+                </div>
+                <div className="timeline-content">
+                  <h3 className="timeline-title">{step.title}</h3>
+                  <p className="timeline-desc">{step.description}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>

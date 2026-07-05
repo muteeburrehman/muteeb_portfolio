@@ -1,49 +1,44 @@
-const TICKER_ITEMS = [
-  'LANGCHAIN',
-  'OPENAI',
-  'GEMINI',
-  'CLAUDE',
-  'QDRANT',
-  'N8N',
-  'VOICE AGENTS',
-  'VECTOR DBs',
-  'AI AGENTS',
-  'AWS',
-  'EC2',
-  'LAMBDA',
-  'ELASTICSEARCH',
-  'PYTHON',
-  'REACT',
-  'POSTGRESQL',
-] as const
+import { TechLogo } from './ui/TechLogo'
 
-const TICKER = TICKER_ITEMS.join('  ·  ') + '  ·  '
+const TRUST_LOGOS = [
+  'Next.js',
+  'React',
+  'Node.js',
+  'Python',
+  'Django',
+  'PostgreSQL',
+  'AWS',
+  'OpenAI',
+  'n8n',
+  'LangChain',
+] as const
 
 export function TechTicker() {
   return (
-    <div
-      className="overflow-hidden"
-      aria-hidden="true"
-      style={{
-        background: 'var(--bg-dark)',
-        borderTop: '1px solid rgba(255,255,255,0.04)',
-        borderBottom: '1px solid rgba(255,255,255,0.04)',
-      }}
-    >
-      <div className="relative py-3.5">
-        {/* Fade edges */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24" style={{ background: 'linear-gradient(90deg, var(--bg-dark), transparent)' }} />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24" style={{ background: 'linear-gradient(270deg, var(--bg-dark), transparent)' }} />
-
-        <div className="flex w-max animate-ticker">
-          <span className="shrink-0 px-6 font-mono text-[11px] tracking-wider text-muted">
-            {TICKER}
-          </span>
-          <span className="shrink-0 px-6 font-mono text-[11px] tracking-wider text-muted">
-            {TICKER}
-          </span>
+    <section className="social-proof-bar" aria-label="Technologies we use">
+      <div className="container">
+        <p className="social-proof-title">Tools &amp; platforms we ship with</p>
+        
+        {/* Double ticker elements for continuous smooth infinite scrolling */}
+        <div className="overflow-hidden relative py-4 mask-edges">
+          <div className="logo-ticker-inner">
+            {/* First Set */}
+            {TRUST_LOGOS.map((name, i) => (
+              <div key={`set1-${name}-${i}`} className="ticker-item">
+                <TechLogo name={name} className="w-8 h-8 opacity-40 hover:opacity-100 transition-opacity" />
+                <span>{name}</span>
+              </div>
+            ))}
+            {/* Second Set (for continuous loop) */}
+            {TRUST_LOGOS.map((name, i) => (
+              <div key={`set2-${name}-${i}`} className="ticker-item">
+                <TechLogo name={name} className="w-8 h-8 opacity-40 hover:opacity-100 transition-opacity" />
+                <span>{name}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

@@ -11,7 +11,7 @@ export function Marquee({ hideOnContact }: MarqueeProps) {
 
   return (
     <div
-      className="fixed right-0 bottom-0 left-0 z-30 overflow-hidden border-t border-border bg-white/90 backdrop-blur-md"
+      className="fixed right-0 bottom-0 left-0 z-30 overflow-hidden border-t border-border bg-bg-dark/90 backdrop-blur-md"
       aria-hidden="true"
     >
       <div className="relative py-3.5">

@@ -5,47 +5,43 @@ import { SectionLabel } from './ui/SectionLabel'
 
 export function ContactCTA() {
   return (
-    <section id="contact" className="section-block relative overflow-hidden" style={{ background: 'var(--bg-dark-3)' }}>
-      {/* Ambient glow */}
-      <div className="ambient-orb ambient-orb--1" style={{ top: '-30%', left: '20%' }} aria-hidden="true" />
+    <section id="contact" className="section-block section-block--compact bg-[#030712] border-t border-slate-900">
+      <div className="glow-radial" style={{ top: '-10%', left: '30%' }} aria-hidden="true" />
+      <div className="grid-overlay" aria-hidden="true" />
 
       <div className="container relative z-10">
         <Reveal>
-          <div className="glass-card-static rounded-2xl border border-[rgba(0,120,215,0.14)] bg-white p-8 sm:p-10 lg:flex lg:items-end lg:justify-between lg:gap-12 lg:p-12">
+          <div className="glass-panel p-8 sm:p-12 lg:flex lg:items-center lg:justify-between lg:gap-12">
             <div className="max-w-xl">
-              <SectionLabel>Get started</SectionLabel>
-              <h2 className="heading-section">
-                Ready to Build <br />
-                <span className="text-gradient">Something?</span>
+              <SectionLabel>Start Your Project</SectionLabel>
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+                Ready to build <span className="text-gradient">something that ships?</span>
               </h2>
-              <p className="mt-4 text-base text-muted sm:text-lg">
-                Book a free 30-minute discovery call. We&apos;ll tell you exactly what your
-                platform needs and what it costs — no obligation.
+              <p className="text-base text-slate-400">
+                Book a free discovery call — we&apos;ll scope the problem and outline next steps.
               </p>
               <a
                 href={`mailto:${EMAIL}`}
-                className="mt-5 inline-flex min-h-[44px] items-center gap-2 text-sm text-accent-hover transition-colors hover:text-accent"
+                className="inline-flex items-center gap-2.5 text-sm text-teal-400 font-semibold mt-4 hover:text-teal-300 transition-colors"
               >
                 <MailIcon className="h-4 w-4" />
                 {EMAIL}
               </a>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-3 lg:mt-0 lg:shrink-0">
+            <div className="mt-8 flex flex-wrap gap-4 lg:mt-0 lg:shrink-0">
               <a
                 href={BOOK_CALL_PATH}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary-light"
+                className="btn-primary"
               >
-                Book a Discovery Call
+                Book Discovery Call
                 <ArrowIcon className="h-4 w-4" />
               </a>
               <a
                 href={`mailto:${EMAIL}`}
-                className="btn-ghost-dark"
+                className="btn-secondary"
               >
-                Email directly
+                Email Directly
               </a>
             </div>
           </div>

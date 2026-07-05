@@ -1,15 +1,7 @@
 import { Link } from 'react-router-dom'
-import { BOOK_CALL_PATH, EMAIL, NAME, ROLE, SOCIAL_LINKS } from '../data/portfolio'
+import { BOOK_CALL_PATH, EMAIL, NAME, SOCIAL_LINKS, TAGLINE } from '../data/portfolio'
 import { ArrowIcon, LinkedInIcon, MailIcon } from './icons'
 import { SiteLogo } from './SiteLogo'
-
-const FOOTER_LINKS = [
-  { to: '/livestock-software', label: 'Livestock Software' },
-  { to: '/qa-testing', label: 'Software Testing' },
-  { to: '/ai-automation', label: 'AI & Automation' },
-  { to: '/#work', label: 'Work' },
-  { to: '/contact', label: 'Contact' },
-] as const
 
 export function Footer() {
   const year = new Date().getFullYear()
@@ -17,54 +9,79 @@ export function Footer() {
 
   return (
     <footer className="site-footer">
-      <div className="container py-12 sm:py-14">
-        <div className="footer-main">
-          <div className="footer-brand">
-            <Link to="/" className="footer-logo-link">
+      <div className="container">
+        <div className="footer-top">
+          {/* Brand Info */}
+          <div className="footer-brand-side">
+            <Link to="/" className="inline-block">
               <SiteLogo variant="footer" />
             </Link>
-            <p className="footer-tagline">{ROLE}</p>
+            <p className="footer-brand-desc max-w-sm mt-3">{TAGLINE}</p>
           </div>
 
-          <div className="footer-actions">
-            <a href={`mailto:${EMAIL}`} className="footer-contact-link">
-              <MailIcon className="h-4 w-4 shrink-0" />
-              {EMAIL}
-            </a>
-            {linkedIn ? (
-              <a
-                href={linkedIn.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-contact-link"
-              >
-                <LinkedInIcon className="h-4 w-4 shrink-0" />
-                LinkedIn
-              </a>
-            ) : null}
-            <Link to={BOOK_CALL_PATH} className="btn-primary footer-cta">
-              Book a Call
-              <ArrowIcon className="h-4 w-4" />
-            </Link>
+          {/* Quick Links Group */}
+          <div className="footer-links-side">
+            <div className="footer-links-group">
+              <span className="footer-links-title">Services</span>
+              <ul className="footer-links-list">
+                <li>
+                  <Link to="/livestock-software">Livestock Software</Link>
+                </li>
+                <li>
+                  <Link to="/#work">Contest Platforms</Link>
+                </li>
+                <li>
+                  <Link to="/contact">Inventory &amp; Agency Ops</Link>
+                </li>
+                <li>
+                  <Link to="/ai-automation">AI &amp; Automation</Link>
+                </li>
+                <li>
+                  <Link to="/qa-testing">Software Testing</Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="footer-links-group">
+              <span className="footer-links-title">Connect</span>
+              <ul className="footer-links-list">
+                <li>
+                  <a href={`mailto:${EMAIL}`} className="inline-flex items-center gap-1.5">
+                    <MailIcon className="h-3.5 w-3.5" />
+                    Email
+                  </a>
+                </li>
+                {linkedIn ? (
+                  <li>
+                    <a
+                      href={linkedIn.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5"
+                    >
+                      <LinkedInIcon className="h-3.5 w-3.5" />
+                      LinkedIn
+                    </a>
+                  </li>
+                ) : null}
+                <li>
+                  <Link to={BOOK_CALL_PATH} className="inline-flex items-center gap-1">
+                    Book a Call
+                    <ArrowIcon className="h-3.5 w-3.5" />
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
-        <nav className="footer-quick-links" aria-label="Footer quick links">
-          {FOOTER_LINKS.map(({ to, label }, i) => (
-            <span key={to} className="footer-quick-link-item">
-              {i > 0 ? <span className="footer-dot" aria-hidden="true">·</span> : null}
-              {to.includes('#') ? (
-                <a href={to}>{label}</a>
-              ) : (
-                <Link to={to}>{label}</Link>
-              )}
-            </span>
-          ))}
-        </nav>
-
         <div className="footer-bottom">
-          <p>© {year} {NAME}. Crafted with React &amp; Tailwind.</p>
-          <p>Python · AI · Full Stack · Cloud</p>
+          <p className="footer-bottom-text">
+            © {year} {NAME}. All rights reserved.
+          </p>
+          <p className="footer-bottom-text text-sm text-slate-500">
+            Agribusiness · Contests · Inventory · Agencies · QA · AI
+          </p>
         </div>
       </div>
     </footer>

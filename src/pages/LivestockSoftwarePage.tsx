@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { FEATURED_CASE_STUDY, SITE_IMAGES } from '../data/portfolio'
 import { FeatureGrid } from '../components/marketing/FeatureGrid'
 import { LivestockCaseStudyBlock } from '../components/marketing/LivestockCaseStudyBlock'
 import { PageCta } from '../components/marketing/PageCta'
@@ -7,20 +8,28 @@ import { WhoItsFor } from '../components/marketing/WhoItsFor'
 
 const FEATURES = [
   {
-    title: 'Herd Registry & Genetics Tracking',
+    title: 'Genetics & herd records',
     description:
-      'Track EPD scores, bloodlines, and performance data across your entire herd. Built for Wagyu, Angus, and commercial operations.',
+      'EPD scores, bloodlines, and inventory in one place — not scattered spreadsheets.',
   },
   {
-    title: 'Buyer Portal & Sale Management',
+    title: 'Buyer portals & catalogs',
     description:
-      'Custom-branded buyer-facing portals with inventory listings, semen catalogs, and direct inquiry flows. No more email chains.',
+      'Semen listings, embryos, and inquiry flows your buyers can trust and use on mobile.',
   },
   {
-    title: 'Dashboard & Reporting',
+    title: 'Sales & reporting',
     description:
-      'Real-time dashboards for herd health, sale history, and genetics reports. Export to PDF or share with your vet and farm manager.',
+      'Dashboards and exports for sale history, genetics reports, and day-to-day ops.',
   },
+] as const
+
+const AUDIENCE = [
+  'Wagyu breeders',
+  'Stud farms',
+  'Commercial cattle ops',
+  'Livestock sale yards',
+  'Genetics labs',
 ] as const
 
 export function LivestockSoftwarePage() {
@@ -32,13 +41,19 @@ export function LivestockSoftwarePage() {
     <>
       <PageHero
         badge="Livestock & Cattle Software"
-        headline="Herd Management Software Built for Serious Cattle Operations"
-        subtext="From genetics tracking to buyer portals — we build the tools that replace spreadsheets for Wagyu breeders, stud farms, and livestock operations worldwide."
+        headline="Software that replaces spreadsheets for cattle operations"
+        subtext="Genetics storefronts, buyer portals, and herd tools — built for Wagyu breeders and ag teams selling semen, embryos, and breeding stock."
+        backgroundImage={SITE_IMAGES.livestockHero}
+        secondaryLabel="See Marble Semen case study"
+        secondaryTo={FEATURED_CASE_STUDY.to}
       />
       <LivestockCaseStudyBlock />
-      <FeatureGrid label="Features" items={[...FEATURES]} />
-      <WhoItsFor text="We build for: Wagyu breeders · Stud farms · Commercial cattle operations · Livestock sale yards · Genetics labs" />
-      <PageCta headline="Ready to replace your spreadsheets?" />
+      <FeatureGrid label="What we build" items={[...FEATURES]} columns={3} />
+      <WhoItsFor items={AUDIENCE} />
+      <PageCta
+        headline="Ready to move off spreadsheets?"
+        backgroundImage={SITE_IMAGES.agricultureBg}
+      />
     </>
   )
 }

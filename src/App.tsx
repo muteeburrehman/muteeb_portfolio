@@ -6,6 +6,7 @@ import { Navbar } from './components/Navbar'
 import { BookCallPage } from './pages/BookCallPage'
 import { CancelBookingPage } from './pages/CancelBookingPage'
 import { ContactPage } from './pages/ContactPage'
+import { AgencySolutionsPage } from './pages/AgencySolutionsPage'
 import { AIAutomationPage } from './pages/AIAutomationPage'
 import { HomePage } from './pages/HomePage'
 import { LivestockSoftwarePage } from './pages/LivestockSoftwarePage'
@@ -35,6 +36,7 @@ function App() {
           <Route path="/book/cancel" element={<CancelBookingPage />} />
           <Route path="/livestock-software" element={<LivestockSoftwarePage />} />
           <Route path="/qa-testing" element={<QATestingPage />} />
+          <Route path="/agency-solutions" element={<AgencySolutionsPage />} />
           <Route path="/ai-automation" element={<AIAutomationPage />} />
           <Route path="/case-study/marblesemen" element={<MarbleSemenCaseStudy />} />
         </Routes>

@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { CONTACT_TOPICS, EMAIL, REPLY_TIME } from '../data/portfolio'
 import { ArrowIcon, CheckIcon } from './icons'
-import { Button } from './ui/Button'
 
 const CONTACT_ENDPOINT =
   (import.meta.env.VITE_CONTACT_API_URL as string | undefined)?.trim() || '/api/contact'
@@ -136,24 +135,20 @@ export function ContactForm() {
     }
   }
 
-  const inputClass = 'form-input'
-
   if (status === 'success') {
     return (
-      <div className="panel-surface relative flex flex-col items-center justify-center p-12 text-center">
-        <div className="relative mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 ring-1 ring-emerald-500/30">
+      <div className="contact-form-success panel-surface">
+        <div className="contact-form-success-icon">
           <CheckIcon />
         </div>
-        <h3 className="relative text-xl font-semibold text-text-primary">Message sent successfully</h3>
-        <p className="relative mt-3 max-w-sm text-sm text-muted">
+        <h3 className="contact-form-success-title">Message sent successfully</h3>
+        <p className="contact-form-success-text">
           Thanks for reaching out — I&apos;ll get back to you soon. You can also email{' '}
-          <a href={`mailto:${EMAIL}`} className="text-accent hover:underline">
-            {EMAIL}
-          </a>
+          <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.
         </p>
-        <Button
-          variant="outline"
-          className="relative mt-8"
+        <button
+          type="button"
+          className="btn-secondary"
           onClick={() => {
             setStatus('idle')
             setForm(initial)
@@ -162,7 +157,7 @@ export function ContactForm() {
           }}
         >
           Send another message
-        </Button>
+        </button>
       </div>
     )
   }
@@ -170,17 +165,15 @@ export function ContactForm() {
   const submitting = status === 'submitting'
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="panel-surface relative space-y-5 p-6 sm:p-8"
-      noValidate
-    >
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div>
-          <label
-            htmlFor="name"
-            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
-          >
+    <form onSubmit={handleSubmit} className="contact-form panel-surface" noValidate>
+      <div className="contact-form-header">
+        <h2 className="contact-form-title">Send a message</h2>
+        <p className="contact-form-subtitle">Tell us about your project, timeline, and goals.</p>
+      </div>
+
+      <div className="contact-form-row">
+        <div className="form-field">
+          <label htmlFor="name" className="form-label">
             Your name
           </label>
           <input
@@ -189,17 +182,14 @@ export function ContactForm() {
             value={form.name}
             onChange={(e) => updateField('name', e.target.value)}
             placeholder="John Doe"
-            className={inputClass}
+            className="form-input"
             disabled={submitting}
             autoComplete="name"
           />
-          {errors.name && <p className="mt-1.5 text-xs text-red-400">{errors.name}</p>}
+          {errors.name ? <p className="form-error">{errors.name}</p> : null}
         </div>
-        <div>
-          <label
-            htmlFor="email"
-            className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
-          >
+        <div className="form-field">
+          <label htmlFor="email" className="form-label">
             Email
           </label>
           <input
@@ -208,117 +198,73 @@ export function ContactForm() {
             value={form.email}
             onChange={(e) => updateField('email', e.target.value)}
             placeholder="you@company.com"
-            className={inputClass}
+            className="form-input"
             disabled={submitting}
             autoComplete="email"
           />
-          {errors.email && <p className="mt-1.5 text-xs text-red-400">{errors.email}</p>}
+          {errors.email ? <p className="form-error">{errors.email}</p> : null}
         </div>
       </div>
 
-      <div>
-        <label
-          htmlFor="topic"
-          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
-        >
+      <div className="form-field">
+        <label htmlFor="topic" className="form-label">
           Project type
         </label>
-        <div className="relative">
-          <select
-            id="topic"
-            value={form.topic}
-            onChange={(e) => setForm({ ...form, topic: e.target.value })}
-            className={`${inputClass} cursor-pointer appearance-none pr-10`}
-            disabled={submitting}
-          >
-            {CONTACT_TOPICS.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-muted"
-          >
-            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none">
-              <path
-                d="M6 9l6 6 6-6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </span>
-        </div>
+        <select
+          id="topic"
+          value={form.topic}
+          onChange={(e) => setForm({ ...form, topic: e.target.value })}
+          className="form-input form-select"
+          disabled={submitting}
+        >
+          {CONTACT_TOPICS.map((t) => (
+            <option key={t} value={t}>
+              {t}
+            </option>
+          ))}
+        </select>
       </div>
 
-      <div>
-        <label
-          htmlFor="message"
-          className="mb-2 block text-[11px] font-medium tracking-[0.14em] text-muted uppercase"
-        >
+      <div className="form-field">
+        <label htmlFor="message" className="form-label">
           Message
         </label>
         <textarea
           id="message"
-          rows={5}
+          rows={6}
           value={form.message}
-            onChange={(e) => updateField('message', e.target.value)}
+          onChange={(e) => updateField('message', e.target.value)}
           placeholder="Tell me about your project, timeline, and goals…"
-          className={`${inputClass} resize-none`}
+          className="form-input form-textarea"
           disabled={submitting}
         />
-        <div className="mt-1.5 flex items-center justify-between text-[11px] text-muted">
+        <div className="form-hint-row">
           {errors.message ? (
-            <span className="text-red-400">{errors.message}</span>
+            <span className="form-error">{errors.message}</span>
           ) : form.message.trim().length >= 20 ? (
-            <span className="text-emerald-400/80">Looks good</span>
+            <span className="form-hint form-hint--ok">Looks good</span>
           ) : (
-            <span>
+            <span className="form-hint">
               Minimum 20 characters
-              {form.message.trim().length > 0 ? (
-                <span className="text-muted">
-                  {' '}
-                  ({20 - form.message.trim().length} more needed)
-                </span>
-              ) : null}
+              {form.message.trim().length > 0
+                ? ` (${20 - form.message.trim().length} more needed)`
+                : ''}
             </span>
           )}
-          <span
-            className={
-              form.message.trim().length >= 20
-                ? 'text-emerald-400/70'
-                : form.message.length > 0
-                  ? 'text-text-primary'
-                  : ''
-            }
-          >
-            {form.message.length}/5000
-          </span>
+          <span className="form-hint">{form.message.length}/5000</span>
         </div>
       </div>
 
-      {error ? (
-        <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-[var(--brand-error)]">
-          {error}
-        </p>
-      ) : null}
+      {error ? <p className="form-error-box">{error}</p> : null}
 
-      <div className="flex flex-col items-start gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-[11px] text-muted">
-          Personal reply <span className="text-text-primary">{REPLY_TIME}</span> · No spam, ever.
+      <div className="contact-form-footer">
+        <p className="contact-form-note">
+          Personal reply <strong>{REPLY_TIME}</strong> · No spam, ever.
         </p>
-        <Button type="submit" className="w-full sm:w-auto" disabled={submitting}>
+        <button type="submit" className="btn-primary contact-form-submit" disabled={submitting}>
           {submitting ? (
             <>
-              <svg
-                aria-hidden="true"
-                className="h-4 w-4 animate-spin"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
+              <svg aria-hidden="true" className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
                 <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" opacity="0.25" />
                 <path
                   d="M21 12a9 9 0 00-9-9"
@@ -335,7 +281,7 @@ export function ContactForm() {
               <ArrowIcon className="h-4 w-4" />
             </>
           )}
-        </Button>
+        </button>
       </div>
     </form>
   )

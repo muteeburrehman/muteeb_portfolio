@@ -12,12 +12,7 @@ export function FeaturedCaseStudy() {
       <div className="container">
         <Reveal>
           <SectionLabel>Featured project</SectionLabel>
-          <div className="glass-card-static featured-project-card rounded-xl"
-            style={{
-              borderLeft: '3px solid',
-              borderImage: 'linear-gradient(to bottom, #0078D7, #00C853) 1',
-            }}
-          >
+          <div className="glass-card-static featured-project-card rounded-xl">
             <div className="min-w-0">
               <h2 className="heading-section">{name}</h2>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">

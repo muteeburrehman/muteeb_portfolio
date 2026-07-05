@@ -1,87 +1,78 @@
-import { SKILLS, STATS } from '../data/portfolio'
+import { Link } from 'react-router-dom'
+import {
+  BOOK_CALL_PATH,
+  NAME,
+  PROFILE_QUICK_FACTS,
+  SITE_PROFILE_IMAGE,
+  TAGLINE,
+  TEAM_APPROACH,
+  TEAM_INTRO,
+} from '../data/portfolio'
+import { ArrowIcon } from './icons'
 import { Reveal } from './ui/Reveal'
 import { SectionLabel } from './ui/SectionLabel'
 
 export function About() {
   return (
-    <section id="about" className="section-block relative overflow-hidden" style={{ background: 'var(--bg-dark-2)' }}>
-      {/* Ambient orbs */}
-      <div className="ambient-orb ambient-orb--2" style={{ top: '-15%', right: '-10%' }} aria-hidden="true" />
-      <div className="ambient-orb ambient-orb--3" style={{ bottom: '-10%', left: '-5%' }} aria-hidden="true" />
-
+    <section id="about" className="about-section section-block section-block--compact bg-[#030712] border-t border-slate-900">
       <div className="container relative z-10">
-        <Reveal className="text-center">
-          <SectionLabel>About</SectionLabel>
-          <h2 className="heading-display mx-auto max-w-2xl text-[clamp(1.75rem,4vw,2.5rem)]">
-            Python-first.
-            <br />
-            <span className="text-gradient">AI-driven.</span>
-          </h2>
-        </Reveal>
+        <div className="about-grid">
+          <Reveal className="about-grid__intro">
+            <SectionLabel>About</SectionLabel>
+            <h2 className="heading-section">
+              Custom software, <span className="text-gradient">engineered hands-on</span>
+            </h2>
+            <p className="about-lead">{TEAM_INTRO}</p>
+            <p className="about-body">{TEAM_APPROACH}</p>
+            <Link to="#values" className="about-values-link">
+              How we work
+              <ArrowIcon className="h-4 w-4" />
+            </Link>
+          </Reveal>
 
-        <Reveal delay={80}>
-          <dl className="mx-auto mt-12 grid max-w-3xl grid-cols-3 gap-6 sm:gap-10">
-            {STATS.map((s) => (
-              <div key={s.label} className="text-center">
-                <dt className="font-display text-3xl font-bold sm:text-4xl text-gradient">
-                  {s.value}
-                </dt>
-                <dd className="mt-2 text-xs tracking-wide text-muted uppercase">
-                  {s.label}
-                </dd>
+          <Reveal delay={80}>
+            <div className="profile-card">
+              <div className="profile-card-header">
+                <div className="profile-avatar-frame">
+                  <div className="profile-avatar-inner">
+                    <img
+                      src={SITE_PROFILE_IMAGE}
+                      alt={NAME}
+                      className="profile-avatar-img"
+                      width={260}
+                      height={260}
+                      decoding="async"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+                <div className="profile-card-intro">
+                  <h3 className="profile-card-name">{NAME}</h3>
+                  <p className="profile-card-role">Lead contact · Founder</p>
+                  <p className="profile-card-tagline">{TAGLINE}</p>
+                </div>
               </div>
-            ))}
-          </dl>
-        </Reveal>
 
-        <Reveal delay={120} className="mx-auto mt-12 max-w-2xl space-y-5 text-center text-base leading-relaxed text-muted sm:text-lg">
-          <p>
-            I&apos;m <strong className="font-medium text-text-primary">Muteeb Ur Rehman</strong> —
-            a full stack developer, AI engineer, and software testing specialist. I build
-            intelligent products end to end: clean React frontends, Python APIs on PostgreSQL,
-            LLM agents, voice interfaces, automation pipelines, and thorough QA before release.
-          </p>
-          <p>
-            Recent shipped work includes{' '}
-            <a
-              href="https://pitprize.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-accent-hover underline decoration-accent/40 underline-offset-4 transition-colors hover:decoration-accent"
-            >
-              PitPrize
-            </a>{' '}
-            (a skill-based motorsport prediction platform with real cash prizes),{' '}
-            <a
-              href="https://marblesemen.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-accent-hover underline decoration-accent/40 underline-offset-4 transition-colors hover:decoration-accent"
-            >
-              Marble Semen
-            </a>{' '}
-            (a Wagyu genetics e-commerce store), production n8n + OpenAI email automation
-            suites and a number of custom AI chatbots deployed for clients.
-          </p>
-          <p>
-            I work across the modern AI stack — LangChain, OpenAI, Gemini, Claude, Qdrant,
-            n8n — plus manual and regression software testing for web and SaaS products. I care
-            about clean code, reliable systems, and outcomes that ship.
-          </p>
-        </Reveal>
+              <div className="profile-meta-info">
+                {PROFILE_QUICK_FACTS.map((row) => (
+                  <div key={row.label} className="profile-meta-row">
+                    <span className="profile-meta-lbl">{row.label}</span>
+                    <span className="profile-meta-val">{row.value}</span>
+                  </div>
+                ))}
+              </div>
 
-        <Reveal delay={160}>
-          <div className="mx-auto mt-10 flex max-w-3xl flex-wrap justify-center gap-2">
-            {SKILLS.map((skill) => (
-              <span
-                key={skill}
-                className="rounded-full border border-border bg-bg-off px-3.5 py-1.5 text-xs text-muted transition-all hover:border-accent/30 hover:text-accent-hover"
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
-        </Reveal>
+              <div className="about-compact__actions">
+                <Link to={BOOK_CALL_PATH} className="btn-compact btn-compact--primary">
+                  Book a call
+                </Link>
+                <Link to="/contact" className="btn-compact btn-compact--ghost">
+                  Send a message
+                </Link>
+              </div>
+            </div>
+          </Reveal>
+        </div>
       </div>
     </section>
   )

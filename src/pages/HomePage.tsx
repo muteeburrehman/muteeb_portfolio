@@ -1,18 +1,15 @@
 import { useEffect } from 'react'
 import { About } from '../components/About'
-import { Capabilities } from '../components/Capabilities'
 import { ContactCTA } from '../components/ContactCTA'
-import { FeaturedCaseStudy } from '../components/FeaturedCaseStudy'
 import { Hero } from '../components/Hero'
-import { HomeValueBar } from '../components/HomeValueBar'
-import { Process } from '../components/Process'
+import { Industries } from '../components/Industries'
+import { OurValues } from '../components/OurValues'
 import { Projects } from '../components/Projects'
 import { Services } from '../components/Services'
-import { TechTicker } from '../components/TechTicker'
 
 const HOME_TITLE = 'MuteebLabs | Custom Software, Software Testing & AI'
 const HOME_DESCRIPTION =
-  'Custom software, software testing, and AI automation for livestock, SaaS, and growing teams. Book a free discovery call with MuteebLabs.'
+  'Custom software for agribusiness, contest platforms, inventory systems, and agency workflow fixes — plus QA and AI automation. MuteebLabs builds platforms teams actually use.'
 
 export function HomePage() {
   useEffect(() => {
@@ -25,7 +22,7 @@ export function HomePage() {
     if (ogDesc) {
       ogDesc.setAttribute(
         'content',
-        'Livestock platforms, software testing services, and AI automation tools built by MuteebLabs.',
+        'Custom software for agribusiness, contests, inventory ops, and agencies — plus QA and AI automation — built by MuteebLabs.',
       )
     }
   }, [])
@@ -33,13 +30,10 @@ export function HomePage() {
   return (
     <>
       <Hero />
-      <TechTicker />
       <Services />
-      <HomeValueBar />
-      <FeaturedCaseStudy />
+      <Industries />
       <Projects />
-      <Capabilities />
-      <Process />
+      <OurValues />
       <About />
       <ContactCTA />
     </>

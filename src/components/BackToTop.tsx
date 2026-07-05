@@ -21,7 +21,7 @@ export function BackToTop({ hideOnContact }: BackToTopProps) {
       type="button"
       aria-label="Back to top"
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      className={`group fixed right-6 z-40 flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-white text-text-primary shadow-lg transition-all duration-300 hover:border-accent hover:text-accent ${
+      className={`group fixed right-6 z-40 flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-bg-dark-2 text-text-primary shadow-lg transition-all duration-300 hover:border-accent hover:text-accent ${
         visible
           ? 'pointer-events-auto bottom-8 translate-y-0 opacity-100'
           : 'pointer-events-none bottom-6 translate-y-2 opacity-0'

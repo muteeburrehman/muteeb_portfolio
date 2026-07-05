@@ -12,20 +12,17 @@ type FeatureGridProps = {
 }
 
 export function FeatureGrid({ label, items, columns = 3 }: FeatureGridProps) {
-  const colClass =
-    columns === 3
-      ? 'md:grid-cols-2 lg:grid-cols-3'
-      : 'md:grid-cols-2'
+  const colClass = columns === 3 ? 'feature-grid--three' : 'feature-grid--two'
 
   return (
-    <section className="section-white section-block">
+    <section className="feature-grid-section section-block section-block--compact">
       <div className="container">
         {label ? <SectionLabel>{label}</SectionLabel> : null}
-        <div className={`grid gap-6 ${colClass}`}>
+        <div className={`feature-grid ${colClass}`}>
           {items.map((item) => (
-            <article key={item.title} className="card-light h-full">
-              <h3 className="text-lg font-semibold text-text-primary">{item.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{item.description}</p>
+            <article key={item.title} className="feature-card">
+              <h3 className="feature-card__title">{item.title}</h3>
+              <p className="feature-card__desc">{item.description}</p>
             </article>
           ))}
         </div>
