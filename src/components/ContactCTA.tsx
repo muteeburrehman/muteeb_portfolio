@@ -29,17 +29,17 @@ export function ContactCTA() {
               </a>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-4 lg:mt-0 lg:shrink-0">
+            <div className="mt-8 flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 lg:mt-0 lg:w-auto lg:shrink-0">
               <a
                 href={BOOK_CALL_PATH}
-                className="btn-primary"
+                className="btn-primary w-full justify-center sm:w-auto"
               >
                 Book Discovery Call
                 <ArrowIcon className="h-4 w-4" />
               </a>
               <a
                 href={`mailto:${EMAIL}`}
-                className="btn-secondary"
+                className="btn-secondary w-full justify-center sm:w-auto"
               >
                 Email Directly
               </a>

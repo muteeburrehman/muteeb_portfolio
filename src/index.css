@@ -127,6 +127,34 @@
     padding-bottom: 4.5rem;
   }
 
+  @media (max-width: 768px) {
+    :root {
+      --section-pad-x: 1.25rem;
+      --section-pad-y: 4.5rem;
+      --nav-height: 72px;
+    }
+
+    body {
+      font-size: 16px;
+    }
+
+    .section-block {
+      padding-top: var(--section-pad-y);
+      padding-bottom: var(--section-pad-y);
+    }
+
+    .section-block--compact {
+      padding-top: 3.25rem;
+      padding-bottom: 3.25rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    :root {
+      --section-pad-x: 1rem;
+    }
+  }
+
   /* Grid layout backdrop with very reduced opacity */
   .grid-overlay {
     position: absolute;
