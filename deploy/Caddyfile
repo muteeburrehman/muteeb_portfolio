@@ -6,14 +6,6 @@
 {
 	email {$ACME_EMAIL:}
 	admin off
-
-	# Trust Cloudflare when the site is proxied (orange cloud).
-	servers {
-		trusted_proxies cloudflare {
-			interval 12h
-			timeout 30s
-		}
-	}
 }
 
 {$SITE_DOMAIN:dev.muteeblabs.uk} {
