@@ -49,7 +49,7 @@ export function About() {
                 <div className="profile-card-intro">
                   <h3 className="profile-card-name">{NAME}</h3>
                   <p className="profile-card-role">Lead contact · Founder</p>
-                  <p className="profile-card-tagline">{TAGLINE}</p>
+                  <p className="profile-card-tagline max-w-none">{TAGLINE}</p>
                 </div>
               </div>
 

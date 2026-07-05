@@ -13,7 +13,7 @@ from schemas.booking import (
     SlotResponse,
     SlotsQueryResponse,
 )
-from services.availability_service import format_slot_label, generate_slots, load_availability_rules
+from services.availability_service import _day_key, format_slot_label, generate_slots, load_availability_rules
 from services.booking_email import send_booking_cancelled_email, send_booking_emails
 from services.booking_store import (
     BookingRecord,
@@ -78,7 +78,14 @@ def slot_availability_summary(from_date: date, to_date: date) -> SlotAvailabilit
     day = from_date
     while day <= to_date:
         count = len(generate_slots(rules, day, day, booked))
-        days.append(DaySlotCount(date=day.isoformat(), available_count=count))
+        bookable = bool(rules.weekly_hours.get(_day_key(day), []))
+        days.append(
+            DaySlotCount(
+                date=day.isoformat(),
+                available_count=count,
+                bookable=bookable,
+            )
+        )
         day += timedelta(days=1)
 
     return SlotAvailabilitySummary(timezone=str(rules.timezone), days=days)

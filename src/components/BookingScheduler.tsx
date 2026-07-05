@@ -6,10 +6,14 @@ import {
   fetchAvailabilitySummary,
   fetchBookingConfig,
   fetchSlots,
-  formatDateKey,
+  formatBookingDateTime,
   formatDisplayDate,
+  formatTimeZoneLabel,
+  isWeekendInTimeZone,
+  nextDaysInTimeZone,
   type BookingConfig,
   type BookingSlot,
+  type DaySlotCount,
 } from '../lib/bookingApi'
 import {
   bookingFieldError,
@@ -24,17 +28,6 @@ import { PhoneField } from './PhoneField'
 import { Button } from './ui/Button'
 
 type Step = 'date' | 'time' | 'details' | 'done'
-
-function nextDays(max: number): string[] {
-  const out: string[] = []
-  const cursor = new Date()
-  cursor.setHours(0, 0, 0, 0)
-  for (let i = 0; i < max; i++) {
-    out.push(formatDateKey(cursor))
-    cursor.setDate(cursor.getDate() + 1)
-  }
-  return out
-}
 
 const inputClass = 'form-input'
 
@@ -53,7 +46,7 @@ export function BookingScheduler() {
     start: string
     cancel_url?: string
   } | null>(null)
-  const [openSlotsByDay, setOpenSlotsByDay] = useState<Record<string, number>>({})
+  const [openSlotsByDay, setOpenSlotsByDay] = useState<Record<string, DaySlotCount>>({})
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -111,8 +104,10 @@ export function BookingScheduler() {
 
   const dayOptions = useMemo(() => {
     if (!config) return []
-    return nextDays(config.max_days_ahead)
+    return nextDaysInTimeZone(config.max_days_ahead, config.timezone)
   }, [config])
+
+  const timezoneLabel = config ? formatTimeZoneLabel(config.timezone) : ''
 
   useEffect(() => {
     if (!config || dayOptions.length === 0) return
@@ -120,9 +115,9 @@ export function BookingScheduler() {
     const to = dayOptions[dayOptions.length - 1]
     fetchAvailabilitySummary(from, to)
       .then((summary) => {
-        const map: Record<string, number> = {}
+        const map: Record<string, DaySlotCount> = {}
         for (const day of summary.days) {
-          map[day.date] = day.available_count
+          map[day.date] = day
         }
         setOpenSlotsByDay(map)
       })
@@ -186,14 +181,8 @@ export function BookingScheduler() {
 
   const stepIndex = ['date', 'time', 'details'].indexOf(step)
 
-  if (step === 'done' && result) {
-    const when = new Date(result.start).toLocaleString(undefined, {
-      weekday: 'long',
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-    })
+  if (step === 'done' && result && config) {
+    const when = formatBookingDateTime(result.start, config.timezone)
     return (
       <div className="panel-surface flex flex-col items-center p-10 text-center sm:p-12">
         <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 ring-1 ring-emerald-500/30">
@@ -270,17 +259,48 @@ export function BookingScheduler() {
 
       {!configLoading && config && step === 'date' && (
         <div>
-          <p className="mb-2 text-sm text-muted">
-            Pick a day ({config.slot_duration_minutes}-minute discovery call,{' '}
-            {config.timezone.replace('_', ' ')})
+          <p className="mb-2 max-w-none text-sm text-muted">
+            Pick a weekday ({config.slot_duration_minutes}-minute discovery call). All times in{' '}
+            <strong className="text-text-primary">{timezoneLabel}</strong>.
           </p>
-          <p className="mb-4 text-xs text-muted">
+          <p className="mb-4 max-w-none text-xs text-muted">
             One booking per time slot. Booked times are hidden; cancel via email to release a slot.
+            Need Saturday or Sunday?{' '}
+            <Link to="/contact" className="font-medium text-accent hover:underline">
+              Send us a message
+            </Link>{' '}
+            and we&apos;ll arrange a time.
           </p>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
             {dayOptions.map((d) => {
-              const openCount = openSlotsByDay[d]
-              const fullyBooked = openCount === 0
+              const dayInfo = openSlotsByDay[d]
+              const isWeekend = isWeekendInTimeZone(d, config.timezone)
+              const isClosed = isWeekend || dayInfo?.bookable === false
+              const openCount = dayInfo?.available_count ?? 0
+              const fullyBooked = !isClosed && openCount === 0
+
+              if (isClosed) {
+                return (
+                  <div
+                    key={d}
+                    className="booking-day-card booking-day-card--closed min-h-[44px] rounded-lg border border-border bg-white/[0.02] px-3 py-2.5 text-sm"
+                  >
+                    <span className="block font-medium text-text-primary">
+                      {formatDisplayDate(d, config.timezone)}
+                    </span>
+                    <span className="mt-1 block text-[11px] leading-snug text-muted">
+                      Weekends by request
+                    </span>
+                    <Link
+                      to="/contact"
+                      className="mt-1.5 inline-flex text-[11px] font-semibold text-accent hover:underline"
+                    >
+                      Contact us →
+                    </Link>
+                  </div>
+                )
+              }
+
               return (
                 <button
                   key={d}
@@ -302,7 +322,7 @@ export function BookingScheduler() {
                     setError(null)
                   }}
                 >
-                  {formatDisplayDate(d)}
+                  {formatDisplayDate(d, config.timezone)}
                   {fullyBooked && (
                     <span className="mt-0.5 block text-[10px] font-normal uppercase tracking-wide">
                       Full
@@ -325,12 +345,17 @@ export function BookingScheduler() {
             ← Change date
           </button>
           <p className="mb-4 text-sm text-muted">
-            {formatDisplayDate(selectedDate)} — available times
+            {formatDisplayDate(selectedDate, config?.timezone)} — available times ({timezoneLabel})
           </p>
           {loadingSlots ? (
             <p className="text-sm text-muted">Loading slots…</p>
           ) : slots.length === 0 ? (
-            <p className="text-sm text-muted">No open slots this day. Try another date.</p>
+            <div className="rounded-lg border border-border bg-white/[0.02] px-4 py-3 text-sm text-muted">
+              <p>No open slots this day. Try another weekday.</p>
+              <Link to="/contact" className="mt-2 inline-flex font-medium text-accent hover:underline">
+                Or contact us directly →
+              </Link>
+            </div>
           ) : (
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
               {slots.map((slot) => (
@@ -369,13 +394,15 @@ export function BookingScheduler() {
             ← Change time
           </button>
           <p className="text-sm font-medium text-text-primary">
-            {formatDisplayDate(selectedDate)} at {selectedSlot.label}
+            {config
+              ? formatBookingDateTime(selectedSlot.start, config.timezone)
+              : `${formatDisplayDate(selectedDate)} at ${selectedSlot.label}`}
           </p>
 
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
               <label htmlFor="booking-name" className="block text-sm font-medium text-text-primary">
-                Name
+                Name <span className="text-accent">*</span>
               </label>
               <input
                 id="booking-name"
@@ -392,7 +419,7 @@ export function BookingScheduler() {
             </div>
             <div>
               <label htmlFor="booking-email" className="block text-sm font-medium text-text-primary">
-                Email
+                Email <span className="text-accent">*</span>
               </label>
               <input
                 id="booking-email"
@@ -453,20 +480,28 @@ export function BookingScheduler() {
               placeholder="Brief project context, timeline, goals…"
               maxLength={2000}
             />
-            <div className="mt-1.5 flex justify-between text-xs text-muted">
-              {fieldErrors.notes ? (
-                <span className="text-red-400">{fieldErrors.notes}</span>
-              ) : (
-                <span>Optional</span>
-              )}
+            {fieldErrors.notes ? (
+              <p className="mt-1.5 text-xs text-red-400">{fieldErrors.notes}</p>
+            ) : null}
+            <div className="mt-1 flex justify-end text-xs text-muted">
               <span>{notes.length}/2000</span>
             </div>
           </div>
 
-          <Button type="submit" disabled={submitting}>
-            {submitting ? 'Booking…' : 'Confirm discovery call'}
-            {!submitting && <ArrowIcon />}
-          </Button>
+          <div className="booking-submit">
+            <p className="booking-submit__hint max-w-none text-sm text-muted">
+              Confirm to reserve this slot. We&apos;ll email your meeting link and a cancel link
+              right away.
+            </p>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="btn-primary booking-submit__btn w-full justify-center"
+            >
+              {submitting ? 'Booking…' : 'Confirm discovery call'}
+              {!submitting && <ArrowIcon className="h-4 w-4" />}
+            </button>
+          </div>
         </form>
       )}
     </div>

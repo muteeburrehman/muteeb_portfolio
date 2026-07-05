@@ -1965,6 +1965,7 @@
 
 .profile-card-tagline {
   margin: 0.5rem 0 0;
+  max-width: none;
   font-size: 0.875rem;
   line-height: 1.65;
   color: #4ade80;
@@ -2039,8 +2040,10 @@
 }
 
 .profile-meta-row {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 38%) minmax(0, 1fr);
+  gap: 0.35rem 1rem;
+  align-items: start;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   padding-bottom: 10px;
 }
@@ -2052,13 +2055,77 @@
 
 .profile-meta-lbl {
   font-size: 14px;
+  line-height: 1.45;
   color: var(--color-text-muted);
 }
 
 .profile-meta-val {
   font-size: 15px;
   font-weight: 600;
+  line-height: 1.45;
   color: #ffffff;
+  text-align: right;
+  word-break: break-word;
+}
+
+.book-call-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.book-call-footer__text,
+.book-call-footer__note {
+  margin: 0;
+  max-width: none;
+  color: var(--color-text-muted);
+}
+
+.book-call-footer__text {
+  font-size: 0.9375rem;
+}
+
+.book-call-footer__note {
+  font-size: 0.8125rem;
+}
+
+.book-call-footer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.book-call-footer__actions .btn-compact {
+  max-width: 100%;
+}
+
+.booking-day-card--closed {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.booking-submit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.booking-submit__hint {
+  margin: 0;
+}
+
+.booking-submit__btn {
+  font-weight: 600;
 }
 
 .about-right-col {
@@ -4893,9 +4960,34 @@
 
   .about-compact__actions {
     flex-direction: column;
+    padding-right: 3.25rem;
   }
 
   .about-compact__actions .btn-compact {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .profile-meta-row {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+    padding-bottom: 12px;
+  }
+
+  .profile-meta-val {
+    text-align: left;
+  }
+
+  .profile-card-header {
+    align-items: flex-start;
+  }
+
+  .book-call-footer__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .book-call-footer__actions .btn-compact {
     width: 100%;
     justify-content: center;
   }

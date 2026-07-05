@@ -71,6 +71,7 @@ class BookingCreateResponse(BaseModel):
 class DaySlotCount(BaseModel):
     date: str
     available_count: int
+    bookable: bool = True
 
 
 class SlotAvailabilitySummary(BaseModel):

@@ -164,4 +164,8 @@ def generate_slots(
 
 def format_slot_label(start: datetime, rules: AvailabilityRules) -> str:
     local = start.astimezone(rules.timezone)
-    return local.strftime("%I:%M %p").lstrip("0")
+    time_str = local.strftime("%I:%M %p").lstrip("0")
+    tz_abbr = local.strftime("%Z").replace("_", " ")
+    if not tz_abbr or tz_abbr.startswith("+") or tz_abbr.startswith("-"):
+        tz_abbr = str(rules.timezone).split("/")[-1].replace("_", " ")
+    return f"{time_str} {tz_abbr}"

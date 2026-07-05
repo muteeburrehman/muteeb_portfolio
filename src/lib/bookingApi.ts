@@ -39,6 +39,7 @@ export type BookingResult = {
 export type DaySlotCount = {
   date: string
   available_count: number
+  bookable: boolean
 }
 
 export type AvailabilitySummary = {
@@ -146,8 +147,83 @@ export function formatDateKey(d: Date): string {
   return `${y}-${m}-${day}`
 }
 
-export function formatDisplayDate(isoDate: string): string {
+/** Calendar date (YYYY-MM-DD) for an instant in the booking timezone. */
+export function formatDateKeyInTimeZone(date: Date, timeZone: string): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date)
+}
+
+/** Next N calendar days starting from today in the booking timezone. */
+export function nextDaysInTimeZone(count: number, timeZone: string): string[] {
+  const out: string[] = []
+  const now = new Date()
+  for (let i = 0; i < count; i++) {
+    const d = new Date(now.getTime() + i * 86_400_000)
+    out.push(formatDateKeyInTimeZone(d, timeZone))
+  }
+  return out
+}
+
+export function formatDisplayDate(isoDate: string, timeZone?: string): string {
   const [y, m, d] = isoDate.split('-').map(Number)
-  const dt = new Date(y, m - 1, d)
-  return dt.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
+  const ref = new Date(Date.UTC(y, m - 1, d, 12, 0, 0))
+  return new Intl.DateTimeFormat(undefined, {
+    timeZone,
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  }).format(ref)
+}
+
+export function formatTimeZoneLabel(timeZone: string): string {
+  try {
+    const label = new Intl.DateTimeFormat(undefined, {
+      timeZone,
+      timeZoneName: 'long',
+    })
+      .formatToParts(new Date())
+      .find((part) => part.type === 'timeZoneName')?.value
+    return label ?? timeZone.replace(/_/g, ' ')
+  } catch {
+    return timeZone.replace(/_/g, ' ')
+  }
+}
+
+/** Whether a calendar date falls on Saturday or Sunday in the booking timezone. */
+export function isWeekendInTimeZone(isoDate: string, timeZone: string): boolean {
+  const [y, m, d] = isoDate.split('-').map(Number)
+  const ref = new Date(Date.UTC(y, m - 1, d, 12, 0, 0))
+  const weekday = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    weekday: 'short',
+  }).format(ref)
+  return weekday === 'Sat' || weekday === 'Sun'
+}
+
+/** Full date + time in the booking timezone (matches server-side slot times). */
+export function formatBookingDateTime(isoStart: string, timeZone: string): string {
+  const start = new Date(isoStart)
+  const datePart = new Intl.DateTimeFormat(undefined, {
+    timeZone,
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  }).format(start)
+  const timePart = new Intl.DateTimeFormat(undefined, {
+    timeZone,
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  }).format(start)
+  const tzPart = new Intl.DateTimeFormat(undefined, {
+    timeZone,
+    timeZoneName: 'short',
+  })
+    .formatToParts(start)
+    .find((part) => part.type === 'timeZoneName')?.value
+  return tzPart ? `${datePart} at ${timePart} ${tzPart}` : `${datePart} at ${timePart}`
 }

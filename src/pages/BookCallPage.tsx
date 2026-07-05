@@ -44,17 +44,20 @@ export function BookCallPage() {
           <BookingScheduler />
         </Reveal>
 
-        <p className="mt-8 text-center text-sm text-muted">
-          Prefer a message instead?{' '}
-          <Link to="/contact" className="font-medium text-accent hover:underline">
-            Contact form
-          </Link>{' '}
-          or{' '}
-          <a href={`mailto:${EMAIL}`} className="font-medium text-accent hover:underline">
-            {EMAIL}
-          </a>{' '}
-          — we reply {REPLY_TIME}.
-        </p>
+        <div className="book-call-footer">
+          <p className="book-call-footer__text">
+            Prefer a message instead?
+          </p>
+          <div className="book-call-footer__actions">
+            <Link to="/contact" className="btn-compact btn-compact--primary">
+              Contact form
+            </Link>
+            <a href={`mailto:${EMAIL}`} className="btn-compact btn-compact--ghost">
+              {EMAIL}
+            </a>
+          </div>
+          <p className="book-call-footer__note">We reply {REPLY_TIME}.</p>
+        </div>
       </div>
     </div>
   )
