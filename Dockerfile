@@ -11,7 +11,7 @@ RUN npm ci --no-audit --no-fund
 FROM node:22-alpine AS web-build
 WORKDIR /app
 ARG VITE_CONTACT_API_URL=/api/contact
-ARG VITE_SITE_URL=https://muteeblabs.uk
+ARG VITE_SITE_URL=https://muteeblabs.com
 ENV VITE_CONTACT_API_URL=$VITE_CONTACT_API_URL VITE_SITE_URL=$VITE_SITE_URL
 COPY --from=web-deps /app/node_modules ./node_modules
 COPY package.json package-lock.json index.html vite.config.ts tsconfig*.json ./

@@ -105,7 +105,7 @@ BOOKING_ADMIN_KEY=your-long-random-secret
 ```
 
 ```bash
-curl "https://muteeblabs.uk/api/booking/stats?key=your-long-random-secret"
+curl "https://muteeblabs.com/api/booking/stats?key=your-long-random-secret"
 ```
 
 Returns: total bookings, upcoming, last 30 days.

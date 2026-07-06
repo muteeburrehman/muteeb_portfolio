@@ -1,4 +1,4 @@
-export const EMAIL = 'business@muteeblabs.uk'
+export const EMAIL = 'info@muteeblabs.com'
 /** Built-in scheduling funnel (custom slots + CRM). */
 export const BOOK_CALL_PATH = '/book'
 /** @deprecated Use BOOK_CALL_PATH — kept for gradual migration */

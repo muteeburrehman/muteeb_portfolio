@@ -41,9 +41,32 @@ Standalone Docker stack for **Muteeb Portfolio** — no shared reverse proxy or 
 | API exposure | Risk if misconfigured | API never published to host |
 | Future services (n8n, etc.) | Port conflicts | Add routes in Caddyfile |
 
+## Domain DNS (Northwest Registered Agent → VPS)
+
+Your LLC domain **`muteeblabs.com`** is registered with Northwest. Point it at this server:
+
+### Option A — Cloudflare (recommended)
+
+1. Add `muteeblabs.com` in [Cloudflare](https://dash.cloudflare.com) (free plan).
+2. Cloudflare shows two nameservers — in Northwest: **Domains → muteeblabs.com → DNS / nameservers** and replace with Cloudflare’s.
+3. In Cloudflare DNS, add:
+   | Type | Name | Content | Proxy |
+   |------|------|---------|-------|
+   | A | `@` | your VPS public IP | Proxied (orange) |
+   | A | `www` | same IP | Proxied |
+4. SSL/TLS mode: **Full (strict)**. For first cert issuance, grey-cloud `@` and `www` for ~5 min, then `docker compose restart caddy`, then re-enable proxy.
+
+### Option B — DNS only at Northwest
+
+In Northwest domain DNS, add **A records** for `@` and `www` → VPS IP. Caddy will obtain Let’s Encrypt certs directly (no Cloudflare).
+
+### Business email
+
+Set up `info@muteeblabs.com` in Northwest (or forward to Gmail). If you keep sending via Gmail SMTP, add the address under Gmail → **Send mail as** and update `.env` `EMAIL_FROM` / `EMAIL_TO`.
+
 ## Prerequisites
 
-1. **DNS:** `muteeblabs.uk` and `www.muteeblabs.uk` → VPS public IP (Cloudflare proxied is fine). `dev.muteeblabs.uk` can stay pointed at the same IP — it redirects to the apex domain.
+1. **DNS:** `muteeblabs.com` and `www.muteeblabs.com` → VPS public IP. Legacy `muteeblabs.uk` / `dev.muteeblabs.uk` can stay on the same IP — they redirect to `.com`.
 2. **Firewall:** allow inbound **80** and **443** to the VPS.
 3. **Nothing else** should bind host ports 80/443 (`ss -tlnp | grep -E ':80|:443'` should show `docker-proxy` after deploy).
 
@@ -52,9 +75,9 @@ Standalone Docker stack for **Muteeb Portfolio** — no shared reverse proxy or 
 ```bash
 cp .env.example .env
 # Edit .env — at minimum:
-#   SITE_DOMAIN=muteeblabs.uk
-#   ACME_EMAIL=business@muteeblabs.uk
-#   PUBLIC_SITE_URL=https://muteeblabs.uk
+#   SITE_DOMAIN=muteeblabs.com
+#   ACME_EMAIL=info@muteeblabs.com
+#   PUBLIC_SITE_URL=https://muteeblabs.com
 #   EMAIL_* for contact/booking
 
 docker compose down
@@ -66,8 +89,8 @@ docker compose up -d --build
 ```bash
 docker compose ps
 ss -tlnp | grep -E ':80|:443'
-curl -sS http://127.0.0.1/healthz -H 'Host: muteeblabs.uk'   # ok
-curl -sS https://muteeblabs.uk/healthz                         # ok
+curl -sS http://127.0.0.1/healthz -H 'Host: muteeblabs.com'   # ok
+curl -sS https://muteeblabs.com/healthz                         # ok
 ```
 
 Expected containers: `muteeb-caddy`, `muteeb-web`, `muteeb-api` — all healthy.

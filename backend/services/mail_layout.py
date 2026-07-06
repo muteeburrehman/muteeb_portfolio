@@ -18,8 +18,8 @@ ACCENT_BAR = f"linear-gradient(90deg,{SKY},{PURPLE})"
 BRAND = os.getenv("MAIL_BRAND_NAME", "Muteeb Labs")
 SIGN_NAME = os.getenv("MAIL_SIGN_NAME", "Muteeb Ur Rehman")
 SIGN_TITLE = os.getenv("MAIL_SIGN_TITLE", "Full Stack Developer & AI Engineer")
-SITE_URL = (os.getenv("PUBLIC_SITE_URL") or "https://muteeblabs.uk").rstrip("/")
-CONTACT_EMAIL = (os.getenv("EMAIL_FROM") or os.getenv("EMAIL_TO") or "business@muteeblabs.uk").strip()
+SITE_URL = (os.getenv("PUBLIC_SITE_URL") or "https://muteeblabs.com").rstrip("/")
+CONTACT_EMAIL = (os.getenv("EMAIL_FROM") or os.getenv("EMAIL_TO") or "info@muteeblabs.com").strip()
 
 
 def esc(value: object) -> str:

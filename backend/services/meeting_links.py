@@ -17,7 +17,7 @@ def get_meeting_link() -> tuple[str, str]:
         label = "Google Meet" if "meet.google" in link else "Zoom"
         return link, label
 
-    site = (os.getenv("PUBLIC_SITE_URL") or "https://muteeblabs.uk").rstrip("/")
+    site = (os.getenv("PUBLIC_SITE_URL") or "https://muteeblabs.com").rstrip("/")
     return (
         f"{site}/contact",
         "Email follow-up",

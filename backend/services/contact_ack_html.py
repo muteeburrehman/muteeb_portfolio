@@ -26,10 +26,10 @@ _ACCENT_BAR = f"linear-gradient(90deg,{_SKY},{_PURPLE})"
 _BRAND = os.getenv("MAIL_BRAND_NAME", "Muteeb Labs")
 _SIGN_NAME = os.getenv("MAIL_SIGN_NAME", "Muteeb Ur Rehman")
 _SIGN_TITLE = os.getenv("MAIL_SIGN_TITLE", "Full Stack Developer & AI Engineer")
-_SITE_URL = (os.getenv("PUBLIC_SITE_URL") or "https://muteeblabs.uk").rstrip("/")
+_SITE_URL = (os.getenv("PUBLIC_SITE_URL") or "https://muteeblabs.com").rstrip("/")
 _REPLY_WINDOW = os.getenv("MAIL_REPLY_WINDOW", "usually within one day")
 _CONTACT_EMAIL = (
-    os.getenv("EMAIL_FROM") or os.getenv("EMAIL_TO") or "business@muteeblabs.uk"
+    os.getenv("EMAIL_FROM") or os.getenv("EMAIL_TO") or "info@muteeblabs.com"
 ).strip()
 
 

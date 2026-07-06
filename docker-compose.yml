@@ -8,7 +8,7 @@
 #   docker compose up -d --build
 #
 # Verify:
-#   curl -sS https://muteeblabs.uk/healthz   # → ok
+#   curl -sS https://muteeblabs.com/healthz   # → ok
 
 name: muteeb-portfolio
 
@@ -22,8 +22,8 @@ services:
       - "443:443"
       - "443:443/udp"
     environment:
-      SITE_DOMAIN: ${SITE_DOMAIN:-muteeblabs.uk}
-      ACME_EMAIL: ${ACME_EMAIL:-business@muteeblabs.uk}
+      SITE_DOMAIN: ${SITE_DOMAIN:-muteeblabs.com}
+      ACME_EMAIL: ${ACME_EMAIL:-info@muteeblabs.com}
     volumes:
       - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
@@ -45,7 +45,7 @@ services:
       context: .
       target: web
       args:
-        VITE_SITE_URL: ${PUBLIC_SITE_URL:-https://muteeblabs.uk}
+        VITE_SITE_URL: ${PUBLIC_SITE_URL:-https://muteeblabs.com}
         VITE_CONTACT_API_URL: ${VITE_CONTACT_API_URL:-/api/contact}
     image: muteeb-portfolio/web:latest
     container_name: muteeb-web
@@ -76,8 +76,8 @@ services:
       - path: .env
         required: false
     environment:
-      PUBLIC_SITE_URL: ${PUBLIC_SITE_URL:-https://muteeblabs.uk}
-      CORS_ORIGINS: ${CORS_ORIGINS:-https://muteeblabs.uk,http://localhost:5173}
+      PUBLIC_SITE_URL: ${PUBLIC_SITE_URL:-https://muteeblabs.com}
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://muteeblabs.com,http://localhost:5173}
       MAIL_BRAND_NAME: ${MAIL_BRAND_NAME:-Muteeb Labs}
       EMAIL_HOST: ${EMAIL_HOST:-}
       EMAIL_PORT: ${EMAIL_PORT:-587}

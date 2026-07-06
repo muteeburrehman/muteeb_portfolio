@@ -63,8 +63,8 @@ Add these to **`.env`** in `/home/muteeb/muteeb_portfolio/.env`:
 |----------|---------|----------------|
 | `EMAIL_USER` | `muteebworkinfo@gmail.com` | Your Gmail account |
 | `EMAIL_PASS` | 16-char app password | [Google App Passwords](https://myaccount.google.com/apppasswords) (2FA required) |
-| `EMAIL_FROM` | `business@muteeblabs.uk` | Gmail → Settings → **Send mail as** (verify alias) |
-| `EMAIL_TO` | `business@muteeblabs.uk` | Inbox for leads and bookings |
+| `EMAIL_FROM` | `info@muteeblabs.com` | Gmail → Settings → **Send mail as** (verify alias) |
+| `EMAIL_TO` | `info@muteeblabs.com` | Inbox for leads and bookings |
 | `EMAIL_HOST` | `smtp.gmail.com` | Fixed |
 | `EMAIL_PORT` | `587` | Fixed |
 | `EMAIL_USE_TLS` | `True` | Fixed |
@@ -105,8 +105,8 @@ EMAIL_PORT=587
 EMAIL_USE_TLS=True
 EMAIL_USER=muteebworkinfo@gmail.com
 EMAIL_PASS=paste-your-gmail-app-password-here
-EMAIL_FROM=business@muteeblabs.uk
-EMAIL_TO=business@muteeblabs.uk
+EMAIL_FROM=info@muteeblabs.com
+EMAIL_TO=info@muteeblabs.com
 MEETING_LINK=https://zoom.us/j/YOUR_PERSONAL_ROOM_ID
 BOOKING_TIMEZONE=Asia/Karachi
 ```
@@ -266,7 +266,7 @@ flowchart TD
 | **IF** | Skip bad data | `{{ $json.email }}` is not empty |
 | **Slack** | Team alert | Channel `#sales`; message with name, time, notes |
 | **Google Sheets** | Simple CRM log | Sheet columns: Date, Name, Email, Company, Starts at, Meeting link, Booking ID |
-| **Gmail / SMTP** | Extra email | To `business@muteeblabs.uk` if you want duplicate of API email |
+| **Gmail / SMTP** | Extra email | To `info@muteeblabs.com` if you want duplicate of API email |
 
 **Slack message template (example):**
 
@@ -351,7 +351,7 @@ Also in **Docker**: `docker-compose.yml` already passes `BOOKING_ADMIN_KEY` from
 **Production:**
 
 ```text
-https://muteeblabs.uk/api/booking/stats?key=PASTE_YOUR_BOOKING_ADMIN_KEY_HERE
+https://muteeblabs.com/api/booking/stats?key=PASTE_YOUR_BOOKING_ADMIN_KEY_HERE
 ```
 
 **Local** (API on port 8000):
@@ -388,8 +388,8 @@ Stats are **API-only** (browser or curl). For a full dashboard you would either:
 
 ```env
 # --- Site ---
-PUBLIC_SITE_URL=https://muteeblabs.uk
-CORS_ORIGINS=https://muteeblabs.uk,http://localhost:5173
+PUBLIC_SITE_URL=https://muteeblabs.com
+CORS_ORIGINS=https://muteeblabs.com,http://localhost:5173
 MAIL_BRAND_NAME=Muteeb Labs
 
 # --- REQUIRED: Email ---
@@ -398,8 +398,8 @@ EMAIL_PORT=587
 EMAIL_USE_TLS=True
 EMAIL_USER=muteebworkinfo@gmail.com
 EMAIL_PASS=your-gmail-app-password
-EMAIL_FROM=business@muteeblabs.uk
-EMAIL_TO=business@muteeblabs.uk
+EMAIL_FROM=info@muteeblabs.com
+EMAIL_TO=info@muteeblabs.com
 SEND_CLIENT_ACK=True
 
 # --- REQUIRED: Booking meeting ---
@@ -464,7 +464,7 @@ LOG_LEVEL=INFO
 
 - [ ] Same `.env` on server  
 - [ ] `docker compose up -d --build`  
-- [ ] Test `https://muteeblabs.uk/book`  
+- [ ] Test `https://muteeblabs.com/book`  
 
 ---
 

@@ -15,8 +15,8 @@ These should already be in your `.env` for the site to send mail.
 |----------|------------|-----------------|
 | `EMAIL_USER` | Gmail address used to log in to SMTP | Your Gmail (e.g. `muteebworkinfo@gmail.com`) |
 | `EMAIL_PASS` | Gmail **App Password** (16 characters) | [Google App Passwords](https://myaccount.google.com/apppasswords) — 2FA must be on |
-| `EMAIL_FROM` | Address shown as sender | `business@muteeblabs.uk` (verify in Gmail → Send mail as) |
-| `EMAIL_TO` | Inbox that receives leads & bookings | `business@muteeblabs.uk` |
+| `EMAIL_FROM` | Address shown as sender | `info@muteeblabs.com` (verify in Gmail → Send mail as) |
+| `EMAIL_TO` | Inbox that receives leads & bookings | `info@muteeblabs.com` |
 | `EMAIL_HOST` | SMTP server | `smtp.gmail.com` |
 | `EMAIL_PORT` | SMTP port | `587` |
 | `EMAIL_USE_TLS` | Use STARTTLS | `True` |
@@ -83,7 +83,7 @@ Create an n8n workflow: **Webhook** trigger → your actions. No n8n account cos
 
 Then open (replace domain and key):
 
-`https://muteeblabs.uk/api/booking/stats?key=YOUR_KEY`
+`https://muteeblabs.com/api/booking/stats?key=YOUR_KEY`
 
 ---
 
@@ -136,7 +136,7 @@ Standalone stack — see [deploy/DEPLOY.md](../deploy/DEPLOY.md).
 ```bash
 cp .env.example .env   # SITE_DOMAIN, ACME_EMAIL, EMAIL_*, MEETING_LINK
 docker compose up -d --build
-curl -sS https://muteeblabs.uk/healthz
+curl -sS https://muteeblabs.com/healthz
 ```
 
 Ensure `.env` on the server includes at least:
