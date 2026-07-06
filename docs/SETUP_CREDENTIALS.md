@@ -83,7 +83,7 @@ Create an n8n workflow: **Webhook** trigger → your actions. No n8n account cos
 
 Then open (replace domain and key):
 
-`https://dev.muteeblabs.uk/api/booking/stats?key=YOUR_KEY`
+`https://muteeblabs.uk/api/booking/stats?key=YOUR_KEY`
 
 ---
 
@@ -136,7 +136,7 @@ Standalone stack — see [deploy/DEPLOY.md](../deploy/DEPLOY.md).
 ```bash
 cp .env.example .env   # SITE_DOMAIN, ACME_EMAIL, EMAIL_*, MEETING_LINK
 docker compose up -d --build
-curl -sS https://dev.muteeblabs.uk/healthz
+curl -sS https://muteeblabs.uk/healthz
 ```
 
 Ensure `.env` on the server includes at least:

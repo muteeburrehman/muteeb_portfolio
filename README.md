@@ -31,4 +31,4 @@ Stack:
 | `muteeb-web` | *(internal)* | Static SPA + nginx API proxy |
 | `muteeb-api` | *(internal)* | FastAPI contact & booking |
 
-Verify: `curl -sS https://dev.muteeblabs.uk/healthz` → `ok`
+Verify: `curl -sS https://muteeblabs.uk/healthz` → `ok`

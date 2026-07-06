@@ -43,7 +43,7 @@ Standalone Docker stack for **Muteeb Portfolio** — no shared reverse proxy or 
 
 ## Prerequisites
 
-1. **DNS:** `SITE_DOMAIN` (e.g. `dev.muteeblabs.uk`) → VPS public IP (Cloudflare proxied is fine).
+1. **DNS:** `muteeblabs.uk` and `www.muteeblabs.uk` → VPS public IP (Cloudflare proxied is fine). `dev.muteeblabs.uk` can stay pointed at the same IP — it redirects to the apex domain.
 2. **Firewall:** allow inbound **80** and **443** to the VPS.
 3. **Nothing else** should bind host ports 80/443 (`ss -tlnp | grep -E ':80|:443'` should show `docker-proxy` after deploy).
 
@@ -52,9 +52,9 @@ Standalone Docker stack for **Muteeb Portfolio** — no shared reverse proxy or 
 ```bash
 cp .env.example .env
 # Edit .env — at minimum:
-#   SITE_DOMAIN=dev.muteeblabs.uk
+#   SITE_DOMAIN=muteeblabs.uk
 #   ACME_EMAIL=business@muteeblabs.uk
-#   PUBLIC_SITE_URL=https://dev.muteeblabs.uk
+#   PUBLIC_SITE_URL=https://muteeblabs.uk
 #   EMAIL_* for contact/booking
 
 docker compose down
@@ -66,8 +66,8 @@ docker compose up -d --build
 ```bash
 docker compose ps
 ss -tlnp | grep -E ':80|:443'
-curl -sS http://127.0.0.1/healthz -H 'Host: dev.muteeblabs.uk'   # ok
-curl -sS https://dev.muteeblabs.uk/healthz                         # ok
+curl -sS http://127.0.0.1/healthz -H 'Host: muteeblabs.uk'   # ok
+curl -sS https://muteeblabs.uk/healthz                         # ok
 ```
 
 Expected containers: `muteeb-caddy`, `muteeb-web`, `muteeb-api` — all healthy.

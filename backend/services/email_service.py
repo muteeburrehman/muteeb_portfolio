@@ -60,7 +60,7 @@ def _build_plain_body(data: ContactSubmission) -> str:
 def _build_ack_plain_body(data: ContactSubmission) -> str:
     first_name = (data.name or "").strip().split()[0] if data.name else "there"
     reply_window = os.getenv("MAIL_REPLY_WINDOW", "usually within one day")
-    site_url = (os.getenv("PUBLIC_SITE_URL") or "https://dev.muteeblabs.uk").rstrip("/")
+    site_url = (os.getenv("PUBLIC_SITE_URL") or "https://muteeblabs.uk").rstrip("/")
     sign_name = os.getenv("MAIL_SIGN_NAME", "Muteeb Ur Rehman")
     sign_title = os.getenv("MAIL_SIGN_TITLE", "Full Stack Developer & AI Engineer")
     return (

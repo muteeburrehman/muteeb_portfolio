@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dev.muteeblabs.uk/sitemap.xml
+Sitemap: https://muteeblabs.uk/sitemap.xml

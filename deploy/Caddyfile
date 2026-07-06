@@ -1,13 +1,13 @@
 # Edge reverse proxy — terminates TLS and forwards to the internal web container.
 # Environment variables (set in .env / docker-compose):
-#   SITE_DOMAIN   e.g. dev.muteeblabs.uk
+#   SITE_DOMAIN   e.g. muteeblabs.uk
 #   ACME_EMAIL    e.g. business@muteeblabs.uk (Let's Encrypt notifications)
 
 {
 	admin off
 }
 
-{$SITE_DOMAIN:dev.muteeblabs.uk} {
+{$SITE_DOMAIN:muteeblabs.uk} {
 	encode gzip zstd
 
 	header {
@@ -28,4 +28,12 @@
 		header_up X-Forwarded-For {remote_host}
 		header_up X-Forwarded-Proto {scheme}
 	}
+}
+
+www.{$SITE_DOMAIN:muteeblabs.uk} {
+	redir https://{$SITE_DOMAIN:muteeblabs.uk}{uri} permanent
+}
+
+dev.muteeblabs.uk {
+	redir https://{$SITE_DOMAIN:muteeblabs.uk}{uri} permanent
 }

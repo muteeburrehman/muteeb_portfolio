@@ -6,7 +6,7 @@ import os
 
 
 def public_site_base() -> str:
-    return (os.getenv("PUBLIC_SITE_URL") or "https://dev.muteeblabs.uk").strip().rstrip("/")
+    return (os.getenv("PUBLIC_SITE_URL") or "https://muteeblabs.uk").strip().rstrip("/")
 
 
 def booking_cancel_url(cancel_token: str) -> str:

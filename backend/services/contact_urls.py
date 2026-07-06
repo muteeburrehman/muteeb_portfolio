@@ -6,6 +6,6 @@ import os
 
 
 def public_contact_form_url() -> str:
-    raw = os.getenv("PUBLIC_SITE_URL") or "https://dev.muteeblabs.uk"
+    raw = os.getenv("PUBLIC_SITE_URL") or "https://muteeblabs.uk"
     base = raw.strip().rstrip("/")
     return f"{base}/contact"

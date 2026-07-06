@@ -351,7 +351,7 @@ Also in **Docker**: `docker-compose.yml` already passes `BOOKING_ADMIN_KEY` from
 **Production:**
 
 ```text
-https://dev.muteeblabs.uk/api/booking/stats?key=PASTE_YOUR_BOOKING_ADMIN_KEY_HERE
+https://muteeblabs.uk/api/booking/stats?key=PASTE_YOUR_BOOKING_ADMIN_KEY_HERE
 ```
 
 **Local** (API on port 8000):
@@ -388,8 +388,8 @@ Stats are **API-only** (browser or curl). For a full dashboard you would either:
 
 ```env
 # --- Site ---
-PUBLIC_SITE_URL=https://dev.muteeblabs.uk
-CORS_ORIGINS=https://dev.muteeblabs.uk,http://localhost:5173
+PUBLIC_SITE_URL=https://muteeblabs.uk
+CORS_ORIGINS=https://muteeblabs.uk,http://localhost:5173
 MAIL_BRAND_NAME=Muteeb Labs
 
 # --- REQUIRED: Email ---
@@ -464,7 +464,7 @@ LOG_LEVEL=INFO
 
 - [ ] Same `.env` on server  
 - [ ] `docker compose up -d --build`  
-- [ ] Test `https://dev.muteeblabs.uk/book`  
+- [ ] Test `https://muteeblabs.uk/book`  
 
 ---
 
