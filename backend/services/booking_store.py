@@ -261,6 +261,17 @@ def admin_cancel_booking(booking_id: str) -> BookingRecord:
     return record
 
 
+def delete_booking(booking_id: str) -> None:
+    """Permanently remove a booking record (frees the slot). No client email."""
+    with _connect() as conn:
+        _ensure_schema(conn)
+        cur = conn.execute("DELETE FROM bookings WHERE id = ?", (booking_id.strip(),))
+        if cur.rowcount == 0:
+            raise LookupError("Booking not found.")
+        conn.commit()
+    logger.info("Booking deleted by admin: %s", booking_id.strip())
+
+
 def cancel_booking(*, booking_id: str | None = None, cancel_token: str | None = None, email: str | None = None) -> BookingRecord:
     with _connect() as conn:
         _ensure_schema(conn)

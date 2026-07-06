@@ -189,11 +189,22 @@ def admin_notification_recipients(*, fallback_user: str | None = None) -> list[s
     return recipients
 
 
-def send_contact_notification(data: ContactSubmission) -> None:
+def send_contact_notification(
+    data: ContactSubmission,
+    *,
+    smtp: smtplib.SMTP | None = None,
+    email_user: str | None = None,
+) -> None:
     """Send the styled notification to the inbox owner (admin)."""
-    smtp, email_user, _ = _open_smtp()
+    own_connection = smtp is None
+    if own_connection:
+        smtp, email_user, _ = _open_smtp()
+    elif not email_user:
+        email_user = os.getenv("EMAIL_USER") or ""
+
+    assert smtp is not None
     try:
-        from_addr = _from_addr(email_user)
+        from_addr = _from_addr(email_user or "")
         recipients = admin_notification_recipients(fallback_user=email_user)
         if not recipients:
             raise RuntimeError("No admin notification recipients configured (EMAIL_TO / EMAIL_ADMIN_COPY)")
@@ -215,19 +226,31 @@ def send_contact_notification(data: ContactSubmission) -> None:
             "Sending admin notification auth=%s from=%s to=%s subject=%s",
             email_user, from_addr, recipients, mime["Subject"],
         )
-        _send_mime(smtp, email_user, recipients, mime)
+        _send_mime(smtp, email_user or "", recipients, mime)
     finally:
-        try:
-            smtp.quit()
-        except smtplib.SMTPException:
-            pass
+        if own_connection:
+            try:
+                smtp.quit()
+            except smtplib.SMTPException:
+                pass
 
 
-def send_contact_acknowledgment(data: ContactSubmission) -> None:
+def send_contact_acknowledgment(
+    data: ContactSubmission,
+    *,
+    smtp: smtplib.SMTP | None = None,
+    email_user: str | None = None,
+) -> None:
     """Send a styled 'thanks for reaching out' email to the form submitter."""
-    smtp, email_user, _ = _open_smtp()
+    own_connection = smtp is None
+    if own_connection:
+        smtp, email_user, _ = _open_smtp()
+    elif not email_user:
+        email_user = os.getenv("EMAIL_USER") or ""
+
+    assert smtp is not None
     try:
-        from_addr = _from_addr(email_user)
+        from_addr = _from_addr(email_user or "")
         client_email = str(data.email).strip()
         if not client_email:
             raise RuntimeError("Cannot send acknowledgment: submitter email is empty")
@@ -247,12 +270,13 @@ def send_contact_acknowledgment(data: ContactSubmission) -> None:
             "Sending client acknowledgment auth=%s from=%s to=%s",
             email_user, from_addr, client_email,
         )
-        _send_mime(smtp, email_user, [client_email], mime)
+        _send_mime(smtp, email_user or "", [client_email], mime)
     finally:
-        try:
-            smtp.quit()
-        except smtplib.SMTPException:
-            pass
+        if own_connection:
+            try:
+                smtp.quit()
+            except smtplib.SMTPException:
+                pass
 
 
 def send_raw_email(
@@ -301,26 +325,24 @@ def send_raw_email(
 
 def process_contact_submission(data: ContactSubmission) -> None:
     """
-    Full contact pipeline:
-
-    1. Send admin notification (required — failure raises).
-    2. Optionally send client acknowledgment (best-effort — failure logged,
-       does not bubble up so the form still appears successful to the visitor).
+    Full contact email pipeline (admin notification + optional client ack).
+    Uses one SMTP login when both messages are sent.
     """
     try:
-        send_contact_notification(data)
+        with smtp_connection() as (smtp, email_user):
+            send_contact_notification(data, smtp=smtp, email_user=email_user)
+
+            if not _env_bool("SEND_CLIENT_ACK", True):
+                logger.info("SEND_CLIENT_ACK disabled — skipping client acknowledgment")
+                return
+
+            try:
+                send_contact_acknowledgment(data, smtp=smtp, email_user=email_user)
+            except Exception:  # noqa: BLE001 — never let ack failures fail admin notify
+                logger.exception("Client acknowledgment send failed (admin notification OK)")
     except smtplib.SMTPAuthenticationError:
         logger.error("SMTP authentication failed — check EMAIL_USER / EMAIL_PASS")
         raise
     except (OSError, smtplib.SMTPException):
         logger.exception("Admin notification SMTP send failed")
         raise
-
-    if not _env_bool("SEND_CLIENT_ACK", True):
-        logger.info("SEND_CLIENT_ACK disabled — skipping client acknowledgment")
-        return
-
-    try:
-        send_contact_acknowledgment(data)
-    except Exception:  # noqa: BLE001 — never let ack failures fail the request
-        logger.exception("Client acknowledgment send failed (admin notification OK)")

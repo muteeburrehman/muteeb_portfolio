@@ -16,18 +16,23 @@ import {
   MicIcon,
   PrintIcon,
   RefreshIcon,
+  TrashIcon,
+  XCircleIcon,
 } from '../components/icons'
 import { Reveal } from '../components/ui/Reveal'
 import { useAdminSession } from '../hooks/useAdminSession'
 import { SITE_BRAND } from '../data/portfolio'
 import {
   cancelAdminBooking,
+  deleteAdminBooking,
+  deleteAdminContact,
   downloadContactsCsv,
   fetchAdminAnalytics,
   fetchAdminBookings,
   fetchAdminContacts,
   fetchAdminOverview,
   formatAdminDateTime,
+  formatAdminDateTimeCompact,
   markContactReplied,
   type AdminAnalytics,
   type AdminBooking,
@@ -60,6 +65,20 @@ function StatCard({
         <p className="admin-stat-value">{value}</p>
       </div>
     </div>
+  )
+}
+
+function AdminBusySpinner() {
+  return (
+    <svg aria-hidden="true" className="admin-icon-btn__spinner" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" opacity="0.25" />
+      <path
+        d="M21 12a9 9 0 00-9-9"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
   )
 }
 
@@ -263,6 +282,67 @@ export function AdminDashboardPage() {
           ])
         } catch (err) {
           setError(err instanceof Error ? err.message : 'Cancel failed')
+        } finally {
+          setBusyId(null)
+        }
+      },
+    })
+  }
+
+  function handleDeleteBooking(booking: AdminBooking) {
+    setConfirm({
+      title: 'Delete booking permanently?',
+      message: (
+        <>
+          Remove the booking for <span className="admin-modal__client">{booking.name}</span> from your
+          dashboard? The time slot will reopen. <strong>No email</strong> is sent to the client — use
+          Cancel instead if they should be notified.
+        </>
+      ),
+      confirmLabel: 'Delete booking',
+      cancelLabel: 'Keep',
+      danger: true,
+      onConfirm: async () => {
+        setBusyId(booking.id)
+        setError(null)
+        try {
+          await deleteAdminBooking(booking.id)
+          setConfirm(null)
+          await Promise.all([
+            loadOverview(),
+            loadBookings(),
+            tab === 'overview' ? loadAnalytics() : Promise.resolve(),
+          ])
+        } catch (err) {
+          setError(err instanceof Error ? err.message : 'Delete failed')
+        } finally {
+          setBusyId(null)
+        }
+      },
+    })
+  }
+
+  function handleDeleteContact(contact: AdminContact) {
+    setConfirm({
+      title: 'Delete contact?',
+      message: (
+        <>
+          Permanently delete the message from{' '}
+          <span className="admin-modal__client">{contact.name}</span>? This cannot be undone.
+        </>
+      ),
+      confirmLabel: 'Delete contact',
+      cancelLabel: 'Keep',
+      danger: true,
+      onConfirm: async () => {
+        setBusyId(contact.id)
+        setError(null)
+        try {
+          await deleteAdminContact(contact.id)
+          setConfirm(null)
+          await Promise.all([loadOverview(), loadContacts()])
+        } catch (err) {
+          setError(err instanceof Error ? err.message : 'Delete failed')
         } finally {
           setBusyId(null)
         }
@@ -484,7 +564,15 @@ export function AdminDashboardPage() {
               ) : (
                 <>
                   <div className="admin-table-wrap">
-                    <table className="admin-table">
+                    <table className="admin-table admin-table--contacts">
+                      <colgroup>
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col className="admin-table__col-actions" />
+                      </colgroup>
                       <thead>
                         <tr>
                           <th>Name</th>
@@ -492,21 +580,42 @@ export function AdminDashboardPage() {
                           <th>Topic</th>
                           <th>Received</th>
                           <th>Status</th>
-                          <th className="no-print">Action</th>
+                          <th className="no-print admin-table__th-actions">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {contacts.map((row) => (
                           <tr key={row.id}>
-                            <td data-label="Name">{row.name}</td>
-                            <td data-label="Email">
-                              <a href={`mailto:${row.email}`} className="admin-link">
+                            <td data-label="Name" className="admin-table__clip-cell">
+                              <span className="admin-table__clip" title={row.name}>
+                                {row.name}
+                              </span>
+                            </td>
+                            <td data-label="Email" className="admin-table__clip-cell">
+                              <a
+                                href={`mailto:${row.email}`}
+                                className="admin-link admin-table__clip"
+                                title={row.email}
+                              >
                                 {row.email}
                               </a>
                             </td>
-                            <td data-label="Topic">{row.topic || row.service || '—'}</td>
-                            <td data-label="Received">{formatAdminDateTime(row.created_at)}</td>
-                            <td data-label="Status">
+                            <td data-label="Topic" className="admin-table__clip-cell">
+                              <span
+                                className="admin-table__clip"
+                                title={row.topic || row.service || '—'}
+                              >
+                                {row.topic || row.service || '—'}
+                              </span>
+                            </td>
+                            <td
+                              data-label="Received"
+                              className="admin-table__when admin-table__when--compact"
+                              title={formatAdminDateTime(row.created_at)}
+                            >
+                              {formatAdminDateTimeCompact(row.created_at)}
+                            </td>
+                            <td data-label="Status" className="admin-table__status">
                               <span
                                 className={
                                   row.replied
@@ -518,23 +627,41 @@ export function AdminDashboardPage() {
                               </span>
                             </td>
                             <td data-label="Action" className="no-print admin-table__actions">
-                              {!row.replied && (
+                              <div className="admin-table__action-toolbar" role="group" aria-label="Contact actions">
+                                {!row.replied ? (
+                                  <button
+                                    type="button"
+                                    className="admin-icon-btn admin-icon-btn--ok"
+                                    disabled={busyId === row.id}
+                                    title="Mark replied"
+                                    aria-label="Mark replied"
+                                    onClick={() => void handleMarkReplied(row.id)}
+                                  >
+                                    {busyId === row.id ? <AdminBusySpinner /> : <CheckIcon />}
+                                  </button>
+                                ) : (
+                                  <span className="admin-icon-btn--spacer" aria-hidden="true" />
+                                )}
                                 <button
                                   type="button"
-                                  className="admin-chip-btn"
-                                  disabled={busyId === row.id}
-                                  onClick={() => void handleMarkReplied(row.id)}
+                                  className="admin-icon-btn admin-icon-btn--ghost"
+                                  title="Email contact"
+                                  aria-label="Email contact"
+                                  onClick={() => openComposeForContact(row)}
                                 >
-                                  {busyId === row.id ? 'Saving…' : 'Mark replied'}
+                                  <MailIcon />
                                 </button>
-                              )}
-                              <button
-                                type="button"
-                                className="admin-chip-btn admin-chip-btn--ghost"
-                                onClick={() => openComposeForContact(row)}
-                              >
-                                Email
-                              </button>
+                                <button
+                                  type="button"
+                                  className="admin-icon-btn admin-icon-btn--danger"
+                                  disabled={busyId === row.id}
+                                  title="Delete contact"
+                                  aria-label="Delete contact"
+                                  onClick={() => handleDeleteContact(row)}
+                                >
+                                  <TrashIcon />
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))}
@@ -568,14 +695,21 @@ export function AdminDashboardPage() {
               />
             ) : (
               <div className="admin-table-wrap">
-              <table className="admin-table">
+              <table className="admin-table admin-table--bookings">
+                <colgroup>
+                  <col />
+                  <col />
+                  <col />
+                  <col />
+                  <col className="admin-table__col-actions" />
+                </colgroup>
                 <thead>
                   <tr>
                     <th>Client</th>
                     <th>When</th>
                     <th>Meeting</th>
                     <th>Status</th>
-                    <th className="no-print">Action</th>
+                    <th className="no-print admin-table__th-actions">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -592,8 +726,14 @@ export function AdminDashboardPage() {
                           {row.notes && <span className="admin-client-cell__notes">{row.notes}</span>}
                         </div>
                       </td>
-                      <td data-label="When">{formatAdminDateTime(row.starts_at)}</td>
-                      <td data-label="Meeting">
+                      <td
+                        data-label="When"
+                        className="admin-table__when admin-table__when--compact"
+                        title={formatAdminDateTime(row.starts_at)}
+                      >
+                        {formatAdminDateTimeCompact(row.starts_at)}
+                      </td>
+                      <td data-label="Meeting" className="admin-table__meeting">
                         <a
                           href={row.meeting_link}
                           target="_blank"
@@ -603,7 +743,7 @@ export function AdminDashboardPage() {
                           Join meeting
                         </a>
                       </td>
-                      <td data-label="Status">
+                      <td data-label="Status" className="admin-table__status">
                         <span
                           className={
                             row.status === 'confirmed'
@@ -614,17 +754,37 @@ export function AdminDashboardPage() {
                           {row.status}
                         </span>
                       </td>
-                      <td data-label="Action" className="no-print">
-                        {row.status === 'confirmed' && (
+                      <td data-label="Action" className="no-print admin-table__actions">
+                        <div
+                          className="admin-table__action-toolbar admin-table__action-toolbar--pair"
+                          role="group"
+                          aria-label="Booking actions"
+                        >
+                          {row.status === 'confirmed' ? (
+                            <button
+                              type="button"
+                              className="admin-icon-btn admin-icon-btn--danger"
+                              disabled={busyId === row.id}
+                              title="Cancel booking"
+                              aria-label="Cancel booking"
+                              onClick={() => handleCancelBooking(row)}
+                            >
+                              {busyId === row.id ? <AdminBusySpinner /> : <XCircleIcon />}
+                            </button>
+                          ) : (
+                            <span className="admin-icon-btn--spacer" aria-hidden="true" />
+                          )}
                           <button
                             type="button"
-                            className="admin-chip-btn admin-chip-btn--danger"
+                            className="admin-icon-btn admin-icon-btn--ghost"
                             disabled={busyId === row.id}
-                            onClick={() => void handleCancelBooking(row)}
+                            title="Delete booking"
+                            aria-label="Delete booking"
+                            onClick={() => handleDeleteBooking(row)}
                           >
-                            {busyId === row.id ? 'Cancelling…' : 'Cancel'}
+                            <TrashIcon />
                           </button>
-                        )}
+                        </div>
                       </td>
                     </tr>
                   ))}

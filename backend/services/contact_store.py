@@ -173,6 +173,16 @@ def mark_contact_replied(contact_id: str) -> ContactRecord | None:
     )
 
 
+def delete_contact(contact_id: str) -> None:
+    with connect() as conn:
+        ensure_contacts_schema(conn)
+        cur = conn.execute("DELETE FROM contacts WHERE id = ?", (contact_id.strip(),))
+        if cur.rowcount == 0:
+            raise LookupError("Contact not found.")
+        conn.commit()
+    logger.info("Contact deleted by admin: %s", contact_id.strip())
+
+
 def contact_counts() -> dict[str, int]:
     with connect() as conn:
         ensure_contacts_schema(conn)

@@ -20,6 +20,7 @@ from schemas.admin import (
     AdminContactItem,
     AdminContactListResponse,
     AdminContactPatchResponse,
+    AdminDeleteResponse,
     AdminOverviewResponse,
     AdminSendMessageRequest,
     AdminSendMessageResponse,
@@ -28,9 +29,9 @@ from schemas.admin import (
 from services.admin_auth import verify_admin
 from services.admin_message_service import send_admin_message
 from services.email_service import smtp_delivery_detail
-from services.booking_service import admin_cancel_booking
+from services.booking_service import admin_cancel_booking, admin_delete_booking
 from services.booking_store import booking_counts, list_bookings
-from services.contact_store import contact_counts, list_contacts, mark_contact_replied
+from services.contact_store import contact_counts, delete_contact, list_contacts, mark_contact_replied
 from services.funnel_analytics import funnel_daily_analytics
 
 logger = logging.getLogger(__name__)
@@ -158,6 +159,40 @@ async def admin_cancel_discovery_call(
         booking=_booking_item(record),
         detail="Booking cancelled. The client was emailed and the slot is open again.",
     )
+
+
+@router.delete("/bookings/{booking_id}", response_model=AdminDeleteResponse)
+async def admin_delete_discovery_call(
+    booking_id: str,
+    _email: Annotated[str, Depends(require_admin)],
+) -> AdminDeleteResponse:
+    try:
+        await asyncio.to_thread(admin_delete_booking, booking_id)
+    except LookupError:
+        raise HTTPException(status_code=404, detail="Booking not found") from None
+    except Exception:
+        logger.exception("Admin booking delete failed for %s", booking_id)
+        raise HTTPException(status_code=503, detail="Could not delete booking.") from None
+
+    return AdminDeleteResponse(
+        detail="Booking permanently deleted. The time slot is open again (no email sent).",
+    )
+
+
+@router.delete("/contacts/{contact_id}", response_model=AdminDeleteResponse)
+async def admin_delete_contact(
+    contact_id: str,
+    _email: Annotated[str, Depends(require_admin)],
+) -> AdminDeleteResponse:
+    try:
+        await asyncio.to_thread(delete_contact, contact_id)
+    except LookupError:
+        raise HTTPException(status_code=404, detail="Contact not found") from None
+    except Exception:
+        logger.exception("Admin contact delete failed for %s", contact_id)
+        raise HTTPException(status_code=503, detail="Could not delete contact.") from None
+
+    return AdminDeleteResponse(detail="Contact permanently deleted.")
 
 
 @router.post("/messages", response_model=AdminSendMessageResponse)

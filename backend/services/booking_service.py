@@ -19,6 +19,7 @@ from services.booking_store import (
     BookingRecord,
     admin_cancel_booking as store_admin_cancel_booking,
     cancel_booking as store_cancel_booking,
+    delete_booking,
     get_booking,
     get_booking_by_token,
     insert_booking,
@@ -143,6 +144,10 @@ def admin_cancel_booking(booking_id: str) -> BookingRecord:
     record = store_admin_cancel_booking(booking_id)
     schedule_booking_cancelled(record.id)
     return record
+
+
+def admin_delete_booking(booking_id: str) -> None:
+    delete_booking(booking_id)
 
 
 def cancel_booking(

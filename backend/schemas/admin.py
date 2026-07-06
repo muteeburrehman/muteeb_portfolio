@@ -80,6 +80,11 @@ class AdminBookingCancelResponse(BaseModel):
     detail: str
 
 
+class AdminDeleteResponse(BaseModel):
+    ok: bool = True
+    detail: str
+
+
 class AdminSendMessageRequest(BaseModel):
     to_email: EmailStr
     subject: str = Field(..., min_length=1, max_length=200)

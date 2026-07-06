@@ -110,6 +110,22 @@ export async function cancelAdminBooking(bookingId: string): Promise<AdminBookin
   return body.booking as AdminBooking
 }
 
+export async function deleteAdminBooking(bookingId: string): Promise<void> {
+  const res = await fetch(adminPath(`/bookings/${bookingId}`), {
+    method: 'DELETE',
+    headers: adminHeaders(),
+  })
+  if (!res.ok) throw new Error(await parseError(res))
+}
+
+export async function deleteAdminContact(contactId: string): Promise<void> {
+  const res = await fetch(adminPath(`/contacts/${contactId}`), {
+    method: 'DELETE',
+    headers: adminHeaders(),
+  })
+  if (!res.ok) throw new Error(await parseError(res))
+}
+
 export async function sendAdminMessage(payload: AdminComposePayload): Promise<void> {
   const res = await fetch(adminPath('/messages'), {
     method: 'POST',
@@ -207,6 +223,16 @@ export async function downloadContactsCsv(status: 'all' | 'pending' | 'replied' 
 export function formatAdminDateTime(iso: string): string {
   return new Date(iso).toLocaleString(undefined, {
     year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  })
+}
+
+/** Shorter label for dense admin tables (avoids column bleed). */
+export function formatAdminDateTimeCompact(iso: string): string {
+  return new Date(iso).toLocaleString(undefined, {
     month: 'short',
     day: 'numeric',
     hour: 'numeric',
