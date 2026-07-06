@@ -308,31 +308,33 @@ def funnel_stats() -> dict[str, int]:
 
 
 def booking_counts() -> dict[str, int]:
-    now = datetime.now(timezone.utc).isoformat()
-    thirty_days_ago = (datetime.now(timezone.utc) - timedelta(days=30)).isoformat()
+    now = datetime.now(timezone.utc)
+    thirty_days_ago = now - timedelta(days=30)
 
     with _connect() as conn:
-        row = conn.execute(
-            """
-            SELECT
-                SUM(CASE WHEN status = 'confirmed' THEN 1 ELSE 0 END) AS confirmed,
-                SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) AS cancelled,
-                SUM(
-                    CASE WHEN status = 'confirmed' AND starts_at >= ? THEN 1 ELSE 0 END
-                ) AS upcoming,
-                SUM(
-                    CASE WHEN status = 'confirmed' AND created_at >= ? THEN 1 ELSE 0 END
-                ) AS last_30_days
-            FROM bookings
-            """,
-            (now, thirty_days_ago),
-        ).fetchone()
+        rows = conn.execute(
+            "SELECT status, starts_at, created_at FROM bookings"
+        ).fetchall()
+
+    confirmed = cancelled = upcoming = last_30_days = 0
+    for row in rows:
+        status = row["status"]
+        created_at = _parse_dt(row["created_at"])
+        if status == "confirmed":
+            confirmed += 1
+            starts_at = _parse_dt(row["starts_at"])
+            if starts_at >= now:
+                upcoming += 1
+            if created_at >= thirty_days_ago:
+                last_30_days += 1
+        elif status == "cancelled":
+            cancelled += 1
 
     return {
-        "confirmed": int(row["confirmed"] or 0),
-        "cancelled": int(row["cancelled"] or 0),
-        "upcoming": int(row["upcoming"] or 0),
-        "last_30_days": int(row["last_30_days"] or 0),
+        "confirmed": confirmed,
+        "cancelled": cancelled,
+        "upcoming": upcoming,
+        "last_30_days": last_30_days,
     }
 
 

@@ -2128,6 +2128,91 @@
   font-weight: 600;
 }
 
+.booking-submit__notice {
+  margin-bottom: 1rem;
+}
+
+/* ——— Email delivery / spam-folder notice ——— */
+.email-inbox-notice {
+  display: flex;
+  gap: 0.875rem;
+  align-items: flex-start;
+  text-align: left;
+  border-radius: 12px;
+}
+
+.email-inbox-notice--prominent {
+  padding: 1rem 1.125rem;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  background: linear-gradient(
+    135deg,
+    rgba(251, 191, 36, 0.14) 0%,
+    rgba(245, 158, 11, 0.08) 100%
+  );
+  box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.08) inset;
+}
+
+.email-inbox-notice--compact {
+  padding: 0.75rem 0.875rem;
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  background: rgba(14, 165, 233, 0.08);
+}
+
+.email-inbox-notice__icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.15);
+}
+
+.email-inbox-notice--compact .email-inbox-notice__icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: #38bdf8;
+  background: rgba(14, 165, 233, 0.15);
+}
+
+.email-inbox-notice__title {
+  margin: 0 0 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #fde68a;
+}
+
+.email-inbox-notice--compact .email-inbox-notice__title {
+  font-size: 0.8125rem;
+  color: #7dd3fc;
+}
+
+.email-inbox-notice__text {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.email-inbox-notice__text strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.email-inbox-notice--compact .email-inbox-notice__text {
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.contact-form-success-notice {
+  width: 100%;
+  max-width: 26rem;
+  margin-bottom: 1.5rem;
+}
+
 .booking-submitting {
   position: absolute;
   inset: 0;

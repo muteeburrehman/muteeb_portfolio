@@ -6,6 +6,7 @@ import logging
 import os
 import smtplib
 import ssl
+from contextlib import contextmanager
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr
@@ -147,12 +148,45 @@ def _open_smtp() -> tuple[smtplib.SMTP, str, str]:
     return smtp, email_user or "", password
 
 
+@contextmanager
+def smtp_connection():
+    """Single SMTP login — reuse for multiple sends in one booking/cancel flow."""
+    smtp, email_user, _ = _open_smtp()
+    try:
+        yield smtp, email_user
+    finally:
+        try:
+            smtp.quit()
+        except smtplib.SMTPException:
+            pass
+
+
 def _from_addr(email_user: str) -> str:
     return (os.getenv("EMAIL_FROM") or email_user or "").strip()
 
 
-def _admin_recipient(email_user: str) -> str:
-    return (os.getenv("EMAIL_TO") or email_user or "").strip()
+def admin_notification_recipients(*, fallback_user: str | None = None) -> list[str]:
+    """Inboxes that receive admin copies (booking alerts, contact form, cancellations)."""
+    raw_parts: list[str] = []
+    for key in ("EMAIL_TO", "EMAIL_ADMIN_COPY"):
+        raw = os.getenv(key, "")
+        if raw:
+            raw_parts.extend(raw.split(","))
+    if not raw_parts and fallback_user:
+        raw_parts.append(fallback_user)
+
+    seen: set[str] = set()
+    recipients: list[str] = []
+    for part in raw_parts:
+        addr = part.strip()
+        if not addr:
+            continue
+        key = addr.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        recipients.append(addr)
+    return recipients
 
 
 def send_contact_notification(data: ContactSubmission) -> None:
@@ -160,14 +194,16 @@ def send_contact_notification(data: ContactSubmission) -> None:
     smtp, email_user, _ = _open_smtp()
     try:
         from_addr = _from_addr(email_user)
-        recipient = _admin_recipient(email_user)
+        recipients = admin_notification_recipients(fallback_user=email_user)
+        if not recipients:
+            raise RuntimeError("No admin notification recipients configured (EMAIL_TO / EMAIL_ADMIN_COPY)")
         topic = _topic(data)
         topic_bit = f" — {topic}" if topic else ""
 
         mime = MIMEMultipart("related")
         mime["Subject"] = f"New inquiry{topic_bit} — {BRAND}"
         mime["From"] = formataddr((BRAND, from_addr))
-        mime["To"] = recipient
+        mime["To"] = ", ".join(recipients)
         mime["Reply-To"] = str(data.email)
         attach_branded_html(
             mime,
@@ -177,9 +213,9 @@ def send_contact_notification(data: ContactSubmission) -> None:
 
         logger.info(
             "Sending admin notification auth=%s from=%s to=%s subject=%s",
-            email_user, from_addr, recipient, mime["Subject"],
+            email_user, from_addr, recipients, mime["Subject"],
         )
-        _send_mime(smtp, email_user, [recipient], mime)
+        _send_mime(smtp, email_user, recipients, mime)
     finally:
         try:
             smtp.quit()
@@ -226,15 +262,23 @@ def send_raw_email(
     plain_body: str,
     html_body: str | None = None,
     reply_to: str | None = None,
+    smtp: smtplib.SMTP | None = None,
+    email_user: str | None = None,
 ) -> None:
     """Plain-text email with optional branded HTML (booking confirmations, alerts)."""
     recipients = [a.strip() for a in to_addrs if a and a.strip()]
     if not recipients:
         raise RuntimeError("No recipients for send_raw_email")
 
-    smtp, email_user, _ = _open_smtp()
+    own_connection = smtp is None
+    if own_connection:
+        smtp, email_user, _ = _open_smtp()
+    elif not email_user:
+        email_user = os.getenv("EMAIL_USER") or ""
+
+    assert smtp is not None
     try:
-        from_addr = _from_addr(email_user)
+        from_addr = _from_addr(email_user or "")
         mime = MIMEMultipart("related")
         mime["Subject"] = subject
         mime["From"] = formataddr((BRAND, from_addr))
@@ -246,12 +290,13 @@ def send_raw_email(
             plain_body=plain_body,
             html_body=html_body or plain_body,
         )
-        _send_mime(smtp, email_user, recipients, mime)
+        _send_mime(smtp, email_user or "", recipients, mime)
     finally:
-        try:
-            smtp.quit()
-        except smtplib.SMTPException:
-            pass
+        if own_connection:
+            try:
+                smtp.quit()
+            except smtplib.SMTPException:
+                pass
 
 
 def process_contact_submission(data: ContactSubmission) -> None:

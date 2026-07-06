@@ -22,7 +22,8 @@ export function BookCallPage() {
           <p className="mt-4 max-w-xl text-lg text-muted">
             Choose a time below. Each slot is reserved for one client — if someone books a time, it
             disappears for everyone else until they cancel or you free the slot. Confirmation
-            emails include a cancel link.
+            emails include your meeting link and a cancel link. If you don&apos;t see the email,
+            check your spam or junk folder.
           </p>
         </Reveal>
 

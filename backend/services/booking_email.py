@@ -14,7 +14,7 @@ from services.booking_email_html import (
 )
 from services.booking_store import BookingRecord
 from services.booking_urls import booking_cancel_url
-from services.email_service import send_raw_email
+from services.email_service import admin_notification_recipients, send_raw_email, smtp_connection
 
 logger = logging.getLogger(__name__)
 BRAND = os.getenv("MAIL_BRAND_NAME", "Muteeb Labs")
@@ -42,10 +42,9 @@ def _format_admin_reference_when(starts_at: datetime, booking_tz_name: str) -> s
 def send_booking_emails(booking: BookingRecord, tz_name: str) -> None:
     when = _format_when(booking.starts_at, tz_name)
     when_admin = _format_admin_reference_when(booking.starts_at, tz_name)
-    to_team = os.getenv("EMAIL_TO", os.getenv("EMAIL_FROM", "")).strip()
-    if not to_team:
-        logger.warning("EMAIL_TO not set — skipping booking notification email")
-        return
+    team_recipients = admin_notification_recipients()
+    if not team_recipients:
+        logger.warning("No admin recipients (EMAIL_TO / EMAIL_ADMIN_COPY) — skipping team booking email")
 
     team_subject = f"[{BRAND}] New discovery call — {booking.name} ({when})"
     team_body = (
@@ -68,21 +67,6 @@ def send_booking_emails(booking: BookingRecord, tz_name: str) -> None:
     if booking.cancel_token:
         team_body += f"\nCancel link: {booking_cancel_url(booking.cancel_token)}\n"
 
-    try:
-        send_raw_email(
-            to_addrs=[to_team],
-            subject=team_subject,
-            plain_body=team_body,
-            html_body=render_team_booking_html(
-                booking=booking,
-                when=when,
-                when_admin_reference=when_admin,
-            ),
-            reply_to=booking.email,
-        )
-    except Exception:
-        logger.exception("Team booking email failed")
-
     first = booking.name.split()[0] if booking.name else "there"
     client_subject = f"Your discovery call with {BRAND} is confirmed"
     client_body = (
@@ -104,66 +88,98 @@ def send_booking_emails(booking: BookingRecord, tz_name: str) -> None:
     )
 
     try:
-        send_raw_email(
-            to_addrs=[booking.email],
-            subject=client_subject,
-            plain_body=client_body,
-            html_body=render_client_booking_html(
-                booking=booking,
-                when=when,
-                first_name=first,
-            ),
-        )
+        with smtp_connection() as (smtp, email_user):
+            if team_recipients:
+                try:
+                    send_raw_email(
+                        to_addrs=team_recipients,
+                        subject=team_subject,
+                        plain_body=team_body,
+                        html_body=render_team_booking_html(
+                            booking=booking,
+                            when=when,
+                            when_admin_reference=when_admin,
+                        ),
+                        reply_to=booking.email,
+                        smtp=smtp,
+                        email_user=email_user,
+                    )
+                except Exception:
+                    logger.exception("Team booking email failed")
+
+            try:
+                send_raw_email(
+                    to_addrs=[booking.email],
+                    subject=client_subject,
+                    plain_body=client_body,
+                    html_body=render_client_booking_html(
+                        booking=booking,
+                        when=when,
+                        first_name=first,
+                    ),
+                    smtp=smtp,
+                    email_user=email_user,
+                )
+            except Exception:
+                logger.exception("Client booking confirmation email failed for <%s>", booking.email)
     except Exception:
-        logger.exception("Client booking confirmation email failed for <%s>", booking.email)
+        logger.exception("SMTP connection failed for booking emails %s", booking.id)
 
 
 def send_booking_cancelled_email(booking: BookingRecord, tz_name: str) -> None:
     when = _format_when(booking.starts_at, tz_name)
     when_admin = _format_admin_reference_when(booking.starts_at, tz_name)
-    to_team = os.getenv("EMAIL_TO", os.getenv("EMAIL_FROM", "")).strip()
-
-    if to_team:
-        try:
-            cancel_plain = (
-                f"Booking cancelled.\n\n"
-                f"Name: {booking.name}\n"
-                f"Email: {booking.email}\n"
-                f"Was scheduled: {when}\n"
-            )
-            if when_admin:
-                cancel_plain += f"Pakistan time: {when_admin}\n"
-            cancel_plain += (
-                f"Booking ID: {booking.id}\n"
-                f"The time slot is now available for other clients.\n"
-            )
-            send_raw_email(
-                to_addrs=[to_team],
-                subject=f"[{BRAND}] Booking cancelled — {booking.name}",
-                plain_body=cancel_plain,
-                html_body=render_team_cancel_html(
-                    booking=booking,
-                    when=when,
-                    when_admin_reference=when_admin,
-                ),
-                reply_to=booking.email,
-            )
-        except Exception:
-            logger.exception("Team cancel email failed")
-
+    team_recipients = admin_notification_recipients()
     first = booking.name.split()[0] if booking.name else "there"
+
     try:
-        send_raw_email(
-            to_addrs=[booking.email],
-            subject=f"Discovery call cancelled — {BRAND}",
-            plain_body=(
-                f"Hi {first},\n\n"
-                f"Your discovery call on {when} has been cancelled.\n"
-                f"You can book another time on our website when ready.\n\n"
-                f"— {os.getenv('MAIL_SIGN_NAME', 'Muteeb Ur Rehman')}\n"
-                f"{BRAND}\n"
-            ),
-            html_body=render_client_cancel_html(when=when, first_name=first),
-        )
+        with smtp_connection() as (smtp, email_user):
+            if team_recipients:
+                try:
+                    cancel_plain = (
+                        f"Booking cancelled.\n\n"
+                        f"Name: {booking.name}\n"
+                        f"Email: {booking.email}\n"
+                        f"Was scheduled: {when}\n"
+                    )
+                    if when_admin:
+                        cancel_plain += f"Pakistan time: {when_admin}\n"
+                    cancel_plain += (
+                        f"Booking ID: {booking.id}\n"
+                        f"The time slot is now available for other clients.\n"
+                    )
+                    send_raw_email(
+                        to_addrs=team_recipients,
+                        subject=f"[{BRAND}] Booking cancelled — {booking.name}",
+                        plain_body=cancel_plain,
+                        html_body=render_team_cancel_html(
+                            booking=booking,
+                            when=when,
+                            when_admin_reference=when_admin,
+                        ),
+                        reply_to=booking.email,
+                        smtp=smtp,
+                        email_user=email_user,
+                    )
+                except Exception:
+                    logger.exception("Team cancel email failed")
+
+            try:
+                send_raw_email(
+                    to_addrs=[booking.email],
+                    subject=f"Discovery call cancelled — {BRAND}",
+                    plain_body=(
+                        f"Hi {first},\n\n"
+                        f"Your discovery call on {when} has been cancelled.\n"
+                        f"You can book another time on our website when ready.\n\n"
+                        f"— {os.getenv('MAIL_SIGN_NAME', 'Muteeb Ur Rehman')}\n"
+                        f"{BRAND}\n"
+                    ),
+                    html_body=render_client_cancel_html(when=when, first_name=first),
+                    smtp=smtp,
+                    email_user=email_user,
+                )
+            except Exception:
+                logger.exception("Client cancel email failed")
     except Exception:
-        logger.exception("Client cancel email failed")
+        logger.exception("SMTP connection failed for cancel emails %s", booking.id)

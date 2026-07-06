@@ -55,6 +55,12 @@ def sync_booking_to_hubspot(
     if deal_id:
         _associate_deal_contact(deal_id, contact_id)
 
+    logger.info(
+        "HubSpot synced for <%s>: contact=%s deal=%s",
+        email,
+        contact_id or "—",
+        deal_id or "—",
+    )
     return contact_id, deal_id
 
 

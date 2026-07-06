@@ -16,7 +16,8 @@ export function ContactPage() {
           </h1>
           <p className="contact-page-lead">
             Have an AI project, full stack app, or cloud deployment in mind? Send a message — you
-            get an instant confirmation, and our team replies {REPLY_TIME}.
+            get an instant confirmation by email (check spam if it doesn&apos;t arrive), and our
+            team replies {REPLY_TIME}.
           </p>
         </Reveal>
 

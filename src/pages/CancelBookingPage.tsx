@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { cancelBooking, fetchBookingManage, type BookingManagePreview } from '../lib/bookingApi'
 import { CheckIcon } from '../components/icons'
+import { EmailInboxNotice } from '../components/EmailInboxNotice'
 import { Button } from '../components/ui/Button'
 import { Reveal } from '../components/ui/Reveal'
 import { SectionLabel } from '../components/ui/SectionLabel'
@@ -89,6 +90,7 @@ export function CancelBookingPage() {
               <p className="mt-2 text-sm text-muted">
                 That slot is open again. Someone else can book it, or you can pick a new time.
               </p>
+              <EmailInboxNotice className="mt-5 text-left" />
               <Button to="/book" className="mt-6">
                 Book a new call
               </Button>

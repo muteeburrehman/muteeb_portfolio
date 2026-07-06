@@ -14,7 +14,7 @@ from schemas.booking import (
     SlotsQueryResponse,
 )
 from services.availability_service import _day_key, format_slot_label, generate_slots, load_availability_rules
-from services.booking_email import send_booking_cancelled_email, send_booking_emails
+from services.booking_follow_up import schedule_booking_cancelled, schedule_booking_created
 from services.booking_store import (
     BookingRecord,
     admin_cancel_booking as store_admin_cancel_booking,
@@ -24,8 +24,6 @@ from services.booking_store import (
     insert_booking,
     list_booked_ranges,
 )
-from services.booking_urls import booking_cancel_url
-from services.funnel_webhook import notify_funnel_webhook
 from services.hubspot_service import sync_booking_to_hubspot
 from services.meeting_links import get_meeting_link
 
@@ -101,18 +99,21 @@ def create_booking(payload: BookingCreate) -> BookingRecord:
         start = start.astimezone(rules.timezone)
 
     end = start + timedelta(minutes=rules.slot_duration_minutes)
-
     meeting_link, _ = get_meeting_link()
 
-    contact_id, deal_id = sync_booking_to_hubspot(
-        name=payload.name,
-        email=str(payload.email),
-        company=payload.company,
-        phone=payload.phone,
-        notes=payload.notes,
-        starts_at=start,
-        meeting_link=meeting_link,
-    )
+    contact_id, deal_id = None, None
+    try:
+        contact_id, deal_id = sync_booking_to_hubspot(
+            name=payload.name,
+            email=str(payload.email),
+            company=payload.company,
+            phone=payload.phone,
+            notes=payload.notes,
+            starts_at=start,
+            meeting_link=meeting_link,
+        )
+    except Exception:
+        logger.exception("HubSpot sync failed for <%s> — booking will still be saved", payload.email)
 
     try:
         record = insert_booking(
@@ -134,22 +135,13 @@ def create_booking(payload: BookingCreate) -> BookingRecord:
         logger.exception("Booking insert failed")
         raise ValueError("That time slot is no longer available. Please pick another.") from None
 
-    try:
-        send_booking_emails(record, str(rules.timezone))
-    except Exception:
-        logger.exception("Booking emails failed for %s", record.id)
-
-    notify_funnel_webhook(record)
+    schedule_booking_created(record.id)
     return record
 
 
 def admin_cancel_booking(booking_id: str) -> BookingRecord:
     record = store_admin_cancel_booking(booking_id)
-    rules = load_availability_rules()
-    try:
-        send_booking_cancelled_email(record, str(rules.timezone))
-    except Exception:
-        logger.exception("Admin cancel email failed for %s", record.id)
+    schedule_booking_cancelled(record.id)
     return record
 
 
@@ -160,11 +152,7 @@ def cancel_booking(
     email: str | None = None,
 ) -> BookingRecord:
     record = store_cancel_booking(booking_id=booking_id, cancel_token=token, email=email)
-    rules = load_availability_rules()
-    try:
-        send_booking_cancelled_email(record, str(rules.timezone))
-    except Exception:
-        logger.exception("Cancel email failed for %s", record.id)
+    schedule_booking_cancelled(record.id)
     return record
 
 

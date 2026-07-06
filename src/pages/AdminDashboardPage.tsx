@@ -117,7 +117,8 @@ export function AdminDashboardPage() {
   const [composeDraft, setComposeDraft] = useState<ComposeDraft | null>(null)
   const [contactFilter, setContactFilter] = useState<'all' | 'pending' | 'replied'>('all')
   const [bookingFilter, setBookingFilter] = useState<'all' | 'confirmed' | 'cancelled'>('all')
-  const [loading, setLoading] = useState(true)
+  const [overviewLoading, setOverviewLoading] = useState(true)
+  const [listLoading, setListLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [analyticsDays, setAnalyticsDays] = useState(14)
   const [analyticsMetric, setAnalyticsMetric] = useState<AnalyticsMetric>('all')
@@ -139,26 +140,59 @@ export function AdminDashboardPage() {
     }
   }, [analyticsDays, navigate])
 
-  const load = useCallback(async () => {
-    setLoading(true)
-    setError(null)
+  const loadOverview = useCallback(async () => {
     try {
-      const [nextOverview, nextContacts, nextBookings] = await Promise.all([
-        fetchAdminOverview(),
-        fetchAdminContacts(contactFilter),
-        fetchAdminBookings(bookingFilter),
-      ])
+      const nextOverview = await fetchAdminOverview()
       setOverview(nextOverview)
-      setContacts(nextContacts)
-      setBookings(nextBookings)
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Could not load admin data'
+      const message = err instanceof Error ? err.message : 'Could not load overview'
+      setError(message)
+      if (message === 'Session expired') navigate('/admin/login', { replace: true })
+    }
+  }, [navigate])
+
+  const loadContacts = useCallback(async () => {
+    setListLoading(true)
+    try {
+      const nextContacts = await fetchAdminContacts(contactFilter)
+      setContacts(nextContacts)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Could not load contacts'
       setError(message)
       if (message === 'Session expired') navigate('/admin/login', { replace: true })
     } finally {
-      setLoading(false)
+      setListLoading(false)
     }
-  }, [bookingFilter, contactFilter, navigate])
+  }, [contactFilter, navigate])
+
+  const loadBookings = useCallback(async () => {
+    setListLoading(true)
+    try {
+      const nextBookings = await fetchAdminBookings(bookingFilter)
+      setBookings(nextBookings)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Could not load bookings'
+      setError(message)
+      if (message === 'Session expired') navigate('/admin/login', { replace: true })
+    } finally {
+      setListLoading(false)
+    }
+  }, [bookingFilter, navigate])
+
+  const refreshAll = useCallback(async () => {
+    setOverviewLoading(true)
+    setError(null)
+    try {
+      await Promise.all([
+        loadOverview(),
+        loadContacts(),
+        loadBookings(),
+        tab === 'overview' ? loadAnalytics() : Promise.resolve(),
+      ])
+    } finally {
+      setOverviewLoading(false)
+    }
+  }, [loadAnalytics, loadBookings, loadContacts, loadOverview, tab])
 
   useEffect(() => {
     if (!checking && !isAdmin) {
@@ -167,18 +201,34 @@ export function AdminDashboardPage() {
   }, [checking, isAdmin, navigate])
 
   useEffect(() => {
-    if (isAdmin) void load()
-  }, [isAdmin, load])
+    if (!isAdmin) return
+    void (async () => {
+      setOverviewLoading(true)
+      await loadOverview()
+      setOverviewLoading(false)
+    })()
+  }, [isAdmin, loadOverview])
 
   useEffect(() => {
-    if (isAdmin) void loadAnalytics()
-  }, [isAdmin, loadAnalytics])
+    if (!isAdmin) return
+    void loadContacts()
+  }, [isAdmin, loadContacts])
+
+  useEffect(() => {
+    if (!isAdmin) return
+    void loadBookings()
+  }, [isAdmin, loadBookings])
+
+  useEffect(() => {
+    if (!isAdmin || tab !== 'overview') return
+    void loadAnalytics()
+  }, [isAdmin, tab, loadAnalytics])
 
   async function handleMarkReplied(contactId: string) {
     setBusyId(contactId)
     try {
       await markContactReplied(contactId)
-      await load()
+      await Promise.all([loadOverview(), loadContacts()])
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Update failed')
     } finally {
@@ -206,7 +256,11 @@ export function AdminDashboardPage() {
         try {
           await cancelAdminBooking(booking.id)
           setConfirm(null)
-          await Promise.all([load(), loadAnalytics()])
+          await Promise.all([
+            loadOverview(),
+            loadBookings(),
+            tab === 'overview' ? loadAnalytics() : Promise.resolve(),
+          ])
         } catch (err) {
           setError(err instanceof Error ? err.message : 'Cancel failed')
         } finally {
@@ -235,7 +289,7 @@ export function AdminDashboardPage() {
 
   const headerActions = (
     <>
-      <ToolbarButton onClick={() => void Promise.all([load(), loadAnalytics()])} disabled={loading}>
+      <ToolbarButton onClick={() => void refreshAll()} disabled={overviewLoading || listLoading}>
         <RefreshIcon />
         <span>Refresh</span>
       </ToolbarButton>
@@ -298,16 +352,16 @@ export function AdminDashboardPage() {
                 icon={<CheckIcon className="h-5 w-5" />}
               />
               <StatCard
+                label="Total bookings"
+                value={overview.bookings_confirmed + overview.bookings_cancelled}
+                tone="violet"
+                icon={<CalendarIcon className="h-5 w-5" />}
+              />
+              <StatCard
                 label="Upcoming meetings"
                 value={overview.bookings_upcoming}
                 tone="blue"
                 icon={<MicIcon className="h-5 w-5" />}
-              />
-              <StatCard
-                label="Bookings (30 days)"
-                value={overview.bookings_last_30_days}
-                tone="violet"
-                icon={<CalendarIcon className="h-5 w-5" />}
               />
             </div>
           </Reveal>
@@ -412,12 +466,12 @@ export function AdminDashboardPage() {
             <AdminCompose
               draft={composeDraft}
               onSent={() => {
-                void load()
+                void Promise.all([loadOverview(), loadContacts()])
               }}
             />
           )}
 
-          {loading && tab !== 'overview' && tab !== 'compose' ? (
+          {listLoading && tab !== 'overview' && tab !== 'compose' ? (
             <p className="admin-loading">Loading records…</p>
           ) : tab === 'contacts' ? (
             <>

@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { CONTACT_TOPICS, EMAIL, REPLY_TIME } from '../data/portfolio'
 import { ArrowIcon, CheckIcon } from './icons'
+import { EmailInboxNotice } from './EmailInboxNotice'
 
 const CONTACT_ENDPOINT =
   (import.meta.env.VITE_CONTACT_API_URL as string | undefined)?.trim() || '/api/contact'
@@ -59,6 +60,7 @@ export function ContactForm() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
   const [error, setError] = useState<string | null>(null)
   const [submitAttempted, setSubmitAttempted] = useState(false)
+  const [confirmedEmail, setConfirmedEmail] = useState<string | null>(null)
 
   function validateAll(state: FormState = form) {
     const next: Partial<Record<keyof FormState, string>> = {}
@@ -118,6 +120,7 @@ export function ContactForm() {
         throw new Error(msg)
       }
 
+      setConfirmedEmail(form.email.trim())
       setForm(initial)
       setErrors({})
       setSubmitAttempted(false)
@@ -146,6 +149,11 @@ export function ContactForm() {
           Thanks for reaching out — I&apos;ll get back to you soon. You can also email{' '}
           <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.
         </p>
+        {confirmedEmail ? (
+          <EmailInboxNotice email={confirmedEmail} className="contact-form-success-notice" />
+        ) : (
+          <EmailInboxNotice className="contact-form-success-notice" />
+        )}
         <button
           type="button"
           className="btn-secondary"
@@ -154,6 +162,7 @@ export function ContactForm() {
             setForm(initial)
             setErrors({})
             setSubmitAttempted(false)
+            setConfirmedEmail(null)
           }}
         >
           Send another message

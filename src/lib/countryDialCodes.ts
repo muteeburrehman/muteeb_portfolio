@@ -32,4 +32,4 @@ export function listCountryDialCodes(): CountryDial[] {
   return cached
 }
 
-export const DEFAULT_PHONE_COUNTRY: CountryCode = 'PK'
+export const DEFAULT_PHONE_COUNTRY: CountryCode = 'US'

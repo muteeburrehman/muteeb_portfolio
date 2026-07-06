@@ -34,7 +34,7 @@ def notify_funnel_webhook(booking: BookingRecord) -> None:
     }
 
     try:
-        with httpx.Client(timeout=12.0) as client:
+        with httpx.Client(timeout=5.0) as client:
             resp = client.post(url, json=payload)
             resp.raise_for_status()
         logger.info("Funnel webhook delivered for booking %s", booking.id)

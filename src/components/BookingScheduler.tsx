@@ -23,6 +23,7 @@ import {
   type BookingField,
 } from '../lib/bookingValidation'
 import { DEFAULT_PHONE_COUNTRY } from '../lib/countryDialCodes'
+import { EmailInboxNotice } from './EmailInboxNotice'
 import { ArrowIcon, CheckIcon } from './icons'
 import { PhoneField } from './PhoneField'
 import { Button } from './ui/Button'
@@ -192,9 +193,10 @@ export function BookingScheduler() {
         <p className="mt-2 text-accent font-medium">{when}</p>
         <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
           We&apos;re sending your confirmation to{' '}
-          <strong className="text-text-primary">{email}</strong>. Your meeting link and cancel
-          option will be in that email — please check your inbox (and spam folder).
+          <strong className="text-text-primary">{email}</strong>. It includes your meeting link and
+          a cancel option.
         </p>
+        <EmailInboxNotice email={email.trim()} className="mt-5 w-full max-w-md" />
         {result.cancel_url ? (
           <p className="mt-4 max-w-md text-xs text-muted">
             Need to cancel later? Use the link in your confirmation email to free the slot.
@@ -215,9 +217,10 @@ export function BookingScheduler() {
             <div className="booking-submitting__spinner" aria-hidden="true" />
             <p className="booking-submitting__title">Thank you for your patience</p>
             <p className="booking-submitting__text">
-              We&apos;re confirming your slot and sending your meeting link by email. This can take
-              up to a minute — please don&apos;t close this page.
+              Your slot is reserved. Confirmation emails are on the way — this usually takes a few
+              seconds. Please don&apos;t close this page until you see the success screen.
             </p>
+            <EmailInboxNotice variant="compact" className="mt-4 text-left" />
           </div>
         </div>
       )}
@@ -468,6 +471,7 @@ export function BookingScheduler() {
           </div>
 
           <div className="booking-submit">
+            <EmailInboxNotice variant="compact" className="booking-submit__notice" />
             <p className="booking-submit__hint max-w-none text-sm text-muted">
               Confirm to reserve this slot. We&apos;ll email your meeting link and a cancel link
               right away.
