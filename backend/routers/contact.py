@@ -8,6 +8,7 @@ import logging
 from fastapi import APIRouter, HTTPException
 
 from schemas.contact import ContactSubmission
+from services.contact_store import insert_contact
 from services.email_service import process_contact_submission
 
 logger = logging.getLogger(__name__)
@@ -28,6 +29,11 @@ async def submit_contact(payload: ContactSubmission) -> dict[str, bool | str]:
                 "email us directly."
             ),
         ) from None
+
+    try:
+        await asyncio.to_thread(insert_contact, payload)
+    except Exception:
+        logger.exception("Contact DB save failed for <%s>", payload.email)
 
     logger.info("Contact email sent for <%s>", payload.email)
     return {"ok": True, "detail": "Message sent successfully"}

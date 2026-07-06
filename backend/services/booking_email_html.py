@@ -36,14 +36,22 @@ def _meet_button_label(link: str) -> str:
     return "Join meeting"
 
 
-def render_team_booking_html(*, booking: BookingRecord, when: str) -> str:
+def render_team_booking_html(
+    *,
+    booking: BookingRecord,
+    when: str,
+    when_admin_reference: str | None = None,
+) -> str:
+    when_rows = [meta_row("When", when)]
+    if when_admin_reference:
+        when_rows.append(meta_row("Pakistan time", when_admin_reference))
     rows = "".join(
         (
             meta_row("Name", booking.name),
             meta_row("Email", booking.email),
             meta_row("Company", booking.company),
             meta_row("Phone", booking.phone),
-            meta_row("When", when),
+            *when_rows,
             meta_row("Booking ID", booking.id),
             meta_row("HubSpot deal", booking.hubspot_deal_id),
         )
@@ -54,8 +62,8 @@ def render_team_booking_html(*, booking: BookingRecord, when: str) -> str:
         notes_block = (
             f'<p style="margin:20px 0 8px;color:{TEXT_DIM};font-size:10px;font-weight:700;'
             f'letter-spacing:0.14em;text-transform:uppercase;">Discussion notes</p>'
-            f'<div style="padding:14px 16px;background:#0f0f0f;border:1px solid #2a2a2a;'
-            f'border-left:4px solid #38bdf8;border-radius:0 12px 12px 0;'
+            f'<div style="padding:14px 16px;background:#0a1220;border:1px solid rgba(51,65,85,0.65);'
+            f'border-left:4px solid #0ea5e9;border-radius:0 14px 14px 0;'
             f'color:{TEXT};font-size:15px;line-height:1.6;">{notes}</div>'
         )
 
@@ -75,7 +83,8 @@ def render_team_booking_html(*, booking: BookingRecord, when: str) -> str:
         f'<table role="presentation" width="100%" cellspacing="0" cellpadding="0">{rows}</table>'
         f"{notes_block}"
         f'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-top:22px;">'
-        f"<tr><td style=\"padding:16px;background:#0f0f0f;border:1px solid #2a2a2a;border-radius:10px;\">"
+        f"<tr><td style=\"padding:16px;background:#0a1220;border:1px solid rgba(51,65,85,0.65);"
+        f'border-radius:14px;">'
         f'<p style="margin:0 0 12px;color:{TEXT_DIM};font-size:10px;font-weight:700;'
         f'letter-spacing:0.1em;text-transform:uppercase;">Meeting link</p>'
         f"{cta_button(booking.meeting_link, _meet_button_label(booking.meeting_link))}"
@@ -119,13 +128,13 @@ def render_client_booking_html(*, booking: BookingRecord, when: str, first_name:
         f"{meta_row('With', BRAND)}"
         f"</table>"
         f'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-top:22px;">'
-        f"<tr><td style=\"padding:18px;background:#0f0f0f;border:1px solid #2a2a2a;border-radius:10px;"
-        f'text-align:center;">'
+        f"<tr><td style=\"padding:18px;background:#0a1220;border:1px solid rgba(51,65,85,0.65);"
+        f'border-radius:14px;text-align:center;">'
         f'<p style="margin:0 0 14px;color:{TEXT_DIM};font-size:10px;font-weight:700;'
-        f'letter-spacing:0.12em;text-transform:uppercase;">Join at the scheduled time</p>'
+        f'letter-spacing:0.12em;text-transform:uppercase;">Meeting link</p>'
         f"{cta_button(booking.meeting_link, _meet_button_label(booking.meeting_link))}"
         f'<p style="margin:14px 0 0;color:{TEXT_DIM};font-size:12px;line-height:1.5;">'
-        f"We'll use this time to understand your project and outline next steps.</p>"
+        f"Join at the scheduled time using the button above.</p>"
         f"</td></tr></table>"
         f"{cancel_section}"
         f"{signature_block()}"
@@ -136,7 +145,7 @@ def render_client_booking_html(*, booking: BookingRecord, when: str, first_name:
         preview_text=f"Your call is confirmed for {when}",
         header_eyebrow=BRAND.upper(),
         header_title="You're booked",
-        header_subtitle="Save this email — it has your meeting link and time.",
+        header_subtitle="Check this email for your meeting link, time, and cancel option.",
         body_html=body,
         footer_html=(
             f"Questions? Email "
@@ -146,12 +155,20 @@ def render_client_booking_html(*, booking: BookingRecord, when: str, first_name:
     )
 
 
-def render_team_cancel_html(*, booking: BookingRecord, when: str) -> str:
+def render_team_cancel_html(
+    *,
+    booking: BookingRecord,
+    when: str,
+    when_admin_reference: str | None = None,
+) -> str:
+    when_rows = [meta_row("Was scheduled", when)]
+    if when_admin_reference:
+        when_rows.append(meta_row("Pakistan time", when_admin_reference))
     rows = "".join(
         (
             meta_row("Name", booking.name),
             meta_row("Email", booking.email),
-            meta_row("Was scheduled", when),
+            *when_rows,
             meta_row("Booking ID", booking.id),
         )
     )

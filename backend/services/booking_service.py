@@ -17,6 +17,7 @@ from services.availability_service import _day_key, format_slot_label, generate_
 from services.booking_email import send_booking_cancelled_email, send_booking_emails
 from services.booking_store import (
     BookingRecord,
+    admin_cancel_booking as store_admin_cancel_booking,
     cancel_booking as store_cancel_booking,
     get_booking,
     get_booking_by_token,
@@ -139,6 +140,16 @@ def create_booking(payload: BookingCreate) -> BookingRecord:
         logger.exception("Booking emails failed for %s", record.id)
 
     notify_funnel_webhook(record)
+    return record
+
+
+def admin_cancel_booking(booking_id: str) -> BookingRecord:
+    record = store_admin_cancel_booking(booking_id)
+    rules = load_availability_rules()
+    try:
+        send_booking_cancelled_email(record, str(rules.timezone))
+    except Exception:
+        logger.exception("Admin cancel email failed for %s", record.id)
     return record
 
 

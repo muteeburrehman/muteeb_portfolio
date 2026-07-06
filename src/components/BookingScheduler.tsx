@@ -190,28 +190,17 @@ export function BookingScheduler() {
         </div>
         <h3 className="text-xl font-semibold text-text-primary">You&apos;re booked</h3>
         <p className="mt-2 text-accent font-medium">{when}</p>
-        <p className="mt-4 max-w-sm text-sm text-muted">
-          Confirmation sent to <strong className="text-text-primary">{email}</strong>. Use this link
-          at the scheduled time:
+        <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
+          We&apos;re sending your confirmation to{' '}
+          <strong className="text-text-primary">{email}</strong>. Your meeting link and cancel
+          option will be in that email — please check your inbox (and spam folder).
         </p>
-        <a
-          href={result.meeting_link}
-          className="mt-6 inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-white hover:bg-accent-hover"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Join meeting
-          <ArrowIcon className="h-4 w-4" />
-        </a>
-        {result.cancel_url && (
-          <a
-            href={result.cancel_url}
-            className="mt-4 text-sm text-muted underline hover:text-accent"
-          >
-            Need to cancel? Free this slot for others
-          </a>
-        )}
-        <Button variant="outline" className="mt-6" onClick={() => window.location.reload()}>
+        {result.cancel_url ? (
+          <p className="mt-4 max-w-md text-xs text-muted">
+            Need to cancel later? Use the link in your confirmation email to free the slot.
+          </p>
+        ) : null}
+        <Button variant="outline" className="mt-8" onClick={() => window.location.reload()}>
           Book another slot
         </Button>
       </div>
@@ -219,7 +208,19 @@ export function BookingScheduler() {
   }
 
   return (
-    <div className="panel-surface p-6 sm:p-8">
+    <div className="panel-surface relative p-6 sm:p-8">
+      {submitting && (
+        <div className="booking-submitting" role="status" aria-live="polite">
+          <div className="booking-submitting__card">
+            <div className="booking-submitting__spinner" aria-hidden="true" />
+            <p className="booking-submitting__title">Thank you for your patience</p>
+            <p className="booking-submitting__text">
+              We&apos;re confirming your slot and sending your meeting link by email. This can take
+              up to a minute — please don&apos;t close this page.
+            </p>
+          </div>
+        </div>
+      )}
       <div className="mb-6 flex flex-wrap gap-2" aria-label="Booking progress">
         {(['date', 'time', 'details'] as const).map((s, i) => (
           <span
@@ -272,34 +273,12 @@ export function BookingScheduler() {
             and we&apos;ll arrange a time.
           </p>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
-            {dayOptions.map((d) => {
+            {dayOptions
+              .filter((d) => !isWeekendInTimeZone(d, config.timezone))
+              .map((d) => {
               const dayInfo = openSlotsByDay[d]
-              const isWeekend = isWeekendInTimeZone(d, config.timezone)
-              const isClosed = isWeekend || dayInfo?.bookable === false
               const openCount = dayInfo?.available_count ?? 0
-              const fullyBooked = !isClosed && openCount === 0
-
-              if (isClosed) {
-                return (
-                  <div
-                    key={d}
-                    className="booking-day-card booking-day-card--closed min-h-[44px] rounded-lg border border-border bg-white/[0.02] px-3 py-2.5 text-sm"
-                  >
-                    <span className="block font-medium text-text-primary">
-                      {formatDisplayDate(d, config.timezone)}
-                    </span>
-                    <span className="mt-1 block text-[11px] leading-snug text-muted">
-                      Weekends by request
-                    </span>
-                    <Link
-                      to="/contact"
-                      className="mt-1.5 inline-flex text-[11px] font-semibold text-accent hover:underline"
-                    >
-                      Contact us →
-                    </Link>
-                  </div>
-                )
-              }
+              const fullyBooked = dayInfo?.bookable !== false && openCount === 0
 
               return (
                 <button
@@ -498,7 +477,7 @@ export function BookingScheduler() {
               disabled={submitting}
               className="btn-primary booking-submit__btn w-full justify-center"
             >
-              {submitting ? 'Booking…' : 'Confirm discovery call'}
+              {submitting ? 'Confirming your booking…' : 'Confirm discovery call'}
               {!submitting && <ArrowIcon className="h-4 w-4" />}
             </button>
           </div>

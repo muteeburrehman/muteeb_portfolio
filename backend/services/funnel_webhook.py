@@ -38,5 +38,12 @@ def notify_funnel_webhook(booking: BookingRecord) -> None:
             resp = client.post(url, json=payload)
             resp.raise_for_status()
         logger.info("Funnel webhook delivered for booking %s", booking.id)
+    except httpx.ConnectError as exc:
+        logger.warning(
+            "Optional funnel webhook unreachable for booking %s (%s). "
+            "Booking was saved — fix n8n SSL/URL or clear N8N_BOOKING_WEBHOOK_URL.",
+            booking.id,
+            exc,
+        )
     except Exception:
         logger.exception("Funnel webhook failed for booking %s", booking.id)

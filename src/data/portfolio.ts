@@ -4,6 +4,11 @@ export const BOOK_CALL_PATH = '/book'
 /** @deprecated Use BOOK_CALL_PATH — kept for gradual migration */
 export const CALENDLY_URL = BOOK_CALL_PATH
 export const SITE_BRAND = 'MuteebLabs'
+export const LEGAL_ENTITY = 'MuteebLabs LLC'
+export const LEGAL_ADDRESS_LINES = [
+  '1209 Mountain Road Pl NE, Ste N',
+  'Albuquerque, Bernalillo County, NM 87110, USA',
+] as const
 export const SITE_LOGO = '/logo.png'
 /** Same transparent wordmark — used on dark nav/footer */
 export const SITE_LOGO_DARK = '/logo-dark.png'
@@ -36,7 +41,7 @@ export const LINKEDIN_URL = 'https://pk.linkedin.com/in/muteeb-ur-rehman-091a262
 
 /** About profile quick facts — broad positioning, not stack/contract limits */
 export const PROFILE_QUICK_FACTS = [
-  { label: 'Location', value: 'Pakistan · Remote worldwide' },
+  { label: 'Location', value: 'Albuquerque, New Mexico, USA' },
   { label: 'Team', value: 'Engineers · QA · AI specialists' },
   { label: 'Clients', value: 'US, UK & global teams' },
   { label: 'What we build', value: 'Ag · Contests · Inventory · QA · AI' },

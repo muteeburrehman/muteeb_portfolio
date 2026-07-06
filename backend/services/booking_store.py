@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 import logging
-import os
 import secrets
 import sqlite3
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
+
+from services.app_db import connect, db_path
 
 logger = logging.getLogger(__name__)
 
@@ -33,19 +33,12 @@ class BookingRecord:
     created_at: datetime
 
 
-def _db_path() -> Path:
-    raw = os.getenv("BOOKING_DB_PATH", "").strip()
-    if raw:
-        return Path(raw)
-    return Path(__file__).resolve().parent.parent / "data" / "bookings.sqlite"
-
-
 def _connect() -> sqlite3.Connection:
-    path = _db_path()
-    path.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(path, check_same_thread=False)
-    conn.row_factory = sqlite3.Row
-    return conn
+    return connect()
+
+
+def _db_path() -> str:
+    return str(db_path())
 
 
 def _ensure_schema(conn: sqlite3.Connection) -> None:
@@ -245,6 +238,29 @@ def get_booking_by_token(cancel_token: str) -> BookingRecord | None:
     return _row_to_record(row)
 
 
+def admin_cancel_booking(booking_id: str) -> BookingRecord:
+    """Cancel by id (admin) — skips client-only restrictions; still frees the slot."""
+    with _connect() as conn:
+        _ensure_schema(conn)
+        row = conn.execute("SELECT * FROM bookings WHERE id = ?", (booking_id.strip(),)).fetchone()
+        if not row:
+            raise LookupError("Booking not found.")
+
+        record = _row_to_record(row)
+        if record.status == "cancelled":
+            raise ValueError("This booking was already cancelled.")
+
+        conn.execute(
+            "UPDATE bookings SET status = 'cancelled' WHERE id = ?",
+            (record.id,),
+        )
+        conn.commit()
+
+    record.status = "cancelled"
+    logger.info("Booking cancelled by admin: %s", record.id)
+    return record
+
+
 def cancel_booking(*, booking_id: str | None = None, cancel_token: str | None = None, email: str | None = None) -> BookingRecord:
     with _connect() as conn:
         _ensure_schema(conn)
@@ -283,24 +299,53 @@ def cancel_booking(*, booking_id: str | None = None, cancel_token: str | None = 
 
 
 def funnel_stats() -> dict[str, int]:
+    counts = booking_counts()
+    return {
+        "total_bookings": counts["confirmed"],
+        "upcoming_bookings": counts["upcoming"],
+        "bookings_last_30_days": counts["last_30_days"],
+    }
+
+
+def booking_counts() -> dict[str, int]:
     now = datetime.now(timezone.utc).isoformat()
     thirty_days_ago = (datetime.now(timezone.utc) - timedelta(days=30)).isoformat()
 
     with _connect() as conn:
-        total = conn.execute(
-            "SELECT COUNT(*) AS c FROM bookings WHERE status = 'confirmed'"
-        ).fetchone()["c"]
-        upcoming = conn.execute(
-            "SELECT COUNT(*) AS c FROM bookings WHERE starts_at >= ? AND status = 'confirmed'",
-            (now,),
-        ).fetchone()["c"]
-        recent = conn.execute(
-            "SELECT COUNT(*) AS c FROM bookings WHERE created_at >= ? AND status = 'confirmed'",
-            (thirty_days_ago,),
-        ).fetchone()["c"]
+        row = conn.execute(
+            """
+            SELECT
+                SUM(CASE WHEN status = 'confirmed' THEN 1 ELSE 0 END) AS confirmed,
+                SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) AS cancelled,
+                SUM(
+                    CASE WHEN status = 'confirmed' AND starts_at >= ? THEN 1 ELSE 0 END
+                ) AS upcoming,
+                SUM(
+                    CASE WHEN status = 'confirmed' AND created_at >= ? THEN 1 ELSE 0 END
+                ) AS last_30_days
+            FROM bookings
+            """,
+            (now, thirty_days_ago),
+        ).fetchone()
 
     return {
-        "total_bookings": int(total),
-        "upcoming_bookings": int(upcoming),
-        "bookings_last_30_days": int(recent),
+        "confirmed": int(row["confirmed"] or 0),
+        "cancelled": int(row["cancelled"] or 0),
+        "upcoming": int(row["upcoming"] or 0),
+        "last_30_days": int(row["last_30_days"] or 0),
     }
+
+
+def list_bookings(*, status: str = "all", limit: int = 500) -> list[BookingRecord]:
+    query = "SELECT * FROM bookings"
+    params: list[object] = []
+    if status == "confirmed":
+        query += " WHERE status = 'confirmed'"
+    elif status == "cancelled":
+        query += " WHERE status = 'cancelled'"
+    query += " ORDER BY starts_at DESC LIMIT ?"
+    params.append(limit)
+
+    with _connect() as conn:
+        rows = conn.execute(query, params).fetchall()
+    return [_row_to_record(row) for row in rows]

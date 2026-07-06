@@ -40,6 +40,7 @@ COPY backend/data ./data
 COPY backend/routers ./routers
 COPY backend/schemas ./schemas
 COPY backend/services ./services
+COPY public/logo.png ./assets/logo.png
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD wget -qO- http://127.0.0.1:8000/healthz || exit 1

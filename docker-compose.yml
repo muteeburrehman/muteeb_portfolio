@@ -28,8 +28,6 @@ services:
       - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
-    networks:
-      - edge
     depends_on:
       web:
         condition: service_healthy
@@ -39,6 +37,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 15s
+    networks:
+      - edge
+      - n8n_proxy
 
   web:
     build:
@@ -92,7 +93,7 @@ services:
       MAIL_REPLY_WINDOW: ${MAIL_REPLY_WINDOW:-usually within one day}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       BOOKING_DB_PATH: /data/bookings.sqlite
-      BOOKING_TIMEZONE: ${BOOKING_TIMEZONE:-Asia/Karachi}
+      BOOKING_TIMEZONE: ${BOOKING_TIMEZONE:-America/Denver}
       MEETING_LINK: ${MEETING_LINK:-}
       HUBSPOT_ENABLED: ${HUBSPOT_ENABLED:-false}
       HUBSPOT_ACCESS_TOKEN: ${HUBSPOT_ACCESS_TOKEN:-}
@@ -100,6 +101,7 @@ services:
       HUBSPOT_DEAL_STAGE: ${HUBSPOT_DEAL_STAGE:-appointmentscheduled}
       N8N_BOOKING_WEBHOOK_URL: ${N8N_BOOKING_WEBHOOK_URL:-}
       BOOKING_ADMIN_KEY: ${BOOKING_ADMIN_KEY:-}
+      ADMIN_SUPER_EMAILS: ${ADMIN_SUPER_EMAILS:-}
     volumes:
       - booking_data:/data
     expose:
@@ -123,3 +125,6 @@ networks:
     driver: bridge
   internal:
     driver: bridge
+  n8n_proxy:
+    external: true
+    name: qubix-solutions_qubix-net

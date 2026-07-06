@@ -18,6 +18,8 @@ from services.email_service import send_raw_email
 
 logger = logging.getLogger(__name__)
 BRAND = os.getenv("MAIL_BRAND_NAME", "Muteeb Labs")
+# Shown only in admin booking notifications — not on the public site or client emails.
+ADMIN_REFERENCE_TZ = os.getenv("BOOKING_ADMIN_REFERENCE_TIMEZONE", "Asia/Karachi").strip() or "Asia/Karachi"
 
 
 def _format_when(starts_at: datetime, tz_name: str) -> str:
@@ -30,8 +32,16 @@ def _format_when(starts_at: datetime, tz_name: str) -> str:
         return starts_at.strftime("%Y-%m-%d %H:%M UTC")
 
 
+def _format_admin_reference_when(starts_at: datetime, booking_tz_name: str) -> str | None:
+    """Pakistan (or other admin) time for internal inbox notifications."""
+    if not ADMIN_REFERENCE_TZ or ADMIN_REFERENCE_TZ == booking_tz_name:
+        return None
+    return _format_when(starts_at, ADMIN_REFERENCE_TZ)
+
+
 def send_booking_emails(booking: BookingRecord, tz_name: str) -> None:
     when = _format_when(booking.starts_at, tz_name)
+    when_admin = _format_admin_reference_when(booking.starts_at, tz_name)
     to_team = os.getenv("EMAIL_TO", os.getenv("EMAIL_FROM", "")).strip()
     if not to_team:
         logger.warning("EMAIL_TO not set — skipping booking notification email")
@@ -45,6 +55,10 @@ def send_booking_emails(booking: BookingRecord, tz_name: str) -> None:
         f"Company: {booking.company or '—'}\n"
         f"Phone: {booking.phone or '—'}\n"
         f"When: {when}\n"
+    )
+    if when_admin:
+        team_body += f"Pakistan time: {when_admin}\n"
+    team_body += (
         f"Meeting link: {booking.meeting_link}\n"
         f"Notes: {booking.notes or '—'}\n"
         f"Booking ID: {booking.id}\n"
@@ -59,7 +73,11 @@ def send_booking_emails(booking: BookingRecord, tz_name: str) -> None:
             to_addrs=[to_team],
             subject=team_subject,
             plain_body=team_body,
-            html_body=render_team_booking_html(booking=booking, when=when),
+            html_body=render_team_booking_html(
+                booking=booking,
+                when=when,
+                when_admin_reference=when_admin,
+            ),
             reply_to=booking.email,
         )
     except Exception:
@@ -102,22 +120,32 @@ def send_booking_emails(booking: BookingRecord, tz_name: str) -> None:
 
 def send_booking_cancelled_email(booking: BookingRecord, tz_name: str) -> None:
     when = _format_when(booking.starts_at, tz_name)
+    when_admin = _format_admin_reference_when(booking.starts_at, tz_name)
     to_team = os.getenv("EMAIL_TO", os.getenv("EMAIL_FROM", "")).strip()
 
     if to_team:
         try:
+            cancel_plain = (
+                f"Booking cancelled.\n\n"
+                f"Name: {booking.name}\n"
+                f"Email: {booking.email}\n"
+                f"Was scheduled: {when}\n"
+            )
+            if when_admin:
+                cancel_plain += f"Pakistan time: {when_admin}\n"
+            cancel_plain += (
+                f"Booking ID: {booking.id}\n"
+                f"The time slot is now available for other clients.\n"
+            )
             send_raw_email(
                 to_addrs=[to_team],
                 subject=f"[{BRAND}] Booking cancelled — {booking.name}",
-                plain_body=(
-                    f"Booking cancelled.\n\n"
-                    f"Name: {booking.name}\n"
-                    f"Email: {booking.email}\n"
-                    f"Was scheduled: {when}\n"
-                    f"Booking ID: {booking.id}\n"
-                    f"The time slot is now available for other clients.\n"
+                plain_body=cancel_plain,
+                html_body=render_team_cancel_html(
+                    booking=booking,
+                    when=when,
+                    when_admin_reference=when_admin,
                 ),
-                html_body=render_team_cancel_html(booking=booking, when=when),
                 reply_to=booking.email,
             )
         except Exception:

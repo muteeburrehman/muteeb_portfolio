@@ -6,6 +6,8 @@ import { Navbar } from './components/Navbar'
 import { BookCallPage } from './pages/BookCallPage'
 import { CancelBookingPage } from './pages/CancelBookingPage'
 import { ContactPage } from './pages/ContactPage'
+import { AdminDashboardPage } from './pages/AdminDashboardPage'
+import { AdminLoginPage } from './pages/AdminLoginPage'
 import { AgencySolutionsPage } from './pages/AgencySolutionsPage'
 import { AIAutomationPage } from './pages/AIAutomationPage'
 import { HomePage } from './pages/HomePage'
@@ -15,6 +17,7 @@ import { QATestingPage } from './pages/QATestingPage'
 
 function App() {
   const { pathname, hash } = useLocation()
+  const isAdminRoute = pathname.startsWith('/admin')
 
   useEffect(() => {
     if (hash) {
@@ -27,8 +30,8 @@ function App() {
 
   return (
     <>
-      <Navbar />
-      <main className="site-main">
+      {!isAdminRoute && <Navbar />}
+      <main className={isAdminRoute ? 'site-main site-main--admin' : 'site-main'}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/contact" element={<ContactPage />} />
@@ -36,13 +39,15 @@ function App() {
           <Route path="/book/cancel" element={<CancelBookingPage />} />
           <Route path="/livestock-software" element={<LivestockSoftwarePage />} />
           <Route path="/qa-testing" element={<QATestingPage />} />
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route path="/admin" element={<AdminDashboardPage />} />
           <Route path="/agency-solutions" element={<AgencySolutionsPage />} />
           <Route path="/ai-automation" element={<AIAutomationPage />} />
           <Route path="/case-study/marblesemen" element={<MarbleSemenCaseStudy />} />
         </Routes>
       </main>
-      <Footer />
-      <BackToTop hideOnContact={pathname === '/contact'} />
+      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && <BackToTop hideOnContact={pathname === '/contact'} />}
     </>
   )
 }

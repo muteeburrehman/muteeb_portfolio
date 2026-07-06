@@ -13,15 +13,19 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from routers.admin import router as admin_router
 from routers.booking import router as booking_router
 from routers.contact import router as contact_router
 from services.booking_store import init_db
+from services.contact_store import init_contacts_db
+from services.super_user_store import init_super_users_db
 
 
 def _bootstrap_config() -> None:
     here = Path(__file__).resolve().parent
-    load_dotenv(here / ".env")
-    load_dotenv(here.parent / ".env", override=False)
+    # override=True so repo .env wins over stale shell exports (e.g. old BOOKING_TIMEZONE).
+    load_dotenv(here.parent / ".env", override=True)
+    load_dotenv(here / ".env", override=True)
 
 
 _bootstrap_config()
@@ -51,6 +55,8 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     else:
         logger.info("SMTP configured for %s", host)
     init_db()
+    init_contacts_db()
+    init_super_users_db()
     yield
 
 
@@ -67,12 +73,13 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=_origins or ["http://localhost:5173"],
     allow_credentials=False,
-    allow_methods=("GET", "POST", "OPTIONS"),
+    allow_methods=("GET", "POST", "PATCH", "OPTIONS"),
     allow_headers=("*"),
 )
 
 app.include_router(contact_router)
 app.include_router(booking_router)
+app.include_router(admin_router)
 
 
 @app.get("/healthz")

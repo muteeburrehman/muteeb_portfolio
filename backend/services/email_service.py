@@ -14,6 +14,7 @@ from schemas.contact import ContactSubmission
 from services.contact_ack_html import render_contact_acknowledgment_html
 from services.contact_email_html import render_contact_notification_html
 from services.contact_urls import public_contact_form_url
+from services.email_mime import attach_branded_html
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +82,36 @@ def _send_mime(
 ) -> None:
     refused = smtp.sendmail(envelope_sender, recipients, mime.as_string())
     if refused:
-        raise RuntimeError(f"SMTP recipients refused: {refused}")
+        raise smtplib.SMTPRecipientsRefused(refused)
+
+
+def smtp_delivery_detail(exc: BaseException) -> str:
+    """Short admin-facing explanation for SMTP send failures."""
+    if isinstance(exc, smtplib.SMTPAuthenticationError):
+        return "SMTP login failed. Check EMAIL_USER and EMAIL_PASS in .env."
+
+    if isinstance(exc, smtplib.SMTPRecipientsRefused):
+        reasons: list[str] = []
+        for _addr, (_code, msg) in exc.recipients.items():
+            text = msg.decode("utf-8", errors="replace") if isinstance(msg, bytes) else str(msg)
+            reasons.append(text)
+        combined = " ".join(reasons)
+        lower = combined.lower()
+        if "quota" in lower or "limit" in lower:
+            return (
+                "Send blocked by your mail provider: outgoing email quota reached. "
+                "Wait for the limit to reset or upgrade your email plan."
+            )
+        return f"Recipient rejected by mail server: {combined}"
+
+    if isinstance(exc, smtplib.SMTPException):
+        return f"SMTP error: {exc}"
+
+    message = str(exc)
+    if isinstance(exc, RuntimeError) and "Missing required env" in message:
+        return f"SMTP not configured — {message}"
+
+    return "Could not send message. Check SMTP settings and try again."
 
 
 def _open_smtp() -> tuple[smtplib.SMTP, str, str]:
@@ -101,11 +131,16 @@ def _open_smtp() -> tuple[smtplib.SMTP, str, str]:
     if missing:
         raise RuntimeError(f"Missing required env vars: {', '.join(missing)}")
 
-    smtp = smtplib.SMTP(smtp_host, smtp_port, timeout=SMTP_TIMEOUT_SEC)
-    smtp.ehlo()
-    if use_tls and smtp.has_extn("STARTTLS"):
-        smtp.starttls(context=ssl.create_default_context())
+    ctx = ssl.create_default_context()
+    if smtp_port == 465:
+        smtp = smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=SMTP_TIMEOUT_SEC, context=ctx)
         smtp.ehlo()
+    else:
+        smtp = smtplib.SMTP(smtp_host, smtp_port, timeout=SMTP_TIMEOUT_SEC)
+        smtp.ehlo()
+        if use_tls and smtp.has_extn("STARTTLS"):
+            smtp.starttls(context=ctx)
+            smtp.ehlo()
 
     password = "".join((email_pass or "").splitlines())
     smtp.login(email_user or "", password)
@@ -129,13 +164,16 @@ def send_contact_notification(data: ContactSubmission) -> None:
         topic = _topic(data)
         topic_bit = f" — {topic}" if topic else ""
 
-        mime = MIMEMultipart("alternative")
+        mime = MIMEMultipart("related")
         mime["Subject"] = f"New inquiry{topic_bit} — {BRAND}"
         mime["From"] = formataddr((BRAND, from_addr))
         mime["To"] = recipient
         mime["Reply-To"] = str(data.email)
-        mime.attach(MIMEText(_build_plain_body(data), "plain", "utf-8"))
-        mime.attach(MIMEText(render_contact_notification_html(data), "html", "utf-8"))
+        attach_branded_html(
+            mime,
+            plain_body=_build_plain_body(data),
+            html_body=render_contact_notification_html(data),
+        )
 
         logger.info(
             "Sending admin notification auth=%s from=%s to=%s subject=%s",
@@ -158,13 +196,16 @@ def send_contact_acknowledgment(data: ContactSubmission) -> None:
         if not client_email:
             raise RuntimeError("Cannot send acknowledgment: submitter email is empty")
 
-        mime = MIMEMultipart("alternative")
+        mime = MIMEMultipart("related")
         mime["Subject"] = f"Message received (automated) — {BRAND}"
         mime["From"] = formataddr((BRAND, from_addr))
         mime["To"] = client_email
         mime["Reply-To"] = formataddr((BRAND, from_addr))
-        mime.attach(MIMEText(_build_ack_plain_body(data), "plain", "utf-8"))
-        mime.attach(MIMEText(render_contact_acknowledgment_html(data), "html", "utf-8"))
+        attach_branded_html(
+            mime,
+            plain_body=_build_ack_plain_body(data),
+            html_body=render_contact_acknowledgment_html(data),
+        )
 
         logger.info(
             "Sending client acknowledgment auth=%s from=%s to=%s",
@@ -194,15 +235,17 @@ def send_raw_email(
     smtp, email_user, _ = _open_smtp()
     try:
         from_addr = _from_addr(email_user)
-        mime = MIMEMultipart("alternative")
+        mime = MIMEMultipart("related")
         mime["Subject"] = subject
         mime["From"] = formataddr((BRAND, from_addr))
         mime["To"] = ", ".join(recipients)
         if reply_to:
             mime["Reply-To"] = reply_to
-        mime.attach(MIMEText(plain_body, "plain", "utf-8"))
-        if html_body:
-            mime.attach(MIMEText(html_body, "html", "utf-8"))
+        attach_branded_html(
+            mime,
+            plain_body=plain_body,
+            html_body=html_body or plain_body,
+        )
         _send_mime(smtp, email_user, recipients, mime)
     finally:
         try:

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { BOOK_CALL_PATH, EMAIL, NAME, SOCIAL_LINKS, TAGLINE } from '../data/portfolio'
+import { BOOK_CALL_PATH, EMAIL, LEGAL_ADDRESS_LINES, LEGAL_ENTITY, SOCIAL_LINKS, TAGLINE } from '../data/portfolio'
 import { ArrowIcon, LinkedInIcon, MailIcon } from './icons'
 import { SiteLogo } from './SiteLogo'
 
@@ -77,7 +77,14 @@ export function Footer() {
 
         <div className="footer-bottom">
           <p className="footer-bottom-text">
-            © {year} {NAME}. All rights reserved.
+            © {year} {LEGAL_ENTITY}. All rights reserved.
+          </p>
+          <p className="footer-bottom-text text-sm text-slate-500">
+            {LEGAL_ADDRESS_LINES.map((line) => (
+              <span key={line} className="footer-address-line">
+                {line}
+              </span>
+            ))}
           </p>
           <p className="footer-bottom-text text-sm text-slate-500">
             Agribusiness · Contests · Inventory · Agencies · QA · AI

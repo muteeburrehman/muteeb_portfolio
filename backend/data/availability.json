@@ -1,5 +1,5 @@
 {
-  "timezone": "Asia/Karachi",
+  "timezone": "America/Denver",
   "slot_duration_minutes": 30,
   "buffer_minutes": 15,
   "min_notice_hours": 24,

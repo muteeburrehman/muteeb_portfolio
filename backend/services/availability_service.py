@@ -58,7 +58,7 @@ def load_availability_rules() -> AvailabilityRules:
     with path.open(encoding="utf-8") as f:
         raw = json.load(f)
 
-    tz_name = os.getenv("BOOKING_TIMEZONE", raw.get("timezone", "Asia/Karachi"))
+    tz_name = os.getenv("BOOKING_TIMEZONE", raw.get("timezone", "America/Denver"))
     tz = ZoneInfo(tz_name)
 
     weekly: dict[str, list[TimeWindow]] = {}

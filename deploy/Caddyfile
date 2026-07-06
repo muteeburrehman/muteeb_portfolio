@@ -38,3 +38,15 @@ www.{$SITE_DOMAIN:muteeblabs.com} {
 muteeblabs.uk, www.muteeblabs.uk, dev.muteeblabs.uk {
 	redir https://{$SITE_DOMAIN:muteeblabs.com}{uri} permanent
 }
+
+# n8n automation (self-hosted on same VPS)
+n8n.muteeblabs.uk {
+	encode gzip zstd
+
+	reverse_proxy n8n:5678 {
+		header_up Host {host}
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-For {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+	}
+}

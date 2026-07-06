@@ -1,19 +1,23 @@
-"""Shared Muteeb Labs branded email layout (dark theme, table + inline CSS)."""
+"""Shared MuteebLabs branded email layout — matches site theme (navy + blue/green)."""
 
 from __future__ import annotations
 
 import html
 import os
 
-BG_OUTER = "#0a0a0a"
-CARD = "#161616"
-CARD_BORDER = "#2a2a2a"
-TEXT = "#f5f5f5"
-TEXT_MUTED = "#a3a3a3"
-TEXT_DIM = "#737373"
-SKY = "#38bdf8"
-PURPLE = "#a855f7"
-ACCENT_BAR = f"linear-gradient(90deg,{SKY},{PURPLE})"
+from services.mail_assets import logo_cid_src
+
+# Site palette (src/index.css)
+BG_OUTER = "#040810"
+BG_NAVY = "#0a1220"
+CARD = "#0c1526"
+CARD_BORDER = "rgba(51, 65, 85, 0.65)"
+TEXT = "#f1f5f9"
+TEXT_MUTED = "#94a3b8"
+TEXT_DIM = "#64748b"
+PRIMARY = "#0ea5e9"
+ACCENT = "#22c55e"
+ACCENT_BAR = f"linear-gradient(135deg,{PRIMARY} 0%,{ACCENT} 100%)"
 
 BRAND = os.getenv("MAIL_BRAND_NAME", "Muteeb Labs")
 SIGN_NAME = os.getenv("MAIL_SIGN_NAME", "Muteeb Ur Rehman")
@@ -32,6 +36,13 @@ def esc_attr(value: object) -> str:
 
 def site_label() -> str:
     return SITE_URL.replace("https://", "").replace("http://", "")
+
+
+def logo_block() -> str:
+    return (
+        f'<img src="{logo_cid_src()}" width="148" height="auto" alt="{esc(BRAND)}" '
+        f'style="display:block;max-width:148px;height:auto;border:0;outline:none;" />'
+    )
 
 
 def meta_row(label: str, value: str | None) -> str:
@@ -54,8 +65,8 @@ def meta_row(label: str, value: str | None) -> str:
 
 def accent_divider() -> str:
     return (
-        f'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 20px;">'
-        f"<tr><td style=\"height:3px;background:{SKY};background:{ACCENT_BAR};"
+        '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 20px;">'
+        f"<tr><td style=\"height:3px;background:{PRIMARY};background:{ACCENT_BAR};"
         f'border-radius:2px;font-size:0;">&#8203;</td></tr></table>'
     )
 
@@ -64,14 +75,14 @@ def cta_button(href: str, label: str) -> str:
     return (
         f'<a href="{esc_attr(href)}" target="_blank" rel="noopener noreferrer" '
         f'style="display:inline-block;padding:12px 22px;font-size:14px;font-weight:600;'
-        f"color:#ffffff;text-decoration:none;border-radius:8px;"
-        f'background:linear-gradient(135deg,{SKY},{PURPLE});">{esc(label)}</a>'
+        f"color:#ffffff;text-decoration:none;border-radius:14px;"
+        f'background:{PRIMARY};background:{ACCENT_BAR};">{esc(label)}</a>'
     )
 
 
 def secondary_link(href: str, label: str) -> str:
     return (
-        f'<a href="{esc_attr(href)}" style="color:{SKY};text-decoration:none;'
+        f'<a href="{esc_attr(href)}" style="color:{PRIMARY};text-decoration:none;'
         f'font-weight:500;">{esc(label)}</a>'
     )
 
@@ -80,22 +91,22 @@ def signature_block() -> str:
     site_href = esc_attr(SITE_URL)
     site_lbl = esc(site_label())
     return (
-        f'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-top:28px;">'
+        '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-top:28px;">'
         f"<tr><td style=\"padding-top:18px;border-top:1px solid {CARD_BORDER};\">"
         f'<p style="margin:0;color:{TEXT};font-size:14px;line-height:1.5;font-weight:600;">{esc(SIGN_NAME)}</p>'
         f'<p style="margin:2px 0 0;color:{TEXT_DIM};font-size:12px;line-height:1.5;">{esc(SIGN_TITLE)}</p>'
         f'<p style="margin:6px 0 0;color:{TEXT_DIM};font-size:12px;line-height:1.5;">'
         f'<a href="{site_href}" target="_blank" rel="noopener noreferrer" '
-        f'style="color:{SKY};text-decoration:none;">{site_lbl}</a></p>'
+        f'style="color:{PRIMARY};text-decoration:none;">{site_lbl}</a></p>'
         "</td></tr></table>"
     )
 
 
 def info_box(title: str, body_html: str) -> str:
     return (
-        f'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:18px 0 0;">'
-        f"<tr><td style=\"padding:14px 16px;background:#0f0f0f;border:1px solid {CARD_BORDER};"
-        f'border-radius:10px;">'
+        '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:18px 0 0;">'
+        f"<tr><td style=\"padding:14px 16px;background:{BG_NAVY};border:1px solid {CARD_BORDER};"
+        f'border-radius:14px;">'
         f'<p style="margin:0 0 8px;color:{TEXT_DIM};font-size:10px;font-weight:700;'
         f'letter-spacing:0.12em;text-transform:uppercase;">{esc(title)}</p>'
         f'<p style="margin:0;color:{TEXT_MUTED};font-size:13px;line-height:1.65;">{body_html}</p>'
@@ -114,7 +125,7 @@ def render_email(
     footer_html: str,
 ) -> str:
     eyebrow = (
-        f'<p style="margin:0 0 6px;color:rgba(255,255,255,0.85);font-size:10px;font-weight:700;'
+        f'<p style="margin:12px 0 0;color:rgba(255,255,255,0.88);font-size:10px;font-weight:700;'
         f'letter-spacing:0.28em;text-transform:uppercase;">{esc(header_eyebrow or BRAND.upper())}</p>'
     )
     return f"""<!DOCTYPE html>
@@ -126,7 +137,7 @@ def render_email(
 <title>{esc(page_title)}</title>
 </head>
 <body style="margin:0;padding:0;background:{BG_OUTER};
- font-family:'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;-webkit-font-smoothing:antialiased;">
+ font-family:'Inter','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;-webkit-font-smoothing:antialiased;">
   <div style="display:none;font-size:1px;color:{BG_OUTER};line-height:1px;max-height:0;opacity:0;overflow:hidden;mso-hide:all;">
     {esc(preview_text)}
   </div>
@@ -138,15 +149,20 @@ def render_email(
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:580px;">
 
           <tr>
-            <td style="border-radius:16px 16px 0 0;overflow:hidden;">
+            <td style="border-radius:18px 18px 0 0;overflow:hidden;border:1px solid {CARD_BORDER};border-bottom:none;">
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                 <tr>
-                  <td style="background:{SKY};background:linear-gradient(125deg,{SKY} 0%,{PURPLE} 100%);
-                    padding:28px 28px 30px;">
+                  <td style="background:{BG_NAVY};padding:22px 28px 8px;text-align:center;">
+                    {logo_block()}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="background:{PRIMARY};background:{ACCENT_BAR};padding:8px 28px 28px;">
                     {eyebrow}
-                    <p style="margin:0;color:#ffffff;font-size:24px;font-weight:800;line-height:1.15;
-                      font-family:Georgia,'Times New Roman',serif;">{esc(header_title)}</p>
-                    <p style="margin:14px 0 0;color:rgba(255,255,255,0.92);font-size:14px;line-height:1.55;">
+                    <p style="margin:0;color:#ffffff;font-size:26px;font-weight:700;line-height:1.15;
+                      font-family:'Oswald','Inter','Segoe UI',sans-serif;letter-spacing:0.02em;">
+                      {esc(header_title)}</p>
+                    <p style="margin:14px 0 0;color:rgba(255,255,255,0.94);font-size:14px;line-height:1.55;">
                       {header_subtitle}</p>
                   </td>
                 </tr>
@@ -156,7 +172,7 @@ def render_email(
 
           <tr>
             <td style="background:{CARD};padding:0 26px 28px;border:1px solid {CARD_BORDER};
-              border-top:none;border-radius:0 0 16px 16px;">
+              border-top:none;border-radius:0 0 18px 18px;">
               {body_html}
             </td>
           </tr>
