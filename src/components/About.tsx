@@ -20,7 +20,7 @@ export function About() {
           <Reveal className="about-grid__intro">
             <SectionLabel>About</SectionLabel>
             <h2 className="heading-section">
-              Custom software, <span className="text-gradient">engineered hands-on</span>
+              A small team that <span className="text-gradient">owns the build</span>
             </h2>
             <p className="about-lead">{TEAM_INTRO}</p>
             <p className="about-body">{TEAM_APPROACH}</p>

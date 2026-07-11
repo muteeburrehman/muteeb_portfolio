@@ -14,8 +14,8 @@ export const SITE_LOGO = '/logo.png'
 export const SITE_LOGO_DARK = '/logo-dark.png'
 export const SITE_PROFILE_IMAGE = '/profile.jpg'
 export const SITE_IMAGES = {
-  heroBackdrop: '/images/mountain-sunset.png',
-  heroVisual: '/images/rancher-tablet.png',
+  heroBackdrop: '/images/hero-backdrop-vivid.jpg',
+  heroVisual: '/images/hero-visual-alt.jpg',
   livestockHero: '/images/barn-golden-hour.png',
   agricultureBg: '/images/cows-grazing.png',
   angusHerd: '/images/angus-herd.png',
@@ -30,21 +30,21 @@ export const SITE_IMAGES = {
   livestockPreview: '/images/angus-herd.png',
 } as const
 export const NAME = 'Muteeb Ur Rehman'
-export const TAGLINE =
-  'Founder & Lead Engineer · MuteebLabs | Custom software, QA & AI automation'
+export const TAGLINE = 'Founder & Lead Engineer · MuteebLabs'
 export const ROLE = TAGLINE
+export const SITE_TAGLINE =
+  'Custom software for niche operations — built end-to-end, shipped to production.'
 export const TEAM_INTRO =
-  'MuteebLabs is a software team building custom platforms — from agribusiness genetics and contest-based racing apps to inventory systems and local agency workflow fixes.'
+  'MuteebLabs is a small engineering team based in Albuquerque. We take ownership of the full build — from the first discovery call through launch and the messy weeks after.'
 export const TEAM_APPROACH =
-  'We work end-to-end across discovery, architecture, development, testing, and launch. Whether the problem is a Wagyu genetics storefront, a motorsport contest platform, stock tracking, or a broken agency process, the goal is the same — software your team trusts and your customers can use.'
-export const LINKEDIN_URL = 'https://pk.linkedin.com/in/muteeb-ur-rehman-091a2628a'
+  'We scope tightly, ship in visible increments, and tell you early when something is the wrong fit. The goal is software your team trusts — not a pile of half-used features.'
+export const LINKEDIN_URL = 'https://www.linkedin.com/company/muteeblabs'
 
 /** About profile quick facts — broad positioning, not stack/contract limits */
 export const PROFILE_QUICK_FACTS = [
   { label: 'Location', value: 'Albuquerque, New Mexico, USA' },
   { label: 'Team', value: 'Engineers · QA · AI specialists' },
   { label: 'Clients', value: 'US, UK & global teams' },
-  { label: 'What we build', value: 'Ag · Contests · Inventory · QA · AI' },
   { label: 'Typical response', value: '< 1 business day' },
 ] as const
 
@@ -286,10 +286,30 @@ export const NAV_SERVICES = [
 ] as const
 
 export const NAV_INDUSTRIES = [
-  { label: 'Agribusiness & genetics', to: '/livestock-software', image: SITE_IMAGES.livestockHero },
-  { label: 'Motorsport & contests', to: '/#work', image: SITE_IMAGES.racingContestsHero },
-  { label: 'Local agencies', to: '/agency-solutions', image: SITE_IMAGES.localGovernmentHero },
-  { label: 'Inventory & operations', to: '/#industries', image: SITE_IMAGES.inventoryHero },
+  {
+    label: 'Agribusiness & genetics',
+    blurb: 'Buyer portals and catalogs for cattle operations.',
+    to: '/livestock-software',
+    image: SITE_IMAGES.livestockHero,
+  },
+  {
+    label: 'Motorsport & contests',
+    blurb: 'Race-season apps with scoring, leaderboards, and payouts.',
+    to: '/#work',
+    image: SITE_IMAGES.racingContestsHero,
+  },
+  {
+    label: 'Local agencies',
+    blurb: 'Lightweight portals when legacy tools slow the team.',
+    to: '/agency-solutions',
+    image: SITE_IMAGES.localGovernmentHero,
+  },
+  {
+    label: 'Inventory & operations',
+    blurb: 'Stock, orders, and alerts in one place.',
+    to: '/#industries',
+    image: SITE_IMAGES.inventoryHero,
+  },
 ] as const
 
 export type NavDropdownItem = { label: string; to: string }

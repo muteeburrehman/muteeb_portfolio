@@ -22,8 +22,11 @@ export function Services() {
         <Reveal>
           <SectionLabel>What we solve</SectionLabel>
           <h2 className="heading-section max-w-2xl">
-            Software for <span className="text-gradient">real business problems</span>
+            What we <span className="text-gradient">take on</span>
           </h2>
+          <p className="section-lead">
+            Clear problem, scoped build, release you can trust — pick the lane that matches yours.
+          </p>
         </Reveal>
 
         <div className="service-cards">

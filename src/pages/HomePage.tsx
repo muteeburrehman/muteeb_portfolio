@@ -9,7 +9,7 @@ import { Services } from '../components/Services'
 
 const HOME_TITLE = 'MuteebLabs | Custom Software, Software Testing & AI'
 const HOME_DESCRIPTION =
-  'Custom software for agribusiness, contest platforms, inventory systems, and agency workflow fixes — plus QA and AI automation. MuteebLabs builds platforms teams actually use.'
+  'MuteebLabs builds production software for niche operations — agribusiness, contests, inventory, and agency workflows — with QA and AI automation when you need it.'
 
 export function HomePage() {
   useEffect(() => {
@@ -22,7 +22,7 @@ export function HomePage() {
     if (ogDesc) {
       ogDesc.setAttribute(
         'content',
-        'Custom software for agribusiness, contests, inventory ops, and agencies — plus QA and AI automation — built by MuteebLabs.',
+        'Production software for niche operations. MuteebLabs — Albuquerque.',
       )
     }
   }, [])

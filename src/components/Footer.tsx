@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { BOOK_CALL_PATH, EMAIL, LEGAL_ADDRESS_LINES, LEGAL_ENTITY, SOCIAL_LINKS, TAGLINE } from '../data/portfolio'
+import { BOOK_CALL_PATH, EMAIL, LEGAL_ADDRESS_LINES, LEGAL_ENTITY, SITE_TAGLINE, SOCIAL_LINKS } from '../data/portfolio'
 import { ArrowIcon, LinkedInIcon, MailIcon } from './icons'
 import { SiteLogo } from './SiteLogo'
 
@@ -16,7 +16,7 @@ export function Footer() {
             <Link to="/" className="inline-block">
               <SiteLogo variant="footer" />
             </Link>
-            <p className="footer-brand-desc max-w-sm mt-3">{TAGLINE}</p>
+            <p className="footer-brand-desc max-w-sm mt-3">{SITE_TAGLINE}</p>
           </div>
 
           {/* Quick Links Group */}

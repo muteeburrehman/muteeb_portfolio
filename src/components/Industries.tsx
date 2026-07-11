@@ -9,10 +9,13 @@ export function Industries() {
     <section id="industries" className="industries-section section-block section-block--compact">
       <div className="container relative z-10">
         <Reveal>
-          <SectionLabel>Industries</SectionLabel>
+          <SectionLabel>Who we build for</SectionLabel>
           <h2 className="heading-section max-w-2xl">
-            Built for <span className="text-gradient">more than one vertical</span>
+            Markets we already <span className="text-gradient">know</span>
           </h2>
+          <p className="section-lead">
+            Domain familiarity shortens discovery — you spend less time explaining the business.
+          </p>
         </Reveal>
 
         <div className="industry-cards">
@@ -24,7 +27,10 @@ export function Industries() {
                   <div className="industry-card__overlay" aria-hidden="true" />
                 </div>
                 <div className="industry-card__body">
-                  <h3 className="industry-card__title">{item.label}</h3>
+                  <div className="industry-card__copy">
+                    <h3 className="industry-card__title">{item.label}</h3>
+                    <p className="industry-card__blurb">{item.blurb}</p>
+                  </div>
                   <span className="industry-card__link">
                     Explore
                     <ArrowIcon className="h-3.5 w-3.5" />

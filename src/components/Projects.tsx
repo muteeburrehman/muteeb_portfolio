@@ -135,11 +135,10 @@ export function Projects() {
           <SectionLabel>Selected work</SectionLabel>
           <div className="section-header-row">
             <h2 className="heading-section max-w-2xl">
-              Work we&apos;ve <span className="text-gradient">shipped</span>
+              Recent <span className="text-gradient">production work</span>
             </h2>
             <p className="section-header-desc">
-              Production platforms across agribusiness, motorsport contests, inventory ops, and
-              automation.
+              Live products and platforms — not concept decks.
             </p>
           </div>
         </Reveal>

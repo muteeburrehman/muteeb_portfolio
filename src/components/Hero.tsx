@@ -9,7 +9,7 @@ function HeroShowcase() {
       <div className="hero-showcase__frame hero-showcase__frame--photo">
         <img
           src={SITE_IMAGES.heroVisual}
-          alt="Rancher using a tablet in the field with cattle in the background"
+          alt="Tablet showing a cattle genetics catalog on a ranch at golden hour"
           className="hero-showcase__photo"
           width={1024}
           height={683}
@@ -51,13 +51,19 @@ function HeroShowcase() {
 export function Hero() {
   return (
     <section id="home" className="hero hero--home">
-      <div
-        className="hero__backdrop hero__backdrop--photo"
-        style={{ backgroundImage: `url(${SITE_IMAGES.heroBackdrop})` }}
-        aria-hidden="true"
-      />
-      <div className="hero-radial-glow" aria-hidden="true" />
-      <div className="grid-overlay grid-overlay--subtle" aria-hidden="true" />
+      <div className="hero__atmosphere" aria-hidden="true">
+        <div
+          className="hero__backdrop hero__backdrop--photo"
+          style={{ backgroundImage: `url(${SITE_IMAGES.heroBackdrop})` }}
+        />
+        <div className="hero__aurora hero__aurora--amber" />
+        <div className="hero__aurora hero__aurora--teal" />
+        <div className="hero__aurora hero__aurora--violet" />
+        <div className="hero__particles" />
+        <div className="hero__sheen" />
+        <div className="hero__scrim" />
+      </div>
+      <div className="grid-overlay grid-overlay--subtle" />
 
       <div className="container relative z-10">
         <div className="hero-main-layout hero-main-layout--home">
@@ -67,7 +73,7 @@ export function Hero() {
                 <span className="hero-badge-live-dot" />
                 Accepting new clients
               </span>
-              <span className="hero-badge">Ag · Motorsport · Agencies · Ops</span>
+              <span className="hero-badge">US · UK · Remote-friendly</span>
             </div>
 
             <h1 className="hero-title hero-title--display">
@@ -78,14 +84,13 @@ export function Hero() {
             </h1>
 
             <p className="hero-desc hero-desc--display">
-              Agribusiness storefronts, contest-based racing apps, inventory systems, and local
-              agency fixes — plus QA and automation for teams outgrowing spreadsheets.
+              We build production platforms for niche operations — then stick around through launch.
             </p>
 
             <div className="hero-ctas">
               <Link to={BOOK_CALL_PATH} className="btn-primary">
                 Book a discovery call
-                <ArrowIcon className="h-5 w-5" />
+                <ArrowIcon className="h-5 w-5 shrink-0" />
               </Link>
               <a href="#work" className="btn-secondary">
                 See our work
