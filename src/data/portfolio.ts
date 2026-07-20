@@ -14,8 +14,8 @@ export const SITE_LOGO = '/logo.png'
 export const SITE_LOGO_DARK = '/logo-dark.png'
 export const SITE_PROFILE_IMAGE = '/profile.jpg'
 export const SITE_IMAGES = {
-  heroBackdrop: '/images/hero-backdrop-vivid.jpg',
-  heroVisual: '/images/hero-visual-alt.jpg',
+  heroBackdrop: '/images/company-hero-backdrop.jpg',
+  heroVisual: '/images/racing-contests-hero.png',
   livestockHero: '/images/barn-golden-hour.png',
   agricultureBg: '/images/cows-grazing.png',
   angusHerd: '/images/angus-herd.png',
@@ -26,24 +26,26 @@ export const SITE_IMAGES = {
   aiAutomationHero: '/images/ai-automation-hero.png',
   inventoryHero: '/images/inventory-hero.png',
   localGovernmentHero: '/images/local-government-hero.png',
+  cjisBookingHero: '/images/cjis-booking-hero.jpg',
   /** Cattle-only preview for livestock portfolio cards — no client screenshots */
   livestockPreview: '/images/angus-herd.png',
+  pitprizePreview: '/projects/pitprize.png',
 } as const
 export const NAME = 'Muteeb Ur Rehman'
 export const TAGLINE = 'Founder & Lead Engineer · MuteebLabs'
 export const ROLE = TAGLINE
 export const SITE_TAGLINE =
-  'Custom software for niche operations — built end-to-end, shipped to production.'
+  'Custom software company — production platforms for agribusiness, motorsport, inventory, compliance booking, and more.'
 export const TEAM_INTRO =
-  'MuteebLabs is a small engineering team based in Albuquerque. We take ownership of the full build — from the first discovery call through launch and the messy weeks after.'
+  'MuteebLabs is a software company based in Albuquerque. We design, build, and ship production systems for operators who need reliable software — not slide decks.'
 export const TEAM_APPROACH =
-  'We scope tightly, ship in visible increments, and tell you early when something is the wrong fit. The goal is software your team trusts — not a pile of half-used features.'
+  'We scope tightly, ship in visible increments, and stay through launch. Whether it is a genetics storefront, a race-season contest app, an inventory dashboard, or CJIS-minded booking software — we own the full build.'
 export const LINKEDIN_URL = 'https://www.linkedin.com/company/muteeblabs'
 
 /** About profile quick facts — broad positioning, not stack/contract limits */
 export const PROFILE_QUICK_FACTS = [
   { label: 'Location', value: 'Albuquerque, New Mexico, USA' },
-  { label: 'Team', value: 'Engineers · QA · AI specialists' },
+  { label: 'Team', value: 'Engineers · QA · Product' },
   { label: 'Clients', value: 'US, UK & global teams' },
   { label: 'Typical response', value: '< 1 business day' },
 ] as const
@@ -59,10 +61,11 @@ export const SOCIAL_LINKS = [
 
 export const FOOTER_FOCUS = [
   'Agribusiness',
-  'Contest Apps',
-  'Inventory Ops',
-  'Software Testing',
-  'AI Automation',
+  'Motorsport Contests',
+  'Inventory Systems',
+  'CJIS Booking',
+  'Agency Software',
+  'QA & AI',
 ] as const
 
 export const SKILLS = [
@@ -110,12 +113,12 @@ export const PROJECTS = [
   {
     slug: 'pitprize',
     name: 'PitPrize',
-    category: 'Full Stack · Live',
+    category: 'Contest Platform · Live',
     tagline: 'Skill-based motorsport prediction platform',
     description:
       'A live competition platform where users build teams, predict race outcomes and compete for real cash prizes. Built end-to-end — scoring engine, prize pools, contest entries, leaderboards and admin tooling.',
-    image: SITE_IMAGES.racingContestsHero,
-    imageAlt: 'Motorsport contest platform — racing cars at speed',
+    image: SITE_IMAGES.pitprizePreview,
+    imageAlt: 'PitPrize motorsport contest platform',
     tags: ['React', 'Python', 'PostgreSQL', 'Stripe', 'Real-time'],
     url: 'https://pitprize.com',
     role: 'Full Stack Engineer',
@@ -125,7 +128,7 @@ export const PROJECTS = [
   {
     slug: 'marblesemen',
     name: 'Marble Semen',
-    category: 'E-commerce · Live',
+    category: 'Agribusiness · Live',
     tagline: 'Wagyu genetics storefront & catalog',
     description:
       'A specialised e-commerce platform for genetically tested Wagyu cattle semen — product catalog, embryos, custom "Bull Battery" tool, shopping cart and content-rich storefront for a niche US client.',
@@ -141,12 +144,12 @@ export const PROJECTS = [
   {
     slug: 'ai-email-router',
     name: 'AI Email Automation Suite',
-    category: 'AI Automation · Production',
+    category: 'Automation · Production',
     tagline: 'Self-managing inbox for busy teams',
     description:
       'Production Gmail automation: every incoming message is parsed, classified (services, consultations, payments, general), routed to the right workflow, and answered with context-aware drafts — hours of inbox triage replaced by an always-on assistant.',
     image: SITE_IMAGES.aiAutomationHero,
-    imageAlt: 'AI automation — workflows, robotics, and intelligent routing',
+    imageAlt: 'AI automation workflows and intelligent routing',
     tags: ['n8n', 'OpenAI', 'Gmail API', 'LLM Classifier', 'Auto-reply'],
     url: '',
     role: 'AI Engineer',
@@ -156,7 +159,7 @@ export const PROJECTS = [
   {
     slug: 'custom-chatbots',
     name: 'Custom AI Chatbots',
-    category: 'AI Engineering · Multiple clients',
+    category: 'Product Engineering · Multiple clients',
     tagline: 'Domain-trained conversational agents',
     description:
       'Bespoke chatbots for client websites and internal tools — RAG knowledge bases, tool use, voice interfaces and tight integrations with each client\'s data and stack. From support bots to lead-qualification agents.',
@@ -173,52 +176,31 @@ export const PROJECTS = [
 export const CAPABILITIES = [
   {
     num: '01',
-    title: 'AI Agents & LLM Pipelines',
+    title: 'Full Stack Web Apps',
     description:
-      'Production agents with LangChain, OpenAI, Gemini, Claude, and custom models. RAG over vector stores, tool use, and orchestration with n8n.',
-    tags: ['LangChain', 'OpenAI', 'Claude', 'Gemini'],
+      'React frontends and APIs on the stack that fits — Python, Node, PostgreSQL, and cloud deployment for real production use.',
+    tags: ['React', 'Python', 'PostgreSQL', 'AWS'],
   },
   {
     num: '02',
-    title: 'Voice Agents & Conversational AI',
+    title: 'Industry Platforms',
     description:
-      'End-to-end voice experiences — speech-to-text, reasoning, and natural responses integrated into real products.',
-    tags: ['Voice Agents', 'LLMs', 'Python'],
+      'Domain software for agribusiness, motorsport contests, inventory ops, agency workflows, and compliance-minded booking.',
+    tags: ['Vertical software', 'Operations', 'Portals'],
   },
   {
     num: '03',
-    title: 'Vector Search & RAG',
+    title: 'Software Testing & QA',
     description:
-      'Semantic search and retrieval with Qdrant and other vector databases, embeddings, and scalable knowledge bases.',
-    tags: ['Qdrant', 'Vector DBs', 'RAG'],
+      'Manual exploratory testing, regression suites, API validation, and release sign-off — so you ship with confidence.',
+    tags: ['Manual QA', 'Regression', 'API Testing'],
   },
   {
     num: '04',
-    title: 'Software Testing & QA',
+    title: 'AI & Automation',
     description:
-      'Manual exploratory testing, regression suites, API validation, and release sign-off — so you ship with confidence, not surprises.',
-    tags: ['Manual QA', 'Regression', 'API Testing', 'Release validation'],
-  },
-  {
-    num: '05',
-    title: 'Full Stack Web Apps',
-    description:
-      'React frontends and APIs on the stack that fits — Python, Node, Next.js, PostgreSQL, and cloud deployment options.',
-    tags: ['React', 'Next.js', 'Node.js', 'PostgreSQL'],
-  },
-  {
-    num: '06',
-    title: 'Cloud & AWS Infrastructure',
-    description:
-      'Deploy and scale on AWS — EC2, Lambda, Elasticsearch, and related services for reliable production workloads.',
-    tags: ['AWS', 'EC2', 'Lambda', 'Elasticsearch'],
-  },
-  {
-    num: '07',
-    title: 'Automation & Integrations',
-    description:
-      'Workflow automation with n8n — connecting APIs, models, and databases into repeatable pipelines.',
-    tags: ['n8n', 'APIs', 'Integrations'],
+      'Production agents, inbox routing, RAG knowledge bases, and workflow automation when busywork is the bottleneck.',
+    tags: ['LangChain', 'n8n', 'OpenAI', 'Claude'],
   },
 ] as const
 
@@ -233,7 +215,7 @@ export const PROCESS = [
     step: '02',
     title: 'Architect',
     description:
-      'Design clean data flow, pick the right stack and lay out the AI/automation pieces — so the build stays simple and the system stays maintainable.',
+      'Design clean data flow, pick the right stack, and map integrations — so the build stays simple and maintainable.',
   },
   {
     step: '03',
@@ -245,14 +227,14 @@ export const PROCESS = [
     step: '04',
     title: 'Iterate',
     description:
-      'Support, monitor, optimise. Tighten prompts, prune costs, add features. Stay involved past launch.',
+      'Support, monitor, and improve after launch. Stay involved past go-live so the system keeps earning trust.',
   },
 ] as const
 
 export const SERVICES = [
   {
-    title: 'AI & LLM Development',
-    description: 'Agents, RAG, fine-tuning workflows, and model integrations.',
+    title: 'Custom Software Development',
+    description: 'End-to-end web platforms for operators who need software that ships.',
   },
   {
     title: 'Full Stack Applications',
@@ -263,29 +245,40 @@ export const SERVICES = [
     description: 'Manual QA, regression suites, API testing, and pre-release validation.',
   },
   {
-    title: 'Cloud & DevOps',
-    description: 'AWS deployments — EC2, Lambda, Elasticsearch, and scaling.',
+    title: 'AI & Automation',
+    description: 'Agents, RAG, inbox routing, and workflow automation when it earns its keep.',
   },
 ] as const
 
 export const CONTACT_TOPICS = [
-  'AI / LLM Project',
-  'Full Stack Development',
+  'Custom Software Project',
+  'Contest / Racing Platform',
+  'Inventory System',
+  'CJIS / Compliance Booking',
+  'Livestock / Agribusiness',
   'Software Testing / QA',
-  'Freelance / Contract',
-  'Full-time Opportunity',
+  'AI / Automation',
   'Consultation',
   'Other',
 ] as const
 
 export const NAV_SERVICES = [
+  { label: 'Contest Platforms', to: '/contest-platforms' },
+  { label: 'Inventory Systems', to: '/inventory-systems' },
+  { label: 'CJIS & Booking Software', to: '/cjis-booking' },
   { label: 'Livestock Software', to: '/livestock-software' },
+  { label: 'Agency Solutions', to: '/agency-solutions' },
   { label: 'Software Testing', to: '/qa-testing' },
   { label: 'AI & Automation', to: '/ai-automation' },
-  { label: 'Custom Web Apps', to: '/#services' },
 ] as const
 
 export const NAV_INDUSTRIES = [
+  {
+    label: 'Motorsport & contests',
+    blurb: 'Race-season apps with scoring, leaderboards, and payouts.',
+    to: '/contest-platforms',
+    image: SITE_IMAGES.racingContestsHero,
+  },
   {
     label: 'Agribusiness & genetics',
     blurb: 'Buyer portals and catalogs for cattle operations.',
@@ -293,22 +286,22 @@ export const NAV_INDUSTRIES = [
     image: SITE_IMAGES.livestockHero,
   },
   {
-    label: 'Motorsport & contests',
-    blurb: 'Race-season apps with scoring, leaderboards, and payouts.',
-    to: '/#work',
-    image: SITE_IMAGES.racingContestsHero,
+    label: 'Inventory & operations',
+    blurb: 'Stock, orders, and alerts in one place.',
+    to: '/inventory-systems',
+    image: SITE_IMAGES.inventoryHero,
+  },
+  {
+    label: 'Compliance & booking',
+    blurb: 'CJIS-minded scheduling and secure intake workflows.',
+    to: '/cjis-booking',
+    image: SITE_IMAGES.cjisBookingHero,
   },
   {
     label: 'Local agencies',
     blurb: 'Lightweight portals when legacy tools slow the team.',
     to: '/agency-solutions',
     image: SITE_IMAGES.localGovernmentHero,
-  },
-  {
-    label: 'Inventory & operations',
-    blurb: 'Stock, orders, and alerts in one place.',
-    to: '/#industries',
-    image: SITE_IMAGES.inventoryHero,
   },
 ] as const
 
@@ -337,25 +330,27 @@ export const NAV_LINKS = [
 ] as const
 
 export const TRUST_BAR_ITEMS = [
+  'Motorsport contest platforms',
   'Agribusiness & genetics',
-  'Contest & racing platforms',
   'Inventory & operations',
-  'Agency workflow fixes',
-  'Software testing & QA',
-  'AI workflow automation',
+  'CJIS compliance software',
+  'Booking platforms',
+  'Agency workflow systems',
+  'Software testing & AI',
 ] as const
 
 export const HOME_METRICS = [
-  { value: '3+', label: 'Years experience' },
-  { value: '5+', label: 'Industry verticals' },
+  { value: '3+', label: 'Years shipping' },
+  { value: '6+', label: 'Industry verticals' },
   { value: '10+', label: 'Production builds' },
   { value: '1 day', label: 'Typical reply' },
 ] as const
 
 export const HERO_TRUST_ITEMS = [
-  { label: 'Agribusiness platforms', detail: 'Genetics storefronts, herd tools, buyer portals' },
-  { label: 'Contest & ops software', detail: 'Racing apps, inventory dashboards, agency fixes' },
-  { label: 'QA & automation', detail: 'Release-ready testing, inbox routing, AI workflows' },
+  { label: 'Contest platforms', detail: 'Motorsport scoring, entries, payouts' },
+  { label: 'Ops & inventory', detail: 'Stock dashboards, alerts, integrations' },
+  { label: 'CJIS compliance', detail: 'Secure systems built for compliance needs' },
+  { label: 'Booking platforms', detail: 'Scheduling, intake, and visitor workflows' },
 ] as const
 
 export const CORE_VALUES = [
@@ -378,19 +373,10 @@ export const CORE_VALUES = [
 
 export const AGENCY_SERVICES = [
   {
-    title: 'Livestock Software',
-    problem: 'Spreadsheets and phone tag slow genetics sales.',
-    solution: 'Buyer portals and catalogs built for cattle operations.',
-    to: '/livestock-software',
-    image: SITE_IMAGES.livestockHero,
-    icon: 'database' as const,
-    accent: 'sky' as const,
-  },
-  {
     title: 'Contest Platforms',
     problem: 'Manual scoring and payouts slow race-season launches.',
     solution: 'Skill-based contest apps with live leaderboards and payments.',
-    to: '/#work',
+    to: '/contest-platforms',
     image: SITE_IMAGES.racingContestsHero,
     icon: 'code' as const,
     accent: 'amber' as const,
@@ -399,10 +385,28 @@ export const AGENCY_SERVICES = [
     title: 'Inventory Systems',
     problem: 'Stock counts and orders scattered across spreadsheets.',
     solution: 'Dashboards, alerts, and integrations for real inventory ops.',
-    to: '/contact',
+    to: '/inventory-systems',
     image: SITE_IMAGES.inventoryHero,
     icon: 'database' as const,
     accent: 'emerald' as const,
+  },
+  {
+    title: 'CJIS & Booking Software',
+    problem: 'Secure scheduling and intake stuck on paper or fragile tools.',
+    solution: 'Compliance-minded booking, visitor workflows, and audit-friendly records.',
+    to: '/cjis-booking',
+    image: SITE_IMAGES.cjisBookingHero,
+    icon: 'shield' as const,
+    accent: 'sky' as const,
+  },
+  {
+    title: 'Livestock Software',
+    problem: 'Spreadsheets and phone tag slow genetics sales.',
+    solution: 'Buyer portals and catalogs built for cattle operations.',
+    to: '/livestock-software',
+    image: SITE_IMAGES.livestockHero,
+    icon: 'database' as const,
+    accent: 'sky' as const,
   },
   {
     title: 'Agency Solutions',
@@ -425,7 +429,7 @@ export const AGENCY_SERVICES = [
   {
     title: 'AI & Automation',
     problem: 'Teams lose hours on inbox triage and repeat tasks.',
-    solution: 'Workflows and AI assistants that handle the busywork.',
+    solution: 'Workflows and assistants that handle the busywork.',
     to: '/ai-automation',
     image: SITE_IMAGES.aiAutomationHero,
     icon: 'zap' as const,
@@ -433,6 +437,7 @@ export const AGENCY_SERVICES = [
   },
 ] as const
 
+/** Featured agribusiness case study (livestock page + Marble Semen). */
 export const FEATURED_CASE_STUDY = {
   slug: 'marblesemen',
   name: 'MarbleSemen.com',
@@ -441,6 +446,9 @@ export const FEATURED_CASE_STUDY = {
   tags: ['React', 'Django', 'PostgreSQL', 'AWS', 'Authorize.net'],
   to: '/case-study/marblesemen',
 } as const
+
+/** Homepage work section lead — contest platform to balance agri visuals. */
+export const HOME_LEAD_PROJECT_SLUG = 'pitprize' as const
 
 export const MARBLESEMEN_CASE_STUDY = {
   slug: 'marblesemen',
@@ -489,13 +497,13 @@ export const REPLY_TIME = 'usually within one day'
 
 export const STATS = [
   { value: '10+', label: 'Builds shipped' },
-  { value: '3+', label: 'Years experience' },
+  { value: '6+', label: 'Verticals served' },
   { value: '1 day', label: 'Typical reply' },
 ] as const
 
 export const HERO_ACCENTS = [
-  'intelligent',
   'production',
-  'AI-native',
   'reliable',
+  'operator-ready',
+  'end-to-end',
 ] as const

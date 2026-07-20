@@ -9,12 +9,13 @@ export function Industries() {
     <section id="industries" className="industries-section section-block section-block--compact">
       <div className="container relative z-10">
         <Reveal>
-          <SectionLabel>Who we build for</SectionLabel>
+          <SectionLabel>Industries</SectionLabel>
           <h2 className="heading-section max-w-2xl">
-            Markets we already <span className="text-gradient">know</span>
+            Markets we already <span className="text-gradient">ship in</span>
           </h2>
           <p className="section-lead">
-            Domain familiarity shortens discovery — you spend less time explaining the business.
+            Domain familiarity shortens discovery — you spend less time explaining the business, and
+            more time reviewing working software.
           </p>
         </Reveal>
 

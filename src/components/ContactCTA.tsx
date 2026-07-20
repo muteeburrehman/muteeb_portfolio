@@ -16,11 +16,11 @@ export function ContactCTA() {
             <div className="max-w-xl min-w-0">
               <SectionLabel>Next step</SectionLabel>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
-                Tell us what&apos;s <span className="text-gradient">blocking you</span>
+                Tell us what you need <span className="text-gradient">built</span>
               </h2>
               <p className="text-base text-slate-400">
-                A short call is enough to decide if we&apos;re the right fit — and what a first
-                release should look like.
+                Contests, inventory, agribusiness, CJIS-minded booking, agency tools, QA, or
+                automation — a short call is enough to decide if we&apos;re the right fit.
               </p>
               <a
                 href={`mailto:${EMAIL}`}

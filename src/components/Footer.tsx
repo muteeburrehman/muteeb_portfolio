@@ -11,7 +11,6 @@ export function Footer() {
     <footer className="site-footer">
       <div className="container">
         <div className="footer-top">
-          {/* Brand Info */}
           <div className="footer-brand-side">
             <Link to="/" className="inline-block">
               <SiteLogo variant="footer" />
@@ -19,19 +18,24 @@ export function Footer() {
             <p className="footer-brand-desc max-w-sm mt-3">{SITE_TAGLINE}</p>
           </div>
 
-          {/* Quick Links Group */}
           <div className="footer-links-side">
             <div className="footer-links-group">
               <span className="footer-links-title">Services</span>
               <ul className="footer-links-list">
                 <li>
+                  <Link to="/contest-platforms">Contest Platforms</Link>
+                </li>
+                <li>
+                  <Link to="/inventory-systems">Inventory Systems</Link>
+                </li>
+                <li>
+                  <Link to="/cjis-booking">CJIS &amp; Booking</Link>
+                </li>
+                <li>
                   <Link to="/livestock-software">Livestock Software</Link>
                 </li>
                 <li>
-                  <Link to="/#work">Contest Platforms</Link>
-                </li>
-                <li>
-                  <Link to="/contact">Inventory &amp; Agency Ops</Link>
+                  <Link to="/agency-solutions">Agency Solutions</Link>
                 </li>
                 <li>
                   <Link to="/ai-automation">AI &amp; Automation</Link>
@@ -87,7 +91,7 @@ export function Footer() {
             ))}
           </p>
           <p className="footer-bottom-text text-sm text-slate-500">
-            Agribusiness · Contests · Inventory · Agencies · QA · AI
+            Contests · Inventory · CJIS Booking · Agribusiness · Agencies · QA · AI
           </p>
         </div>
       </div>

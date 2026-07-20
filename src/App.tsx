@@ -10,7 +10,10 @@ import { AdminDashboardPage } from './pages/AdminDashboardPage'
 import { AdminLoginPage } from './pages/AdminLoginPage'
 import { AgencySolutionsPage } from './pages/AgencySolutionsPage'
 import { AIAutomationPage } from './pages/AIAutomationPage'
+import { CjisBookingPage } from './pages/CjisBookingPage'
+import { ContestPlatformsPage } from './pages/ContestPlatformsPage'
 import { HomePage } from './pages/HomePage'
+import { InventorySystemsPage } from './pages/InventorySystemsPage'
 import { LivestockSoftwarePage } from './pages/LivestockSoftwarePage'
 import { MarbleSemenCaseStudy } from './pages/MarbleSemenCaseStudy'
 import { QATestingPage } from './pages/QATestingPage'
@@ -38,6 +41,9 @@ function App() {
           <Route path="/book" element={<BookCallPage />} />
           <Route path="/book/cancel" element={<CancelBookingPage />} />
           <Route path="/livestock-software" element={<LivestockSoftwarePage />} />
+          <Route path="/contest-platforms" element={<ContestPlatformsPage />} />
+          <Route path="/inventory-systems" element={<InventorySystemsPage />} />
+          <Route path="/cjis-booking" element={<CjisBookingPage />} />
           <Route path="/qa-testing" element={<QATestingPage />} />
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin" element={<AdminDashboardPage />} />

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FEATURED_CASE_STUDY, PROJECTS } from '../data/portfolio'
+import { HOME_LEAD_PROJECT_SLUG, PROJECTS } from '../data/portfolio'
 import { ArrowIcon, ExternalLinkIcon } from './icons'
 import { Reveal } from './ui/Reveal'
 import { SectionLabel } from './ui/SectionLabel'
@@ -54,7 +54,7 @@ function ProjectCard({ project }: { project: (typeof PROJECTS)[number] }) {
   const hasCaseStudy = 'caseStudyTo' in project && project.caseStudyTo
   const browserLabel =
     project.slug === 'ai-email-router' ? 'inbox.muteeblabs.app' : project.url ? host : `${project.slug}.app`
-  const isFeatured = project.slug === FEATURED_CASE_STUDY.slug
+  const isFeatured = project.slug === HOME_LEAD_PROJECT_SLUG
   const serviceLink = project.slug === 'ai-email-router' ? '/ai-automation' : null
 
   return (
@@ -135,10 +135,10 @@ export function Projects() {
           <SectionLabel>Selected work</SectionLabel>
           <div className="section-header-row">
             <h2 className="heading-section max-w-2xl">
-              Recent <span className="text-gradient">production work</span>
+              Production work across <span className="text-gradient">our verticals</span>
             </h2>
             <p className="section-header-desc">
-              Live products and platforms — not concept decks.
+              Live products — contests, agribusiness, automation, and more.
             </p>
           </div>
         </Reveal>

@@ -18,9 +18,9 @@ export function About() {
       <div className="container relative z-10">
         <div className="about-grid">
           <Reveal className="about-grid__intro">
-            <SectionLabel>About</SectionLabel>
+            <SectionLabel>About MuteebLabs</SectionLabel>
             <h2 className="heading-section">
-              A small team that <span className="text-gradient">owns the build</span>
+              A software company that <span className="text-gradient">owns the build</span>
             </h2>
             <p className="about-lead">{TEAM_INTRO}</p>
             <p className="about-body">{TEAM_APPROACH}</p>

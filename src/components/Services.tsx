@@ -1,6 +1,14 @@
 import type { ComponentType } from 'react'
 import { AGENCY_SERVICES } from '../data/portfolio'
-import { ArrowIcon, CheckIcon, CodeIcon, DatabaseIcon, SparklesIcon, ZapIcon } from './icons'
+import {
+  ArrowIcon,
+  CheckIcon,
+  CodeIcon,
+  DatabaseIcon,
+  ShieldIcon,
+  SparklesIcon,
+  ZapIcon,
+} from './icons'
 import { SmartLink } from './SmartLink'
 import { Reveal } from './ui/Reveal'
 import { SectionLabel } from './ui/SectionLabel'
@@ -13,6 +21,7 @@ const SERVICE_ICONS: Record<(typeof AGENCY_SERVICES)[number]['icon'], IconCompon
   zap: ZapIcon,
   code: CodeIcon,
   sparkles: SparklesIcon,
+  shield: ShieldIcon,
 }
 
 export function Services() {
@@ -20,12 +29,13 @@ export function Services() {
     <section id="services" className="section-block section-block--compact relative">
       <div className="container relative z-10">
         <Reveal>
-          <SectionLabel>What we solve</SectionLabel>
+          <SectionLabel>Capabilities</SectionLabel>
           <h2 className="heading-section max-w-2xl">
-            What we <span className="text-gradient">take on</span>
+            Software across <span className="text-gradient">multiple verticals</span>
           </h2>
           <p className="section-lead">
-            Clear problem, scoped build, release you can trust — pick the lane that matches yours.
+            MuteebLabs is a software company — not a single-industry shop. Pick the lane that matches
+            your operation.
           </p>
         </Reveal>
 

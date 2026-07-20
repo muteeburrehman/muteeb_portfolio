@@ -1,51 +1,91 @@
 @import 'tailwindcss';
 
-:root {
-  /* MuteebLabs — logo-aligned: tech blue + agri green on deep navy */
-  --color-bg: #040810;
-  --color-bg-navy: #0a1220;
-  --color-surface: #0c1526;
-  --color-surface-elevated: #111f35;
+@font-face {
+  font-family: 'Epilogue';
+  src: url('/fonts/epilogue/Epilogue-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
-  --color-primary: #0ea5e9;
-  --color-primary-hover: #0284c7;
-  --color-accent: #22c55e;
-  --color-accent-hover: #16a34a;
+@font-face {
+  font-family: 'Epilogue';
+  src: url('/fonts/epilogue/Epilogue-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Epilogue';
+  src: url('/fonts/epilogue/Epilogue-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Epilogue';
+  src: url('/fonts/epilogue/Epilogue-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Epilogue';
+  src: url('/fonts/epilogue/Epilogue-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* MuteebLabs — professional company palette: steel blue + teal on deep slate */
+  --color-bg: #070b12;
+  --color-bg-navy: #0c121c;
+  --color-surface: #101826;
+  --color-surface-elevated: #162033;
+
+  --color-primary: #3b9eff;
+  --color-primary-hover: #1d86ef;
+  --color-accent: #2dd4bf;
+  --color-accent-hover: #14b8a6;
   --color-text: #f1f5f9;
   --color-text-muted: #94a3b8;
-  --color-border: rgba(51, 65, 85, 0.65);
-  --color-border-glow: rgba(14, 165, 233, 0.28);
+  --color-border: rgba(71, 85, 105, 0.55);
+  --color-border-glow: rgba(59, 158, 255, 0.28);
 
-  --primary-rgb: 14, 165, 233;
-  --green-rgb: 34, 197, 94;
-  --teal-rgb: 34, 197, 94;
+  --primary-rgb: 59, 158, 255;
+  --green-rgb: 45, 212, 191;
+  --teal-rgb: 45, 212, 191;
 
   --container-max: 1280px;
   --section-pad-y: 120px;
   --section-pad-x: 2rem;
   --max-text-width: 620px;
-  --radius-lg: 18px;
-  --radius-btn: 14px;
-  --nav-height: 88px;
+  --radius-lg: 14px;
+  --radius-btn: 10px;
+  --nav-height: 80px;
 
-  --gradient-brand: linear-gradient(135deg, #0ea5e9 0%, #22c55e 100%);
-  --gradient-brand-reverse: linear-gradient(135deg, #22c55e 0%, #0ea5e9 100%);
-  --gradient-dark: radial-gradient(ellipse 80% 60% at 50% 0%, #0c1a2e 0%, #040810 70%);
-  --gradient-card: linear-gradient(180deg, rgba(12, 21, 38, 0.85) 0%, rgba(4, 8, 16, 0.95) 100%);
+  --gradient-brand: linear-gradient(135deg, #3b9eff 0%, #2dd4bf 100%);
+  --gradient-brand-reverse: linear-gradient(135deg, #2dd4bf 0%, #3b9eff 100%);
+  --gradient-dark: radial-gradient(ellipse 80% 60% at 50% 0%, #121c2c 0%, #070b12 70%);
+  --gradient-card: linear-gradient(180deg, rgba(16, 24, 38, 0.9) 0%, rgba(7, 11, 18, 0.96) 100%);
 
-  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.55);
-  --shadow-glow: 0 0 32px rgba(14, 165, 233, 0.18);
-  --shadow-glow-green: 0 0 32px rgba(34, 197, 94, 0.15);
-  --shadow-cta: 0 4px 24px rgba(14, 165, 233, 0.25), 0 0 40px rgba(34, 197, 94, 0.12);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.28);
+  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.36);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.45);
+  --shadow-glow: 0 0 28px rgba(59, 158, 255, 0.12);
+  --shadow-glow-green: 0 0 28px rgba(45, 212, 191, 0.1);
+  --shadow-cta: 0 4px 20px rgba(59, 158, 255, 0.22);
 
-  --glass-blur: 16px;
-  --glass-bg: rgba(8, 14, 28, 0.72);
+  --glass-blur: 14px;
+  --glass-bg: rgba(10, 16, 28, 0.78);
 
-  --font-display: 'Oswald', 'Inter', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
-  --font-hero: 'Oswald', 'Inter', system-ui, sans-serif;
+  --font-display: 'Epilogue', system-ui, sans-serif;
+  --font-body: 'Epilogue', system-ui, sans-serif;
+  --font-hero: 'Epilogue', system-ui, sans-serif;
 }
 
 @theme {
@@ -74,15 +114,15 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Headings — Oswald display; body stays Inter */
+  /* Headings — Epilogue; sentence case for company tone */
   h1,
   h2 {
     font-family: var(--font-display);
     font-weight: 700;
-    line-height: 1.1;
+    line-height: 1.12;
     color: #ffffff;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    text-transform: none;
   }
 
   h3,
@@ -91,7 +131,7 @@
     font-weight: 600;
     line-height: 1.25;
     color: #ffffff;
-    letter-spacing: 0.02em;
+    letter-spacing: -0.01em;
   }
 
   p {
@@ -214,18 +254,18 @@
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #4ade80 0%, #38bdf8 100%);
+    background: linear-gradient(135deg, #5eb3ff 0%, #2dd4bf 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .text-brand-green {
-    color: #4ade80;
+    color: #2dd4bf;
   }
 
   .text-brand-blue {
-    color: #38bdf8;
+    color: #5eb3ff;
   }
 
   .text-muted {
