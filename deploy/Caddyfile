@@ -18,7 +18,8 @@
 		-Server
 	}
 
-	reverse_proxy web:80 {
+	# Use container_name — service name "web" collides with AGRI_TOOL on muteeb-edge.
+	reverse_proxy muteeb-web:80 {
 		health_uri /healthz
 		health_interval 30s
 		health_timeout 5s
