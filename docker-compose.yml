@@ -39,6 +39,7 @@ services:
       start_period: 15s
     networks:
       - edge
+      - shared_edge
       - n8n_proxy
 
   web:
@@ -123,6 +124,10 @@ volumes:
 networks:
   edge:
     driver: bridge
+  shared_edge:
+    # Breeding app (AGRI_TOOL) + Caddy share this; keep portfolio `edge` for web:80 DNS.
+    name: muteeb-edge
+    external: true
   internal:
     driver: bridge
   n8n_proxy:

@@ -50,3 +50,32 @@ n8n.muteeblabs.uk {
 		header_up X-Forwarded-Proto {scheme}
 	}
 }
+
+# ── Breeding Inventory (AGRI_TOOL) on shared muteeb-edge ─────────────────────
+# Containers: agri-web / agri-frontend (aliases from AGRI shared-proxy compose).
+# DNS: breed + www.breed + api → same VPS IP as muteeblabs.com.
+
+www.breed.muteeblabs.com {
+	redir https://breed.muteeblabs.com{uri} permanent
+}
+
+breed.muteeblabs.com {
+	encode gzip zstd
+
+	handle /api/* {
+		reverse_proxy agri-web:8000
+	}
+
+	handle /media/* {
+		reverse_proxy agri-web:8000
+	}
+
+	handle {
+		reverse_proxy agri-frontend:80
+	}
+}
+
+api.muteeblabs.com {
+	encode gzip zstd
+	reverse_proxy agri-web:8000
+}
