@@ -4,7 +4,7 @@ export const BOOK_CALL_PATH = '/book'
 /** @deprecated Use BOOK_CALL_PATH — kept for gradual migration */
 export const CALENDLY_URL = BOOK_CALL_PATH
 export const SITE_BRAND = 'MuteebLabs'
-export const LEGAL_ENTITY = 'MuteebLabs LLC'
+export const LEGAL_ENTITY = 'Muteeb Labs LLC'
 export const LEGAL_ADDRESS_LINES = [
   '1209 Mountain Road Pl NE, Ste N',
   'Albuquerque, Bernalillo County, NM 87110, USA',
