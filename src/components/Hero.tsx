@@ -22,9 +22,8 @@ export function Hero() {
           </h1>
 
           <p className="hero-desc hero-desc--company">
-            We build and ship production platforms across motorsport contests, inventory,
-            agribusiness, CJIS compliance, booking platforms, and agency workflows — then stick
-            around through launch.
+            We build and ship production systems that survive real-world use — then stick around
+            through launch and beyond.
           </p>
 
           <div className="hero-ctas">

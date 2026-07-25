@@ -330,13 +330,9 @@ export const NAV_LINKS = [
 ] as const
 
 export const TRUST_BAR_ITEMS = [
-  'Motorsport contest platforms',
-  'Agribusiness & genetics',
-  'Inventory & operations',
-  'CJIS compliance software',
-  'Booking platforms',
-  'Agency workflow systems',
-  'Software testing & AI',
+  'LCT',
+  'Marble Semen',
+  'PitPrize',
 ] as const
 
 export const HOME_METRICS = [
@@ -347,10 +343,10 @@ export const HOME_METRICS = [
 ] as const
 
 export const HERO_TRUST_ITEMS = [
-  { label: 'Contest platforms', detail: 'Motorsport scoring, entries, payouts' },
-  { label: 'Ops & inventory', detail: 'Stock dashboards, alerts, integrations' },
-  { label: 'CJIS compliance', detail: 'Secure systems built for compliance needs' },
-  { label: 'Booking platforms', detail: 'Scheduling, intake, and visitor workflows' },
+  { label: 'Contest platforms', detail: "Scoring, entries, and payouts that don't break under load" },
+  { label: 'Ops & inventory', detail: 'Live stock dashboards, alerts, and integrations' },
+  { label: 'CJIS compliance', detail: 'Audit-ready systems built for law enforcement standards' },
+  { label: 'Booking platforms', detail: "Scheduling, intake, and visitor workflows that don't need a manual" },
 ] as const
 
 export const CORE_VALUES = [

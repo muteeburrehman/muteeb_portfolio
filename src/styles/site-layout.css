@@ -689,44 +689,7 @@
 /* ——————————————————————————————————
    SOCIAL PROOF — Tech Logo ticker & grid
    —————————————————————————————————— */
-.social-proof-bar {
-  padding: 3rem 0;
-  background: #02050e;
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-  overflow: hidden;
-  position: relative;
-}
-
-.social-proof-title {
-  text-align: center;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--color-text-muted);
-  margin-bottom: 2rem;
-}
-
-.logo-ticker-inner {
-  display: flex;
-  gap: 4rem;
-  animation: ticker 35s linear infinite;
-  width: max-content;
-}
-
-.ticker-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: rgba(255, 255, 255, 0.35);
-  font-size: 18px;
-  font-weight: 600;
-  transition: color 0.3s ease;
-}
-
-.ticker-item:hover {
-  color: #ffffff;
-}
+/* Client proof bar styles live near company-hero block below */
 
 /* ——————————————————————————————————
    SERVICES — Compact problem / solution cards
@@ -7006,40 +6969,110 @@ td.admin-table__actions {
 .hero-verticals__detail {
   font-size: 0.75rem;
   line-height: 1.45;
-  color: #94a3b8;
+  color: #7d8ea3;
 }
 
 .social-proof-bar {
-  border-block: 1px solid rgba(148, 163, 184, 0.12);
-  background: rgba(16, 24, 38, 0.72);
-  padding: 1.1rem 1.5rem;
+  position: relative;
+  border-block: 1px solid rgba(148, 163, 184, 0.14);
+  background:
+    linear-gradient(180deg, rgba(12, 18, 28, 0.92) 0%, rgba(8, 12, 20, 0.96) 100%);
+  padding: 1.25rem 0;
+  overflow: hidden;
 }
 
 .social-proof-bar__inner {
-  max-width: var(--container-max);
-  margin: 0 auto;
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 0.65rem 1.5rem;
+  justify-content: flex-start;
+  gap: 0.85rem 1.75rem;
 }
 
-.social-proof-bar__item {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: #94a3b8;
-  letter-spacing: 0.01em;
+.social-proof-bar__lead {
+  margin: 0;
+  max-width: none;
+  flex-shrink: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #64748b;
+  padding-right: 1.75rem;
+  border-right: 1px solid rgba(148, 163, 184, 0.28);
+  line-height: 1.2;
 }
 
-.social-proof-bar__sep {
-  display: none;
-  color: rgba(148, 163, 184, 0.35);
+.social-proof-bar__clients {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  min-width: 0;
 }
 
-@media (min-width: 640px) {
-  .social-proof-bar__sep {
-    display: inline;
+.social-proof-bar__client {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 1.35rem;
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #cbd5e1;
+  transition: color 0.25s ease;
+}
+
+.social-proof-bar__client:first-child {
+  padding-left: 0;
+}
+
+.social-proof-bar__client:not(:first-child)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 1px;
+  height: 1em;
+  transform: translateY(-50%);
+  background: rgba(148, 163, 184, 0.28);
+}
+
+.social-proof-bar__client:hover {
+  color: #ffffff;
+}
+
+@media (max-width: 720px) {
+  .social-proof-bar {
+    padding: 1.1rem 0;
+  }
+
+  .social-proof-bar__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+
+  .social-proof-bar__lead {
+    padding-right: 0;
+    border-right: none;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+  }
+
+  .social-proof-bar__client {
+    padding: 0.2rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .social-proof-bar__client:first-child {
+    padding-left: 0;
   }
 }
 
