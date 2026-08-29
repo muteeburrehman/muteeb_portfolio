@@ -333,6 +333,7 @@ export const TRUST_BAR_ITEMS = [
   'LCT',
   'Marble Semen',
   'PitPrize',
+  'Danny\'s Jewelry',
 ] as const
 
 export const HOME_METRICS = [
