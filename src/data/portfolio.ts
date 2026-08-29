@@ -348,6 +348,7 @@ export const HERO_TRUST_ITEMS = [
   { label: 'Ops & inventory', detail: 'Live stock dashboards, alerts, and integrations' },
   { label: 'CJIS compliance', detail: 'Audit-ready systems built for law enforcement standards' },
   { label: 'Booking platforms', detail: "Scheduling, intake, and visitor workflows that don't need a manual" },
+  { label: 'Jewelry platforms', detail: 'Custom e-commerce and management tools for jewelry businesses' },
 ] as const
 
 export const CORE_VALUES = [
