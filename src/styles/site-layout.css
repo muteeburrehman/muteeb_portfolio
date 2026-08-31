@@ -199,9 +199,6 @@
   background: rgba(8, 14, 28, 0.98);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55);
   transform: none;
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
 }
 
 .nav-dropdown__menu > li {
