@@ -12,9 +12,9 @@ export const LEGAL_ADDRESS_LINES = [
 export const SITE_LOGO = '/logo.png'
 /** Same transparent wordmark — used on dark nav/footer */
 export const SITE_LOGO_DARK = '/logo-dark.png'
-export const SITE_PROFILE_IMAGE = '/profile.jpg'
+export const SITE_PROFILE_IMAGE = '/images/founder-portrait.webp'
 export const SITE_IMAGES = {
-  heroBackdrop: '/images/company-hero-backdrop.jpg',
+  heroBackdrop: '/images/hero-bg-company.webp',
   heroVisual: '/images/racing-contests-hero.png',
   livestockHero: '/images/barn-golden-hour.png',
   agricultureBg: '/images/cows-grazing.png',
@@ -344,11 +344,11 @@ export const HOME_METRICS = [
 ] as const
 
 export const HERO_TRUST_ITEMS = [
-  { label: 'Contest platforms', detail: "Scoring, entries, and payouts that don't break under load" },
-  { label: 'Ops & inventory', detail: 'Live stock dashboards, alerts, and integrations' },
-  { label: 'CJIS compliance', detail: 'Audit-ready systems built for law enforcement standards' },
-  { label: 'Booking platforms', detail: "Scheduling, intake, and visitor workflows that don't need a manual" },
-  { label: 'Jewelry platforms', detail: 'Custom e-commerce and management tools for jewelry businesses' },
+  { label: 'Data engineering', detail: 'High-throughput pipelines, warehousing, and analytics' },
+  { label: 'Cloud architectures', detail: 'Resilient cloud infrastructure and microservices' },
+  { label: 'AI & automation', detail: 'Intelligent workflows, LLM systems, and custom tooling' },
+  { label: 'Ops & inventory', detail: 'Live operations dashboards, alerts, and integrations' },
+  { label: 'Security & compliance', detail: 'Audit-ready systems built for strict regulatory standards' },
 ] as const
 
 export const CORE_VALUES = [

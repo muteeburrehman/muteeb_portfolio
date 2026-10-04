@@ -3,7 +3,7 @@ import { ContactForm } from '../components/ContactForm'
 import { ArrowIcon, ClockIcon, MailIcon, SparklesIcon } from '../components/icons'
 import { Reveal } from '../components/ui/Reveal'
 import { SectionLabel } from '../components/ui/SectionLabel'
-import { BOOK_CALL_PATH, EMAIL, NAME, REPLY_TIME, SERVICES, SITE_PROFILE_IMAGE, TAGLINE } from '../data/portfolio'
+import { BOOK_CALL_PATH, EMAIL, NAME, REPLY_TIME, SERVICES, SITE_PROFILE_IMAGE } from '../data/portfolio'
 
 export function ContactPage() {
   return (
@@ -23,29 +23,6 @@ export function ContactPage() {
 
         <div className="contact-page-grid">
           <Reveal as="aside" delay={80} className="contact-sidebar">
-            <div className="contact-founder-card">
-              <div className="contact-founder-header">
-                <div className="profile-avatar-frame profile-avatar-frame--sm">
-                  <div className="profile-avatar-inner">
-                    <img
-                      src={SITE_PROFILE_IMAGE}
-                      alt={NAME}
-                      className="profile-avatar-img"
-                      width={116}
-                      height={116}
-                      decoding="async"
-                      loading="lazy"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <p className="contact-founder-label">Lead contact</p>
-                  <h2 className="contact-founder-name">{NAME}</h2>
-                </div>
-              </div>
-              <p className="contact-founder-tagline">{TAGLINE}</p>
-            </div>
-
             <div className="panel-surface contact-panel">
               <h2 className="contact-panel-title">Direct contact</h2>
               <ul className="contact-panel-list">
@@ -104,6 +81,25 @@ export function ContactPage() {
 
           <Reveal delay={140} className="contact-form-col">
             <ContactForm />
+            <div className="contact-founder-card contact-founder-card--compact">
+              <div className="profile-avatar-frame profile-avatar-frame--sm shrink-0">
+                <div className="profile-avatar-inner">
+                  <img
+                    src={SITE_PROFILE_IMAGE}
+                    alt={NAME}
+                    className="profile-avatar-img"
+                    width={58}
+                    height={58}
+                    decoding="async"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+              <div className="contact-founder-info min-w-0">
+                <h3 className="contact-founder-name">{NAME}</h3>
+                <p className="contact-founder-title">Founder &amp; Lead Engineer, MuteebLabs</p>
+              </div>
+            </div>
           </Reveal>
         </div>
       </div>

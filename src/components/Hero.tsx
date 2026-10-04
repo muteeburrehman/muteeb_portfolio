@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { BOOK_CALL_PATH, HERO_TRUST_ITEMS, SITE_BRAND, SITE_IMAGES } from '../data/portfolio'
+import { BOOK_CALL_PATH, HERO_TRUST_ITEMS, SITE_IMAGES } from '../data/portfolio'
 import { ArrowIcon } from './icons'
 
 export function Hero() {
@@ -15,15 +15,14 @@ export function Hero() {
 
       <div className="container relative z-10">
         <div className="hero-company">
-          <p className="hero-brand-mark">{SITE_BRAND}</p>
+          <p className="hero-brand-mark">Custom software, AI and cloud company</p>
 
           <h1 className="hero-title hero-title--company">
-            Custom software for real operations
+            Software that keeps real operations running
           </h1>
 
           <p className="hero-desc hero-desc--company">
-            We build and ship production systems that survive real-world use — then stick around
-            through launch and beyond.
+            We design, build and scale data-centric platforms, cloud architectures, and intelligent automation — delivering reliable production systems that stay with you through launch and beyond.
           </p>
 
           <div className="hero-ctas">

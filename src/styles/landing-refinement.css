@@ -1,1 +1,202 @@
-/* Consolidated into site-layout.css and index.css for maximum layout efficiency */
+/* Hero Section Layout, Framing & Background Adjustments */
+.hero--home.hero--company {
+  padding-top: clamp(2.75rem, 5.5vh, 4.5rem) !important;
+  padding-bottom: clamp(2.5rem, 5vh, 4rem) !important;
+  min-height: auto !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.hero--company .hero__backdrop--photo {
+  inset: 0 !important;
+  left: auto !important;
+  right: 0 !important;
+  width: 100% !important;
+  max-width: 1024px !important;
+  height: 100% !important;
+  background-size: cover !important;
+  background-position: right top !important;
+  background-repeat: no-repeat !important;
+  opacity: 1 !important;
+  animation: none !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
+
+/* Gradient: ~85% navy on left fading to ~15% on right so headline stays readable and network/face stay bright */
+.hero__scrim--company {
+  background: linear-gradient(
+    90deg,
+    rgba(7, 11, 18, 0.88) 0%,
+    rgba(7, 11, 18, 0.82) 42%,
+    rgba(7, 11, 18, 0.45) 68%,
+    rgba(7, 11, 18, 0.15) 100%
+  ) !important;
+}
+
+/* Relaxed spacing so hero text and elements breathe naturally */
+.hero-company {
+  max-width: 100% !important;
+  gap: 1.35rem !important;
+}
+
+.hero-brand-mark {
+  margin-bottom: 0.35rem !important;
+  font-size: 0.8125rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #38bdf8 !important;
+  font-weight: 600 !important;
+}
+
+.hero-title--company {
+  font-size: clamp(2.35rem, 4.2vw, 3.6rem) !important;
+  line-height: 1.15 !important;
+  max-width: 18ch !important;
+  letter-spacing: -0.025em !important;
+}
+
+.hero-desc--company {
+  font-size: 1.0625rem !important;
+  line-height: 1.65 !important;
+  max-width: 36rem !important;
+  color: #94a3b8 !important;
+}
+
+.hero--company .hero-ctas {
+  margin-top: 0.6rem !important;
+  gap: 1rem !important;
+}
+
+/* 5 Equal Columns on Desktop with generous spacing */
+.hero-verticals {
+  max-width: 100% !important;
+  margin-top: 2rem !important;
+  padding-top: 1.5rem !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 0.875rem 1.75rem !important;
+}
+
+.hero-verticals__item {
+  gap: 0.35rem !important;
+}
+
+.hero-verticals__label {
+  font-size: 0.875rem !important;
+  font-weight: 650 !important;
+  color: #f8fafc !important;
+}
+
+.hero-verticals__detail {
+  font-size: 0.775rem !important;
+  line-height: 1.48 !important;
+  color: #94a3b8 !important;
+}
+
+/* Tablet: 2 columns */
+@media (max-width: 1024px) and (min-width: 641px) {
+  .hero-company {
+    gap: 1.25rem !important;
+  }
+
+  .hero-title--company {
+    max-width: 18ch !important;
+  }
+
+  .hero-desc--company {
+    max-width: 32rem !important;
+  }
+
+  .hero-verticals {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Mobile: show image responsively, 1 column verticals */
+@media (max-width: 640px) {
+  .hero--company .hero__backdrop--photo {
+    max-width: 100% !important;
+    height: 100% !important;
+    background-position: 72% top !important;
+    background-size: cover !important;
+  }
+
+  .hero__scrim--company {
+    background: linear-gradient(
+      180deg,
+      rgba(7, 11, 18, 0.25) 0%,
+      rgba(7, 11, 18, 0.65) 35%,
+      rgba(7, 11, 18, 0.92) 65%,
+      rgba(7, 11, 18, 0.98) 100%
+    ) !important;
+  }
+
+  .hero-company {
+    padding-top: 7rem !important;
+    gap: 1rem !important;
+  }
+
+  .hero-title--company {
+    max-width: 100% !important;
+    font-size: clamp(1.9rem, 8vw, 2.5rem) !important;
+    line-height: 1.18 !important;
+  }
+
+  .hero-desc--company {
+    max-width: 100% !important;
+    font-size: 1rem !important;
+  }
+
+  .hero-verticals {
+    margin-top: 1.5rem !important;
+    padding-top: 1.25rem !important;
+    grid-template-columns: 1fr !important;
+    gap: 0.85rem !important;
+  }
+}
+
+/* Contact Section Refinements */
+.contact-founder-card--compact {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1.15rem !important;
+  margin-top: 1.25rem !important;
+  padding: 1rem 1.25rem !important;
+  border-radius: var(--radius-lg, 12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: rgba(15, 23, 42, 0.65) !important;
+}
+
+.contact-founder-card--compact .contact-founder-name {
+  margin: 0 !important;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  line-height: 1.25 !important;
+}
+
+.contact-founder-card--compact .contact-founder-title {
+  margin: 0.25rem 0 0 !important;
+  font-size: 0.875rem !important;
+  color: #94a3b8 !important;
+  line-height: 1.35 !important;
+}
+
+@media (max-width: 1024px) {
+  .contact-page-grid {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .contact-form-col {
+    order: 1 !important;
+    width: 100% !important;
+  }
+
+  .contact-sidebar {
+    order: 2 !important;
+    width: 100% !important;
+  }
+}
