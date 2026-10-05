@@ -14,7 +14,7 @@ export const SITE_LOGO = '/logo.png'
 export const SITE_LOGO_DARK = '/logo-dark.png'
 export const SITE_PROFILE_IMAGE = '/images/founder-portrait.webp'
 export const SITE_IMAGES = {
-  heroBackdrop: '/images/hero-bg-company.webp',
+  heroBackdrop: '/images/hero-corporate-architecture.webp',
   heroVisual: '/images/racing-contests-hero.png',
   livestockHero: '/images/barn-golden-hour.png',
   agricultureBg: '/images/cows-grazing.png',

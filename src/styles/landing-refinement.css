@@ -1,4 +1,7 @@
-/* Hero Section Layout, Framing & Background Adjustments */
+/* ==========================================================================
+   Hero Section: Layout, Framing & Background (Desktop, Tablet & Mobile)
+   ========================================================================== */
+
 .hero--home.hero--company {
   padding-top: clamp(2.75rem, 5.5vh, 4.5rem) !important;
   padding-bottom: clamp(2.5rem, 5vh, 4rem) !important;
@@ -7,34 +10,35 @@
   overflow: hidden !important;
 }
 
+/* Background photo: right-aligned, cover, capped at natural width to prevent blur */
 .hero--company .hero__backdrop--photo {
   inset: 0 !important;
   left: auto !important;
   right: 0 !important;
   width: 100% !important;
-  max-width: 1024px !important;
+  max-width: 1376px !important;
   height: 100% !important;
   background-size: cover !important;
-  background-position: right top !important;
+  background-position: right center !important;
   background-repeat: no-repeat !important;
-  opacity: 1 !important;
+  opacity: 0.95 !important;
   animation: none !important;
   mask-image: none !important;
   -webkit-mask-image: none !important;
 }
 
-/* Gradient: ~85% navy on left fading to ~15% on right so headline stays readable and network/face stay bright */
+/* Left-to-right navy gradient overlay: ~92% on left fading to ~5% on right */
 .hero__scrim--company {
   background: linear-gradient(
     90deg,
-    rgba(7, 11, 18, 0.88) 0%,
-    rgba(7, 11, 18, 0.82) 42%,
-    rgba(7, 11, 18, 0.45) 68%,
-    rgba(7, 11, 18, 0.15) 100%
+    rgba(7, 11, 18, 0.92) 0%,
+    rgba(7, 11, 18, 0.82) 44%,
+    rgba(7, 11, 18, 0.35) 72%,
+    rgba(7, 11, 18, 0.05) 100%
   ) !important;
 }
 
-/* Relaxed spacing so hero text and elements breathe naturally */
+/* Relaxed content stack */
 .hero-company {
   max-width: 100% !important;
   gap: 1.35rem !important;
@@ -65,10 +69,12 @@
 
 .hero--company .hero-ctas {
   margin-top: 0.6rem !important;
+  display: flex !important;
   gap: 1rem !important;
+  align-items: center !important;
 }
 
-/* 5 Equal Columns on Desktop with generous spacing */
+/* Desktop: 5 Service Highlights in 1 row */
 .hero-verticals {
   max-width: 100% !important;
   margin-top: 2rem !important;
@@ -80,6 +86,8 @@
 }
 
 .hero-verticals__item {
+  display: flex !important;
+  flex-direction: column !important;
   gap: 0.35rem !important;
 }
 
@@ -95,69 +103,173 @@
   color: #94a3b8 !important;
 }
 
-/* Tablet: 2 columns */
+/* ==========================================================================
+   Tablet (641px - 1024px): 2 Columns for Highlights & Balanced Framing
+   ========================================================================== */
 @media (max-width: 1024px) and (min-width: 641px) {
-  .hero-company {
-    gap: 1.25rem !important;
+  .hero--home.hero--company {
+    padding-top: 2.75rem !important;
+    padding-bottom: 3rem !important;
   }
 
-  .hero-title--company {
-    max-width: 18ch !important;
-  }
-
-  .hero-desc--company {
-    max-width: 32rem !important;
-  }
-
-  .hero-verticals {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-
-/* Mobile: show image responsively, 1 column verticals */
-@media (max-width: 640px) {
   .hero--company .hero__backdrop--photo {
-    max-width: 100% !important;
-    height: 100% !important;
-    background-position: 72% top !important;
-    background-size: cover !important;
+    opacity: 0.75 !important;
+    background-position: right 10% center !important;
   }
 
   .hero__scrim--company {
     background: linear-gradient(
-      180deg,
-      rgba(7, 11, 18, 0.25) 0%,
-      rgba(7, 11, 18, 0.65) 35%,
-      rgba(7, 11, 18, 0.92) 65%,
-      rgba(7, 11, 18, 0.98) 100%
+      90deg,
+      rgba(7, 11, 18, 0.95) 0%,
+      rgba(7, 11, 18, 0.88) 50%,
+      rgba(7, 11, 18, 0.50) 75%,
+      rgba(7, 11, 18, 0.15) 100%
     ) !important;
   }
 
   .hero-company {
-    padding-top: 7rem !important;
-    gap: 1rem !important;
+    gap: 1.25rem !important;
+    max-width: 38rem !important;
+  }
+
+  .hero-title--company {
+    font-size: clamp(2.2rem, 4.5vw, 3rem) !important;
+    line-height: 1.15 !important;
+    max-width: 18ch !important;
+  }
+
+  .hero-desc--company {
+    font-size: 1.05rem !important;
+    line-height: 1.65 !important;
+    max-width: 34rem !important;
+  }
+
+  .hero-verticals {
+    margin-top: 1.75rem !important;
+    padding-top: 1.25rem !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.75rem 1rem !important;
+  }
+
+  .hero-verticals__item {
+    padding: 0.75rem 1rem !important;
+    background: rgba(15, 23, 42, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 10px !important;
+  }
+
+  .hero-verticals__item:last-child {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+/* ==========================================================================
+   Mobile (<= 640px): High-Contrast, No Giant Void, Touch CTAs & 1-Col Stack
+   ========================================================================== */
+@media (max-width: 640px) {
+  .hero--home.hero--company {
+    padding-top: 1.75rem !important;
+    padding-bottom: 2.25rem !important;
+  }
+
+  /* Backdrop photo on mobile: cleanly framed at top with soft mask, no vertical overstretch/blur */
+  .hero--company .hero__backdrop--photo {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: 320px !important;
+    max-height: 320px !important;
+    background-size: cover !important;
+    background-position: right 10% top !important;
+    background-repeat: no-repeat !important;
+    opacity: 0.55 !important;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.6) 65%, transparent 100%) !important;
+    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.6) 65%, transparent 100%) !important;
+  }
+
+  /* Deep vertical scrim: preserves visual at top while keeping 100% text readability below */
+  .hero__scrim--company {
+    background: linear-gradient(
+      180deg,
+      rgba(7, 11, 18, 0.50) 0%,
+      rgba(7, 11, 18, 0.88) 180px,
+      rgba(7, 11, 18, 1) 310px
+    ) !important;
+  }
+
+  /* Remove artificial 7rem push-down so content starts at a natural, clean position */
+  .hero-company {
+    padding-top: 0 !important;
+    gap: 1.15rem !important;
+  }
+
+  .hero-brand-mark {
+    font-size: 0.75rem !important;
+    letter-spacing: 0.08em !important;
+    margin-bottom: 0.25rem !important;
   }
 
   .hero-title--company {
     max-width: 100% !important;
-    font-size: clamp(1.9rem, 8vw, 2.5rem) !important;
+    font-size: clamp(2rem, 7.5vw, 2.45rem) !important;
     line-height: 1.18 !important;
+    letter-spacing: -0.02em !important;
   }
 
   .hero-desc--company {
     max-width: 100% !important;
-    font-size: 1rem !important;
+    font-size: 0.975rem !important;
+    line-height: 1.6 !important;
+    color: #94a3b8 !important;
   }
 
+  /* Mobile CTAs: full-width touch friendly buttons stacked vertically */
+  .hero--company .hero-ctas {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 0.75rem !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .hero--company .hero-ctas .btn-primary,
+  .hero--company .hero-ctas .btn-secondary {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 0.875rem 1.25rem !important;
+  }
+
+  /* Mobile: 1 Column Service Highlights styled as sleek glass cards */
   .hero-verticals {
-    margin-top: 1.5rem !important;
+    margin-top: 1.75rem !important;
     padding-top: 1.25rem !important;
     grid-template-columns: 1fr !important;
-    gap: 0.85rem !important;
+    gap: 0.65rem !important;
+  }
+
+  .hero-verticals__item {
+    padding: 0.8rem 1rem !important;
+    background: rgba(15, 23, 42, 0.55) !important;
+    border: 1px solid rgba(255, 255, 255, 0.07) !important;
+    border-radius: 10px !important;
+  }
+
+  .hero-verticals__label {
+    font-size: 0.875rem !important;
+  }
+
+  .hero-verticals__detail {
+    font-size: 0.8rem !important;
+    line-height: 1.45 !important;
   }
 }
 
-/* Contact Section Refinements */
+/* ==========================================================================
+   Contact Section: Compact Card & Mobile Ordering (Form First, Card Below)
+   ========================================================================== */
 .contact-founder-card--compact {
   display: flex !important;
   align-items: center !important;
@@ -188,6 +300,7 @@
   .contact-page-grid {
     display: flex !important;
     flex-direction: column !important;
+    gap: 2rem !important;
   }
 
   .contact-form-col {
@@ -198,5 +311,27 @@
   .contact-sidebar {
     order: 2 !important;
     width: 100% !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .contact-founder-card--compact {
+    padding: 0.85rem 1rem !important;
+    gap: 0.85rem !important;
+    margin-top: 1rem !important;
+  }
+
+  .contact-founder-card--compact .profile-avatar-frame--sm {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+  }
+
+  .contact-founder-card--compact .contact-founder-name {
+    font-size: 1rem !important;
+  }
+
+  .contact-founder-card--compact .contact-founder-title {
+    font-size: 0.8125rem !important;
   }
 }
