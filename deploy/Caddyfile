@@ -81,43 +81,45 @@ api.muteeblabs.com {
 	reverse_proxy agri-web:8000
 }
 
+# ── Victory Acres ────────────────────────────────────────────────────────────
+victoryacres.muteeblabs.com {
+    encode zstd gzip
+    reverse_proxy http://172.17.0.1:9080
+}
+
+api.victoryacres.muteeblabs.com {
+    encode zstd gzip
+    reverse_proxy http://172.17.0.1:9080
+}
+
+# ── Apex Construction Group ──────────────────────────────────────────────────
+www.construction.muteeblabs.com {
+    redir https://construction.muteeblabs.com{uri} permanent
+}
+
+construction.muteeblabs.com {
+    encode zstd gzip
+    reverse_proxy http://172.17.0.1:8085
+}
+
 # ── Tax Estimator (Naylor & Warner CPAs) ─────────────────────────────────────
 taxestimator.muteeblabs.com {
-	encode gzip zstd
-
-	header {
-		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-		X-Content-Type-Options "nosniff"
-		Referrer-Policy "strict-origin-when-cross-origin"
-		Permissions-Policy "camera=(), microphone=(), geolocation=()"
-		-Server
-	}
-
-	reverse_proxy 127.0.0.1:8086 {
-		header_up Host {host}
-		header_up X-Real-IP {remote_host}
-		header_up X-Forwarded-For {remote_host}
-		header_up X-Forwarded-Proto {scheme}
-	}
+    encode zstd gzip
+    reverse_proxy http://172.17.0.1:8086
 }
 
 # ── CaseLedger (Personal Injury Case Management) ─────────────────────────────
 caseledger.muteeblabs.com {
-	encode gzip zstd
+    encode zstd gzip
 
-	header {
-		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-		X-Content-Type-Options "nosniff"
-		X-Frame-Options "SAMEORIGIN"
-		Referrer-Policy "strict-origin-when-cross-origin"
-		Permissions-Policy "camera=(), microphone=(), geolocation=()"
-		-Server
-	}
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        -Server
+    }
 
-	reverse_proxy 127.0.0.1:8087 {
-		header_up Host {host}
-		header_up X-Real-IP {remote_host}
-		header_up X-Forwarded-For {remote_host}
-		header_up X-Forwarded-Proto {scheme}
-	}
+    reverse_proxy http://172.17.0.1:8087
 }
